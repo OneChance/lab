@@ -1,0 +1,401 @@
+$barHeight: 60px;
+
+body {
+    overflow-x: hidden;
+    margin: 10px;
+}
+
+.el-menu {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.form-required:after {
+    content: '*';
+    color: red;
+}
+
+.el-aside {
+    width: initial !important;
+}
+
+#left-menu {
+    min-height: 800px;
+}
+
+.box-card {
+    .el-input {
+        margin-bottom: 10px;
+    }
+
+    .el-form-item {
+        margin-bottom: 0 !important;
+    }
+}
+
+.files-down {
+    .el-dialog {
+        width: 80%;
+    }
+}
+
+.el-popup-parent--hidden {
+    padding-right: 0 !important;
+}
+
+.card-content {
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+}
+
+.line {
+    text-align: center;
+}
+
+.box-card {
+    width: 98%;
+}
+
+.tree-btn {
+    padding: 5px !important;
+}
+
+.el-cascader {
+    width: 100%;
+}
+
+.hiddenRow {
+    display: none;
+}
+
+.tree-icon {
+    padding-right: 5px;
+}
+
+.el-cascader-panel .el-radio {
+    position: absolute;
+    z-index: 10;
+    padding: 0 10px;
+    width: 132px;
+    height: 34px;
+    line-height: 34px;
+}
+
+.el-cascader-panel .el-radio__input {
+    visibility: hidden;
+}
+
+//字体图标
+.fa {
+    width: 20px;
+    color: #2f673c !important;
+}
+
+.success-fa {
+    color: #67C23A !important;
+}
+
+.warning-fa {
+    color: #E6A23C !important;
+}
+
+.primary-fa {
+    color: #409EFF !important;
+
+}
+
+.right-fa {
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+
+//可点击的字体图标
+.click-fa {
+    cursor: pointer;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+//树结构图标颜色
+.tree-icon i {
+    color: #909399 !important;
+}
+
+.el-badge__content {
+    top: 15px !important;
+    right: 0 !important;
+}
+
+.header-bar {
+    background-color: #2f673c;
+
+    .el-submenu__icon-arrow {
+        color: white !important;
+    }
+}
+
+.my-menu {
+    .el-submenu__icon-arrow {
+        color: #2f673c !important;
+    }
+}
+
+.header-bar-right {
+    display: flex;
+    justify-content: flex-end;
+    height: $barHeight;
+    line-height: $barHeight;
+}
+
+.header-navi {
+    height: $barHeight;
+}
+
+.logo {
+    height: $barHeight;
+    line-height: $barHeight;
+    width: 100%;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 10px;
+    text-align: center;
+}
+
+.logo-title {
+    width: 100%;
+    text-align: center;
+}
+
+.exit-button {
+    color: #fff !important;
+}
+
+.header-bar-user {
+    color: #fff !important;
+}
+
+#left-menu {
+    .fa {
+        margin-right: 10px;
+    }
+}
+
+.left-oper {
+    display: none;
+}
+
+.right-button-group {
+    margin-bottom: 20px;
+}
+
+.navbar-menu-wrapper {
+    width: auto;
+    position: relative;
+    top: auto;
+    left: auto;
+    bottom: auto;
+    background-color: transparent;
+    overflow: visible;
+    display: flex;
+    order: 2;
+    transform: none;
+    z-index: auto;
+    flex: 1;
+}
+
+//小屏幕菜单缩略按钮
+.small-menu-bar {
+    display: none !important;
+    color: #fff !important;
+}
+
+.small-menu {
+    display: none !important;
+}
+
+//表格
+.table-center {
+    tr {
+        th > div {
+            text-align: center;
+        }
+
+        td > div {
+            text-align: center;
+        }
+    }
+}
+
+.form-dialog {
+    .el-dialog {
+        width: 900px;
+    }
+}
+
+//表格表单
+.form-table {
+    width: 100%;
+    font-family: verdana, arial, sans-serif;
+    font-size: 11px;
+    color: #333333;
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+
+    th {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #666666;
+        background-color: #f9f8f8;
+    }
+
+    td {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #666666;
+        background-color: #ffffff;
+    }
+
+    .form-input-code {
+        width: 160px;
+    }
+
+    .el-input__inner {
+        border: 0;
+    }
+
+    .el-form-item {
+        margin-bottom: 0;
+    }
+
+    .el-form-item__error {
+        position: relative;
+    }
+
+    .compact-td {
+        padding: 1px;
+    }
+}
+
+//分页导航
+.page-nav {
+    margin-top: 10px;
+    float: right;
+    margin-bottom: 10px;
+}
+
+//角色分配用户对话框样式
+.role-user {
+    .el-dialog {
+        width: 823px
+    }
+
+    //穿梭框宽度
+    .el-transfer-panel {
+        width: 300px !important;
+    }
+}
+
+//资料清单分配对话框样式
+.material-group {
+    .el-dialog {
+        width: 1100px;
+        height: 620px;
+    }
+
+    //穿梭框宽度
+    .el-transfer-panel {
+        width: 425px !important;
+    }
+
+    .el-transfer-panel__body {
+        height: 320px;
+    }
+
+    .el-transfer-panel__list {
+        height: 270px !important;
+    }
+}
+
+.el-input.is-disabled .el-input__inner {
+    color: #3e3d3d !important;
+}
+
+.el-textarea.is-disabled .el-textarea__inner {
+    color: #3e3d3d !important;
+}
+
+//单选按钮
+.el-radio {
+    margin-right: 0 !important;
+}
+
+.el-radio.is-bordered + .el-radio.is-bordered {
+    margin-left: 0 !important;
+}
+
+.editing {
+    background-color: #c9f0c2 !important;
+}
+
+//mobile----------------------------------------
+.mobile-card {
+    height: 100%;
+}
+
+.btn-mobile-full {
+    width: 100%;
+    padding: 12px 0 12px 0 !important;
+}
+
+//适配小屏幕
+@media screen and (max-width: 480px) {
+    body {
+        .navi-menu {
+            display: none;
+        }
+
+        //导航菜单
+        .small-menu {
+            display: inline-block !important;
+            order: 3;
+            width: 260px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            overflow: hidden;
+            z-index: 1060;
+            transform: translateX(-270px);
+            transition: all 0.4s;
+        }
+
+        //菜单缩略按钮
+        .small-menu-bar {
+            display: inline-block !important;
+            margin-right: 10px;
+        }
+
+        //logo加文宽度
+        .header-bar {
+            .logo {
+                width: 150px;
+            }
+        }
+
+        //弹出2级菜单图标颜色
+        .el-menu--popup i {
+            color: #e1184a !important;
+        }
+    }
+}
