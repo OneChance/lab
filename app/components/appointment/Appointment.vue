@@ -56,6 +56,10 @@ export default {
                 this.$message.error('请选择预约日期');
             } else if (this.aForm.chooseTimeZone.length === 0) {
                 this.$message.error('请选择预约时段');
+            } else if (this.aForm.chooseTimeZone.length > 2) {
+                this.$message.error('选择的时段不能超过2小时');
+            } else if (this.aForm.chooseTimeZone.length === 2 && Math.abs(this.aForm.chooseTimeZone[0] - this.aForm.chooseTimeZone[1]) !== 1) {
+                this.$message.error('必须选择相邻的时段');
             } else {
                 console.log(this.aForm.chooseTimeZone)
             }

@@ -30,52 +30,37 @@ module.exports = {
                 use: ['vue-loader']
             },
             {
-                oneOf: [//以下规则只要有一个匹配,就会终止匹配,不会遍历所有
+                oneOf: [
                     {
                         test: /\.js$/,
                         exclude: /(node_modules|bower_components)/,
                         use: [
-                            /*{
-                                loader: 'thread-loader',//开启多进程打包,若电脑本身运行其他程序,cpu繁忙,此方式会更慢
-                                options: {
-                                    workers: 4
-                                }
-                            },*/
-                            {//es6语法兼容,备用补充@babel/polyfill
+                            {
                                 loader: 'babel-loader',
                                 options: {
                                     presets: [
                                         [
                                             '@vue/babel-preset-jsx',
                                             {
-                                                //corejs按需加载兼容性解决方案,替代polyfill
                                                 useBuiltIns: 'usage',
                                                 corejs: {
                                                     version: 3
                                                 },
-                                                targets: { //具体向前兼容到哪一个版本
+                                                targets: {
                                                     chrome: '60',
                                                     firefox: '60'
                                                 }
                                             }
                                         ]
                                     ],
-                                    cacheDirectory: true  //开启babel缓存,加快打包速度(不明显)
+                                    cacheDirectory: true
                                 }
                             },
-                            /*{//js语法规范检查
-                                loader: 'eslint-loader',
-                                options: {
-                                    fix: true //自动修复
-                                }
-                            }*/
                         ],
                     },
                     {
-                        test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
+                        test: /\.(gif|jpg|png|woff|svg|eot|ttf|mp3)\??.*$/,
                         use: ['url-loader?limit=1&name=images/[hash:8].[name].[ext]'],
-                        //如果是html(非vue)中引入图片 要设置options{esModule:false},配合html-loader,
-                        // 因为html-loader将图片转为commonjs模块,es6模块无法识别
                     },
                     {
                         test: /\.css$/,
@@ -85,18 +70,13 @@ module.exports = {
                         test: /\.scss$/,
                         use: [...commonCssLoader, 'sass-loader']
                     },
-                    /*{
-                        //html-loader,用于处理html中引入的image
-                        test:/\.html$/,
-                        loader: 'html-loader'
-                    }*/
                 ]
             },
         ]
     },
     resolve: {
-        extensions: ['.js', '.css', '.scss', '.vue'],//省略后缀
-        alias: {//路径别名
+        extensions: ['.js', '.css', '.scss', '.vue'],
+        alias: {
             'vue': 'vue/dist/vue.min.js',
             'svg': 'svg.js/dist/svg.min.js',
         }
@@ -119,11 +99,5 @@ module.exports = {
             jQuery: 'jquery/dist/jquery.min.js',
             $: 'jquery/dist/jquery.min.js'
         }),
-        new webpack.DllReferencePlugin({
-            manifest: path.resolve(__dirname, 'dll/manifest.json'),
-        }),
-        new AddAssetHtmlWebpackPlugin({
-            filepath: path.resolve(__dirname, 'dll/vendor.js'),
-        })
     ],
 };

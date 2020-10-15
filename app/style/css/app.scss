@@ -2,7 +2,7 @@ $barHeight: 60px;
 
 body {
     overflow-x: hidden;
-    margin: 10px;
+    margin: 0 !important;
 }
 
 .el-menu {
@@ -35,6 +35,10 @@ body {
     }
 }
 
+.nav-card {
+    margin: 10px 20px 10px 20px !important;
+}
+
 .files-down {
     .el-dialog {
         width: 80%;
@@ -46,9 +50,6 @@ body {
 }
 
 .card-content {
-    display: -webkit-flex; /* Safari */
-    display: flex;
-    justify-content: center;
     padding-top: 30px;
 }
 
@@ -57,7 +58,7 @@ body {
 }
 
 .box-card {
-    width: 98%;
+    margin: 0 20px 0 20px;
 }
 
 .tree-btn {
@@ -130,6 +131,10 @@ body {
 .el-badge__content {
     top: 15px !important;
     right: 0 !important;
+}
+
+.banner-back {
+    background-color: #2f673c;
 }
 
 .header-bar {
@@ -350,6 +355,7 @@ body {
 //mobile----------------------------------------
 .mobile-card {
     height: 100%;
+    margin-top: 20px;
 }
 
 .btn-mobile-full {

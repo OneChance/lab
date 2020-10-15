@@ -1,7 +1,10 @@
 import Net from './net';
 
 export default {
-  getMenu() {
-    return Net.get('/menu/list/');
-  },
+    getMenu() {
+        return new Promise(function (resolve, reject) {
+            resolve({menus: [{value: 'test', children: []}]})
+        })
+        //return Net.get('/menu/list/');
+    },
 };
