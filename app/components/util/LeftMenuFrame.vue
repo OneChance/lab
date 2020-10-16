@@ -54,11 +54,11 @@
 
 <script>
 
-import SysCampOrg from '../components/SysCampOrg.vue'
-import SysRight from '../components/SysRight.vue'
-import SysRole from '../components/SysRole.vue'
-import SysMenu from '../components/SysMenu.vue'
-import SysUser from "./SysUser";
+import SysCampOrg from '../sys/SysCampOrg.vue'
+import SysRight from '../sys/SysRight.vue'
+import SysRole from '../sys/SysRole.vue'
+import SysMenu from '../sys/SysMenu.vue'
+import SysUser from "../sys/SysUser";
 
 export default {
     name: "leftMenuFrame",

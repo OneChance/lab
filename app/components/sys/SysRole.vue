@@ -39,11 +39,11 @@
 
 <script>
 
-import Role from '../script/server/role'
-import User from '../script/server/user'
-import Common from '../script/common'
-import TableComponent from "./TableComponent";
-import Config from "../script/config";
+import Role from '../../script/server/role'
+import User from '../../script/server/user'
+import Common from '../../script/common'
+import TableComponent from "../util/TableComponent";
+import Config from "../../script/config";
 
 export default {
     name: "SysRole",

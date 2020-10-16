@@ -1,7 +1,7 @@
 <template id="index">
     <div class="center">
         <el-button type="primary" plain class="btn-mobile-full" @click="toAppointment">预约</el-button>
-        <el-button type="success" plain class="btn-mobile-full">考试</el-button>
+        <el-button type="success" plain class="btn-mobile-full" @click="toExam">考试</el-button>
     </div>
 </template>
 
@@ -23,6 +23,9 @@ export default {
     methods: {
         toAppointment() {
             App.router.$router.push('appointment').catch(err => err)
+        },
+        toExam() {
+            App.router.$router.push('exam').catch(err => err)
         }
     },
     components: {},

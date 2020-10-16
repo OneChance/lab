@@ -54,8 +54,8 @@
 
 <script>
 
-import TableComponent from "../TableComponent";
-import NavComponent from "../NavComponent";
+import TableComponent from "../util/TableComponent";
+import NavComponent from "../util/NavComponent";
 import Config from "../../script/config";
 
 export default {

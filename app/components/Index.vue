@@ -63,7 +63,7 @@ require('../style/css/anim.scss');
 import Menu from '../script/server/menu.js'
 import Account from '../script/server/account.js'
 import App from '../script/app.js'
-import LeftMenuFrame from '../components/LeftMenuFrame.vue'
+import LeftMenuFrame from './util/LeftMenuFrame.vue'
 import QuestionBank from "./exam/QuestionBank";
 
 export default {

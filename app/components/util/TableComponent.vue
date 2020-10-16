@@ -62,8 +62,8 @@
 
 <script>
 
-import App from '../script/app.js'
-import Config from "../script/config";
+import App from '../../script/app.js'
+import Config from "../../script/config";
 
 export default {
     data: function () {

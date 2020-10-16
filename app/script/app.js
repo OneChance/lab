@@ -9,6 +9,7 @@ import Appointment from "../components/appointment/Appointment";
 import QuestionBank from "../components/exam/QuestionBank";
 import OneBank from "../components/exam/OneBank";
 import Sample from "../components/sample/Sample";
+import Paper from "../components/exam/Paper";
 
 // 局部打印插件
 import printArea from '../plugin/printarea/jquery.PrintArea';
@@ -51,6 +52,7 @@ export default {
                 {path: '/application', component: Application},
                 {path: '/appointment', component: Appointment},
                 {path: '/sample', component: Sample},
+                {path: '/exam', component: Paper},
             ];
 
             const router = new VueRouter({

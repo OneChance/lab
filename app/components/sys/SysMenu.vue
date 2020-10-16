@@ -3,17 +3,22 @@
         <el-card class="box-card">
 
             <div slot="header" class="clearfix">
-                <span>权限</span>
+                <span>菜单</span>
             </div>
 
             <div class="right-button-group">
                 <el-button type="primary" @click="expandAll()">全部展开</el-button>
                 <el-button type="primary" @click="foldAll()">全部折叠</el-button>
-                <el-button type="danger" @click="dialogVisible = true">添加权限</el-button>
+                <el-button type="danger" @click="dialogVisible = true">添加菜单</el-button>
             </div>
 
-            <el-table :data="rights" border style="width: 100%;" size="medium" :row-class-name="rowClassNameHandler">
-                <el-table-column label="权限名称" width="460" align="left" show-overflow-tooltip>
+            <el-table :data="menuList"
+                      max-height="550"
+                      border
+                      style="width: 100%;"
+                      size="medium"
+                      :row-class-name="rowClassNameHandler">
+                <el-table-column label="菜单名称" width="460" align="left" show-overflow-tooltip>
                     <template slot-scope="scope">
                         <span :style="{marginLeft: scope.row.level * 23 + 'px'}">&ensp;</span>
                         <i v-if="scope.row.showChildren"
@@ -27,15 +32,12 @@
                         <span :data-level="scope.row.level" :style="{marginLeft: 4 + 'px'}">{{ scope.row.label }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="categoryid" label="菜单URL" width="80" align="center"></el-table-column>
-                <el-table-column prop="parentcategoryid" label="排序号" width="80" align="center"></el-table-column>
-                <el-table-column prop="undeployed" label="类型" align="left"></el-table-column>
-                <el-table-column prop="deployed" label="Code" align="left"></el-table-column>
-                <el-table-column prop="edit" label="操作" align="left">
-                    <template slot-scope="scope" v-if="!scope.row.hasChildren">
+                <el-table-column prop="url" label="URL" width="300" align="center"></el-table-column>
+                <el-table-column label="操作" align="left">
+                    <template slot-scope="scope">
                         <el-tooltip class="item" effect="dark" content="编辑" placement="left">
                             <i class="fa fa-pencil-square-o fa-lg click-fa warning-fa"
-                               @click="dialogVisible=true;editRight(scope.row)"></i>
+                               @click="dialogVisible=true;editMenuInfo(scope.row)"></i>
                         </el-tooltip>
                         <el-tooltip class="item" effect="dark" content="删除" placement="right">
                             <i class="fa fa-trash-o fa-lg click-fa" @click="deleteRight()"></i>
@@ -46,37 +48,31 @@
         </el-card>
 
 
-        <el-dialog title="权限信息"
+        <el-dialog title="菜单信息"
                    :visible.sync="dialogVisible"
                    :close-on-click-modal="false">
             <el-form label-width="100px">
-                <el-form-item label="所在菜单">
-                    <el-cascader :options="rightPath"
+                <el-form-item label="上级菜单">
+                    <el-cascader :options="menuPath"
                                  change-on-select
                                  v-model="curPath"
                     ></el-cascader>
                 </el-form-item>
-                <el-form-item label="权限点名称">
-                    <el-input v-model="rightsInfo.label"></el-input>
+                <el-form-item label="菜单名称">
+                    <el-input v-model="menuInfo.label"></el-input>
                 </el-form-item>
-                <el-form-item label="权限点URL">
-                    <el-input v-model="rightsInfo.url"></el-input>
-                </el-form-item>
-                <el-form-item label="权限点类型">
-                    <template>
-                        <el-radio v-model="rightsInfo.type" label="1">页面</el-radio>
-                        <el-radio v-model="rightsInfo.type" label="2">按钮</el-radio>
-                    </template>
+                <el-form-item label="URL">
+                    <el-input v-model="menuInfo.url"></el-input>
                 </el-form-item>
                 <el-form-item label="排序">
-                    <el-input v-model="rightsInfo.sort"></el-input>
+                    <el-input v-model="menuInfo.sort"></el-input>
                 </el-form-item>
                 <el-form-item label="备注">
                     <el-input
                         type="textarea"
                         :rows="2"
                         placeholder="请输入内容"
-                        v-model="rightsInfo.note">
+                        v-model="menuInfo.note">
                     </el-input>
                 </el-form-item>
             </el-form>
@@ -91,59 +87,33 @@
 
 <script>
 
-import Right from '../script/server/right'
+import Menu from '../../script/server/menu'
 
 export default {
-    name: "SysRight",
+    name: "SysMenu",
     mounted: function () {
-
-        this.rights = Right.getRights()
-
-        //格式化cascader数据====================================================
-        let rightsPrepare = []
-
-        for (let right of this.rights) {
-            rightsPrepare.push(right);
-        }
-
-        for (let right of rightsPrepare.reverse()) {
-            if (right.isLeaf) {
-                continue
-            }
-            let addObj = {value: right.id, label: right.label, pid: right.pid}
-            let last = this.rightPath.pop();
-            while (last) {
-                if (last.pid === right.id) {
-                    if (!addObj.children) {
-                        addObj.children = []
-                    }
-                    addObj.children.push(last)
-                } else {
-                    this.rightPath.push(last)
-                    break;
-                }
-                last = this.rightPath.pop()
-            }
-            this.rightPath.push(addObj)
-        }
-        this.rightPath = this.rightPath.reverse()
-        //======================================================================
+        let comp = this
+        Menu.getMenu().then(res => {
+            comp.menus = res.menus
+            comp.treeToList(this.menus, this, 0, 1)
+            comp.menuPath = this.menus
+        })
     },
     data: function () {
         return {
-            rights: [],
+            menus: [],
+            menuList: [],
             curPath: [],
-            rightsInfo: {
+            menuInfo: {
                 id: 0,
                 pid: 0,
                 label: "",
                 url: "",
-                type: "",
                 sort: 0,
                 note: ''
             },
             dialogVisible: false,
-            rightPath: []
+            menuPath: []
         }
     },
     methods: {
@@ -162,70 +132,90 @@ export default {
         },
         loadSubItems(item, isShowChildren) {
             let self = this
-            for (let i = 0; i < self.rights.length; i++) {
-                if (self.rights[i].pid === item.id) {
+            for (let i = 0; i < self.menuList.length; i++) {
+                if (self.menuList[i].pid === item.id) {
                     if (isShowChildren) {
-                        self.rights[i].visible = true
+                        self.menuList[i].visible = true
                     } else {
-                        if (self.rights[i].visible) {
-                            self.rights[i].visible = false
-                            if (self.rights[i].hasChildren) {
-                                self.rights[i].showChildren = false
+                        if (self.menuList[i].visible) {
+                            self.menuList[i].visible = false
+                            if (self.menuList[i].hasChildren) {
+                                self.menuList[i].showChildren = false
                             }
                         }
-                        self.loadSubItems(self.rights[i], false);
+                        self.loadSubItems(self.menuList[i], false);
                     }
                 }
             }
         },
         expandAll() {
-            for (let i = 0; i < this.rights.length; i++) {
-                if (this.rights[i].hasChildren) {
-                    this.rights[i].showChildren = true;
+            for (let i = 0; i < this.menuList.length; i++) {
+                if (this.menuList[i].hasChildren) {
+                    this.menuList[i].showChildren = true;
                 }
-                this.rights[i].visible = true;
+                this.menuList[i].visible = true;
             }
         },
         foldAll() {
-            for (let i = 0; i < this.rights.length; i++) {
-                if (this.rights[i].hasChildren) {
-                    this.rights[i].showChildren = false;
+            for (let i = 0; i < this.menuList.length; i++) {
+                if (this.menuList[i].hasChildren) {
+                    this.menuList[i].showChildren = false;
                 }
-                if (this.rights[i].level !== 1) {
-                    this.rights[i].visible = false;
+                if (this.menuList[i].level !== 1) {
+                    this.menuList[i].visible = false;
                 }
             }
         },
         submit() {
 
         },
-        editRight(row) {
-            this.rightsInfo.id = row.id
-            this.rightsInfo.pid = row.pid
-            this.rightsInfo.label = row.label
+        editMenuInfo(row) {
+            this.menuInfo.id = row.id
+            this.menuInfo.pid = row.pid
+            this.menuInfo.label = row.label
+            this.menuInfo.url = row.url
 
             //获取cascade当前路径
-            let rightsPrepare = []
+            //获取cascade当前路径
+            let tmp = []
 
-            for (let right of this.rights) {
-                rightsPrepare.push(right);
+            for (let menu of this.menuList) {
+                tmp.push(menu);
             }
 
             this.curPath = []
 
             let recordId = row.pid
 
-            for (let right of rightsPrepare.reverse()) {
-                if (right.id === recordId) {
+            for (let menu of tmp.reverse()) {
+                if (menu.id === recordId) {
                     this.curPath.push(recordId)
-                    recordId = right.pid
+                    recordId = menu.pid
                 }
             }
-
             this.curPath = this.curPath.reverse()
         },
         deleteRight() {
 
+        },
+        treeToList(tree, comp, pid, level) {
+            for (let t of tree) {
+                let item = {
+                    id: t.value,
+                    pid: pid,
+                    label: t.label,
+                    url: t.value,
+                    level: level,
+                    showChildren: false,
+                    hasChildren: t.children !== null,
+                    visible: level === 1,
+                    isLeaf: t.children === null
+                }
+                comp.menuList.push(item)
+                if (t.children) {
+                    this.treeToList(t.children, comp, t.value, level + 1)
+                }
+            }
         }
     },
     components: {},

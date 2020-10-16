@@ -46,7 +46,7 @@
 
 <script>
 
-import Org from '../script/server/org'
+import Org from '../../script/server/org'
 
 export default {
     name: "SysCampOrg",

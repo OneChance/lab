@@ -49,10 +49,10 @@
 
 <script>
 
-import User from "../script/server/user";
-import TableComponent from "./TableComponent";
-import Config from "../script/config";
-import Common from '../script/common'
+import User from "../../script/server/user";
+import TableComponent from "../util/TableComponent";
+import Config from "../../script/config";
+import Common from '../../script/common'
 import md5 from 'js-md5';
 
 export default {

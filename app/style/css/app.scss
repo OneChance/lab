@@ -363,6 +363,23 @@ body {
     padding: 12px 0 12px 0 !important;
 }
 
+.el-radio__label {
+    width: 100% !important;
+    text-overflow: ellipsis;
+    white-space: normal;
+    line-height: 18px;
+    word-break: break-all;
+}
+
+.content-center {
+    text-align: center;
+}
+
+.el-radio.is-bordered {
+    padding: 12px 20px 12px 10px;
+    height: auto;
+}
+
 //适配小屏幕
 @media screen and (max-width: 480px) {
     body {

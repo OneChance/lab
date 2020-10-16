@@ -1,6 +1,5 @@
 <template>
     <div>
-        <nav-component v-bind:data="navData"></nav-component>
         <el-row>
             <el-col :span="24">
                 <el-card class="box-card">
@@ -44,7 +43,7 @@ import NavComponent from "../util/NavComponent";
 import Config from "../../script/config"
 
 export default {
-    name: "Banks",
+    name: "Teacher",
     data: function () {
         return {
             navData: [Config.navs.questionbank],
@@ -79,7 +78,7 @@ export default {
             this.visible = true
         },
         view(row) {
-            App.router.$router.push({name: 'onebank', params: {bankName: row.name}}).catch(err => err);
+
         },
         addCommit() {
             this.list.push(this.form);
