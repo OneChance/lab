@@ -7,10 +7,10 @@ import Index from '../components/Index.vue';
 import MobileApp from '../components/MobileApp.vue';
 import AppCompnent from "../components/AppCompnent";
 import Appointment from "../components/appointment/Appointment";
+import QuestionBanks from "../components/exam/QuestionBanks";
 import QuestionBank from "../components/exam/QuestionBank";
-import OneBank from "../components/exam/OneBank";
+import SampleBanks from "../components/sample/SampleBanks";
 import SampleBank from "../components/sample/SampleBank";
-import OneSample from "../components/sample/OneSample";
 import Sample from "../components/sample/SampleMobile";
 import SampleInfo from "../components/sample/SampleInfo";
 import Paper from "../components/exam/Paper";
@@ -55,14 +55,14 @@ export default {
                             component: AppCompnent,
                             children: [
                                 {
+                                    path: 'questionbanks',
+                                    name: 'questionbanks',
+                                    component: QuestionBanks
+                                },
+                                {
                                     path: 'questionbank',
                                     name: 'questionbank',
                                     component: QuestionBank
-                                },
-                                {
-                                    path: 'onebank',
-                                    name: 'onebank',
-                                    component: OneBank
                                 },
                                 {
                                     path: 'lab',
@@ -75,14 +75,14 @@ export default {
                                     component: Teacher
                                 },
                                 {
-                                    path: 'samplebank',
-                                    name: 'samplebank',
-                                    component: SampleBank,
+                                    path: 'samplebanks',
+                                    name: 'samplebanks',
+                                    component: SampleBanks,
                                 },
                                 {
-                                    path: 'onesample',
-                                    name: 'onesample',
-                                    component: OneSample
+                                    path: 'samplebank',
+                                    name: 'samplebank',
+                                    component: SampleBank
                                 },
                                 {
                                     path: 'sampleinfo',

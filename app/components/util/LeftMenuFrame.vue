@@ -65,15 +65,11 @@ export default {
             this.oneLevelMenu = newVal.filter(menu => menu.childrens === null)
             this.MultiLevelMenu = newVal.filter(menu => menu.childrens !== null)
             setTimeout(() => {
-                this.activeIndex = this.$route.path
+                this.setActive(this.$route.path)
             }, 10)
         },
         $route(route) {
-            if (route.path.indexOf('sample') !== -1) {
-                this.activeIndex = '/index/app/samplebank'
-            } else {
-                this.activeIndex = route.path
-            }
+            this.setActive(route.path)
         }
     },
     mounted: function () {
@@ -85,6 +81,15 @@ export default {
                 this.isCollapse = !this.isCollapse
             }
         },
+        setActive(path) {
+            if (path.indexOf('sample') !== -1) {
+                this.activeIndex = '/index/app/samplebanks'
+            } else if (path.indexOf('question') !== -1) {
+                this.activeIndex = '/index/app/questionbanks'
+            } else {
+                this.activeIndex = path
+            }
+        }
     },
     components: {}
 }

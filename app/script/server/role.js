@@ -10,9 +10,6 @@ export default {
     getRole(data) {
         return Net.get('/role/' + data.id + '/');
     },
-    getRoleUsers(data) {
-        return Net.get('/role/' + data.id + '/user/list/', data);
-    },
     deleteRole(data) {
         return Net.delete('/role/' + data.id + '/');
     },
@@ -21,5 +18,14 @@ export default {
     },
     saveRoleUsers(data) {
         return Net.put('/role/' + data.id + '/user/', data);
+    },
+    getRoleUsers(data) {
+        return Net.get('/role/' + data.id + '/user/list/', data);
+    },
+    saveRoleMenus(data) {
+        return Net.put('/role/' + data.id + '/menu/', data);
+    },
+    getRoleMenus(data) {
+        return Net.get('/role/' + data.id + '/menu/list/', data);
     },
 };

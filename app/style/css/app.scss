@@ -22,7 +22,7 @@ body {
 }
 
 .left-menu {
-    min-height: 800px;
+    height: calc(100vh - 60px);
 }
 
 .box-card {

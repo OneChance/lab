@@ -3,7 +3,7 @@
         <div class="center">
             <el-card class="box-card login-card">
                 <div slot="header" class="clearfix header">
-                    <span class="sign-title">实验管理系统</span>
+                    <span class="sign-title">实验室管理系统</span>
                 </div>
                 <el-form :model="form">
                     <el-form-item>

@@ -130,10 +130,16 @@ export default {
             }
         },
         setActive(path) {
+            let appMenu = this.global.loginUser.menus.filter(m => m.url === '/index/app')[0]
+            let sysMenu = this.global.loginUser.menus.filter(m => m.url === '/index/sys')[0]
             if (path === '/index' || path === '/index/' || path === '/index/app' || path === '/index/app/') {
-                App.router.$router.push('/index/app/questionbank').catch(err => err);
+                if (appMenu) {
+                    App.router.$router.push(appMenu.childrens[0].url).catch(err => err);
+                }
             } else if (path === '/index/sys' || path === '/index/sys/') {
-                App.router.$router.push('/index/sys/user').catch(err => err);
+                if (sysMenu) {
+                    App.router.$router.push(sysMenu.childrens[0].url).catch(err => err);
+                }
             } else if (path.indexOf('/index/sys') !== -1) {
                 this.activeMenuIndex = '/index/sys'
             } else if (path.indexOf('/index/app') !== -1) {

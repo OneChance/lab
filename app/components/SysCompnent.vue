@@ -19,9 +19,7 @@ export default {
             })
         }
     },
-    watch: {
-
-    },
+    watch: {},
     data: function () {
         return {
             leftMenus: []
@@ -29,7 +27,10 @@ export default {
     },
     methods: {
         setMenu() {
-            this.leftMenus = this.global.loginUser.menus.filter(m => m.url === '/index/sys')[0].childrens
+            let sysMenu = this.global.loginUser.menus.filter(m => m.url === '/index/sys')[0]
+            if (sysMenu) {
+                this.leftMenus = sysMenu.childrens
+            }
         }
     },
     components: {

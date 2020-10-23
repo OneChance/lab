@@ -239,10 +239,37 @@ export default {
                     p.children = [...(p.children || []), menu]
                 })
                 this.menus = root.children
+
+                //获得已分配菜单
+                Role.getRoleMenus({id: row.id, page: 1, pageSize: 9999999}).then(res => {
+                    this.$refs.tree.setCheckedKeys(res.list.map(m => m.menuId));
+                })
             })
         },
         commitRoleMenus: function () {
-            console.log(this.$refs.tree.getCheckedKeys(true))
+            //如果父节点勾选,清除其子节点
+            let checked = []
+            let needCheck = [...this.menus]
+            while (needCheck.length > 0) {
+                let node = needCheck.pop()
+                if (this.$refs.tree.getCheckedKeys().includes(node.id)) {
+                    checked.push(node)
+                } else {
+                    if (node.children) {
+                        needCheck = [...needCheck, ...node.children]
+                    }
+                }
+            }
+            Role.saveRoleMenus({
+                id: this.currentRow.id,
+                menus: checked.map(n => Object({menuId: n.id}))
+            }).then(() => {
+                this.roleMenusVisible = false;
+                this.$message({
+                    message: '分配成功',
+                    type: 'success'
+                });
+            })
         },
         commitRoleUsers: function () {
             let users = []

@@ -6,7 +6,7 @@
                 <el-card class="box-card">
                     <el-form :inline="true" class="demo-form-inline">
                         <el-form-item>
-                            <el-button type="primary" @click="add">添加题库</el-button>
+                            <el-button type="primary" @click="add">添加题目</el-button>
                         </el-form-item>
                     </el-form>
                     <table-component v-bind:tableConfig="tableConfig" style="margin-top: 20px"></table-component>
@@ -14,21 +14,36 @@
             </el-col>
         </el-row>
 
-
-        <el-dialog :visible.sync="visible"
+        <el-dialog title="题目信息"
+                   :visible.sync="visible"
+                   class="form-dialog"
                    :close-on-click-modal="false">
-
             <template>
-                <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-                    <el-form-item label="名称" prop="username">
-                        <el-input v-model="form.name"></el-input>
+                <el-form ref="form" :model="form" :rules="rules" label-width="80px" :inline="true">
+                    <el-form-item label="题目" prop="question">
+                        <el-input type="textarea" v-model="form.question" style="width:700px"></el-input>
                     </el-form-item>
+                    <div v-for="(option,index) in form.options">
+                        <el-form-item label="选项" :prop="'options.' + index + '.answer'"
+                                      :rules="{required: true, message: '请填写选项内容', trigger: 'blur'}">
+                            <el-input v-model="option.answer" style="width:560px"></el-input>
+                            <el-tooltip :content="option.right?'正确答案':'错误答案'" placement="top">
+                                <el-switch
+                                    style="margin-left: 10px"
+                                    v-model="option.right"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949">
+                                </el-switch>
+                            </el-tooltip>
+                        </el-form-item>
+                        <el-button @click.prevent="removeOption(option)">删除</el-button>
+                    </div>
                 </el-form>
             </template>
-
             <div slot="footer" class="dialog-footer">
                 <el-button @click="visible = false">取 消</el-button>
-                <el-button type="primary" @click="visible=false;addCommit()">确 定</el-button>
+                <el-button @click="addOption">新增选项</el-button>
+                <el-button type="primary" @click="addCommit()">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -39,35 +54,43 @@
 <script>
 
 import TableComponent from "../util/TableComponent";
-import App from "../../script/app";
 import NavComponent from "../util/NavComponent";
-import Config from "../../script/config"
+import Config from "../../script/config";
 
 export default {
     name: "QuestionBank",
     data: function () {
         return {
-            navData: [Config.navs.questionbank],
+            navData: [Config.navs.questionbank, {
+                'name': this.$route.query.name,
+                'url': '/index/app/questionbank?id=' + this.$route.query.id + '&name=' + this.$route.query.name
+            }],
             visible: false,
             form: {
-                name: ''
+                question: '',
+                options: [{answer: '', right: false}],
+            },
+            rules: {
+                question: [
+                    {required: true, message: '请填写题目内容', trigger: 'blur'},
+                ],
             },
             tableConfig: {
                 data: [],
                 page: true,
                 pageMethod: this.toPage,
                 cols: [
-                    {prop: 'name', label: '名称', width: '900'},
+                    {prop: 'question', label: '题目', width: '800'},
                 ],
                 oper: [
                     {
-                        class: 'fa fa-pencil-square-o fa-lg click-fa warning-fa',
-                        tip: {content: '修改', placement: 'right'},
-                        event: this.edit,
+                        class: 'fa fa-pencil-square-o  fa-lg click-fa primary-fa',
+                        tip: {content: '编辑', placement: 'right'},
+                        event: this.view,
                     },
                 ]
             },
-            list: [{name: 'test1'}, {name: 'test2'}],
+            list: [],
         }
     },
     mounted: function () {
@@ -78,17 +101,36 @@ export default {
         add() {
             this.visible = true
         },
-        edit(row) {
-            this.visible = true
-        },
-        addItem(row) {
-            App.router.$router.push({name: 'onebank', params: {bankName: row.name}}).catch(err => err);
+        view() {
+
         },
         addCommit() {
-            this.list.push(this.form);
-            this.tableConfig.data = this.list;
-            this.tableConfig.total = this.list.length
-        }
+            this.$refs['form'].validate((valid) => {
+                if (valid) {
+                    console.log(this.form)
+                    this.list.push(this.form);
+                    this.tableConfig.data = this.list;
+                    this.tableConfig.total = this.list.length
+                }
+            })
+        },
+        addOption: function () {
+            this.form.options.push({
+                answer: '',
+                right: false,
+            })
+        },
+        removeOption: function (option) {
+            let index = this.form.options.indexOf(option)
+            if (index > 0) {
+                this.form.options.splice(index, 1)
+            } else {
+                this.$message({
+                    message: '第一行无法删除',
+                    type: 'warning'
+                });
+            }
+        },
     },
     components: {
         TableComponent, NavComponent
