@@ -2,39 +2,36 @@
     <el-container>
         <el-aside>
             <el-menu
-                id="left-menu"
-                :default-active="leftActiveIndex"
-                class="el-menu-vertical-demo my-menu"
+                :default-active="activeIndex"
+                class="el-menu-vertical-demo my-menu left-menu"
                 text-color="#303133"
-                active-text-color="#e1184a"
+                active-text-color="#347dd6"
                 @select="handleSelect"
+                router="true"
                 :collapse="isCollapse">
-                <el-menu-item :index="menu.value" v-for="menu in oneLevelMenu" :key="menu.value">
+                <el-menu-item :index="menu.url" v-for="menu in oneLevelMenu" :key="menu.id">
                     <i :class="'fa '+menu.icon+' fa-lg fa-inverse'"></i>
                     <span slot="title">
-                        {{ menu.label }}
+                        {{ menu.name }}
                     </span>
                 </el-menu-item>
-                <el-submenu :index="menu.value" v-for="menu in MultiLevelMenu" :key="menu.value">
+                <el-submenu :index="menu.url" v-for="menu in MultiLevelMenu" :key="menu.id">
                     <template slot="title">
                         <i :class="'fa '+menu.icon+' fa-lg fa-inverse'"></i>
                         <span slot="title">
-                            {{ menu.label }}
+                            {{ menu.name }}
                         </span>
                     </template>
-                    <el-menu-item :index="m.value" v-for="m in menu.children" :key="m.value">
+                    <el-menu-item :index="m.url" v-for="m in menu.childrens" :key="m.id">
                         <template slot="title">
                             <i :class="'fa '+m.icon+' fa-lg fa-inverse'"></i>
-                            <span slot="title" v-if="m.value!=='willDo'">
-                                {{ m.label }}
+                            <span slot="title">
+                                {{ m.name }}
                             </span>
-                            <el-badge :value="willDoCount" class="item" v-if="m.value==='willDo'">
-                                {{ m.label }}
-                            </el-badge>
                         </template>
                     </el-menu-item>
                 </el-submenu>
-                <el-menu-item index="collapse">
+                <el-menu-item>
                     <i class="fa fa-bars fa-lg fa-inverse"></i>
                     <span slot="title">
                         菜单缩放
@@ -44,9 +41,7 @@
         </el-aside>
         <el-main>
             <div class="main_right" id="main_right">
-                <component v-bind:is="currentComponent" class="tab">
-
-                </component>
+                <router-view></router-view>
             </div>
         </el-main>
     </el-container>
@@ -54,31 +49,31 @@
 
 <script>
 
-import SysCampOrg from '../sys/SysCampOrg.vue'
-import SysRight from '../sys/SysRight.vue'
-import SysRole from '../sys/SysRole.vue'
-import SysMenu from '../sys/SysMenu.vue'
-import SysUser from "../sys/SysUser";
-
 export default {
     name: "leftMenuFrame",
     data: function () {
         return {
             oneLevelMenu: [],
             MultiLevelMenu: [],
-            leftActiveIndex: '',
-            isCollapse: true,
-            currentComponent: '',
-            willDoCount: 0,
+            isCollapse: false,
+            activeIndex: '',
         }
     },
     props: ['menus'],
     watch: {
         menus: function (newVal) {
-            this.oneLevelMenu = newVal.filter(menu => menu.children === null)
-            this.MultiLevelMenu = newVal.filter(menu => menu.children !== null)
-            this.leftActiveIndex = newVal[0].value
-            this.currentComponent = newVal[0].value
+            this.oneLevelMenu = newVal.filter(menu => menu.childrens === null)
+            this.MultiLevelMenu = newVal.filter(menu => menu.childrens !== null)
+            setTimeout(() => {
+                this.activeIndex = this.$route.path
+            }, 10)
+        },
+        $route(route) {
+            if (route.path.indexOf('sample') !== -1) {
+                this.activeIndex = '/index/app/samplebank'
+            } else {
+                this.activeIndex = route.path
+            }
         }
     },
     mounted: function () {
@@ -86,35 +81,18 @@ export default {
     },
     methods: {
         handleSelect(key) {
-            console.log(key)
-            if (key === 'collapse') {
+            if (!key) {
                 this.isCollapse = !this.isCollapse
-            } else {
-                this.currentComponent = key
             }
         },
-        menuCollapse(size) {
-
-        }
     },
-    components: {
-        SysCampOrg,
-        SysRight,
-        SysRole,
-        SysMenu,
-        SysUser,
-    }
+    components: {}
 }
 </script>
 
 <style scoped>
 
-.el-menu-vertical-demo {
-
-}
-
 .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
 }
-
 </style>

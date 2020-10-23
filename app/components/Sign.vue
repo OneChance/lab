@@ -13,12 +13,12 @@
                         <el-input v-model="password" placeholder="密码"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="success" class="sign-btn sign-local-btn" @click="signIn" disabled="disabled">
+                        <el-button type="primary" class="sign-btn sign-local-btn" @click="signIn" disabled="disabled">
                             登陆
                         </el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="success" class="sign-btn" @click="authCenter">统一身份认证</el-button>
+                        <el-button type="primary" class="sign-btn" @click="authCenter">统一身份认证</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
@@ -31,7 +31,6 @@
 
 import Account from '../script/server/account.js'
 import App from '../script/app.js'
-import md5 from 'js-md5';
 
 export default {
     data: function () {
@@ -57,16 +56,10 @@ export default {
             }
         },
         signIn: function () {
-            /*Account.signIn({
+            Account.signIn({
                 username: this.name,
-                password: md5(this.password)
-            }).then(this.signCallback);*/
-            console.log(this.name)
-            if (this.name === '1') {
-                App.router.$router.push('index').catch(err => err)
-            } else {
-                App.router.$router.push('application').catch(err => err)
-            }
+                password: this.password
+            }).then(this.signCallback);
         },
         authCenter: function () {
             window.location.href = "https://uaaap.yzu.edu.cn/cas/login?service=http%3a%2f%2fdemo.ceeg.cn/sys/index.page";
@@ -81,14 +74,6 @@ export default {
         },
     },
     mounted: function () {
-        let comp = this
-        $(document).on('keydown', (e) => {
-            if (e.keyCode === 13) {
-                if (comp.password && comp.name) {
-                    comp.signIn();
-                }
-            }
-        });
     },
 }
 </script>
@@ -103,7 +88,7 @@ export default {
 
 .sign-title {
     font-size: x-large;
-    color: #2f673c;
+    color: #347dd6;
     font-weight: 700;
 }
 
@@ -153,7 +138,7 @@ export default {
     position: absolute;
     bottom: 30px;
     left: calc(50% - 55px);
-    color: #2f673c;
+    color: #347dd6;
 }
 
 .sign-local-btn {

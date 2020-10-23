@@ -8,15 +8,15 @@ module.exports = merge(common, {
     mode: 'development',
     devtool: 'eval-cheap-source-map',
     devServer: {
-        port: 8899,
+        port: 8893,
         disableHostCheck: true,
-        compress: true, //启动gzip压缩,加快启动速度
-        hot: true,//开启HMR，只重新打包修改的模块
+        compress: true,
+        hot: true,
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'js/[name].[hash].js',
-        publicPath: 'http://192.168.1.200:8899/', //192.168.1.200:8899
+        publicPath: 'http://ssm.ceeg.cn/',
         chunkFilename: 'js/[name].[hash].js'
     },
 });

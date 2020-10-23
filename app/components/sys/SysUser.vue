@@ -7,7 +7,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
-                    <el-button type="success" @click="add" v-if="type!=='sysuser'">新增</el-button>
+                    <el-button type="success" @click="add">新增</el-button>
                 </el-form-item>
             </el-form>
             <table-component v-bind:tableConfig="tableConfig"></table-component>
@@ -24,6 +24,15 @@
                     </el-form-item>
                     <el-form-item label="密码" prop="password">
                         <el-input v-model="form.password"></el-input>
+                    </el-form-item>
+                    <el-form-item label="是否登陆" prop="isLogin">
+                        <el-tooltip :content="form.isLogin?'是':'否'" placement="top">
+                            <el-switch
+                                v-model="form.isLogin"
+                                active-color="#13ce66"
+                                inactive-color="#ff4949">
+                            </el-switch>
+                        </el-tooltip>
                     </el-form-item>
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="form.name"></el-input>
@@ -52,8 +61,7 @@
 import User from "../../script/server/user";
 import TableComponent from "../util/TableComponent";
 import Config from "../../script/config";
-import Common from '../../script/common'
-import md5 from 'js-md5';
+import Common from '../../script/common';
 
 export default {
     name: "SysUser",
@@ -63,14 +71,14 @@ export default {
             query: {
                 userName: ''
             },
+            addUser: true,
             form: {
                 username: '',
-                password: '888888',
+                password: '',
                 name: '',
                 email: '',
                 telphone: '',
-                thirdPartyName: '',
-                thirdParty: false,
+                isLogin: false
             },
             rules: {
                 username: [
@@ -82,15 +90,16 @@ export default {
                 name: [
                     {required: true, message: '请输入姓名', trigger: 'blur'},
                 ],
-                thirdPartyName: [
-                    {required: true, message: '请输入单位名称', trigger: 'blur'},
-                ],
             },
             tableConfig: {
                 data: [],
                 page: true,
                 pageMethod: this.toPage,
-                cols: [],
+                cols: [
+                    {prop: 'username', label: '用户名', width: '180'},
+                    {prop: 'name', label: '姓名', width: '180'},
+                    {prop: 'telphone', label: '联系方式', width: '180'},
+                ],
                 oper: [
                     {
                         class: 'fa fa-pencil-square-o fa-lg click-fa warning-fa',
@@ -110,29 +119,22 @@ export default {
     },
     mounted: function () {
         this.list()
-        if (this.type === 'sysuser') {
-            this.tableConfig.cols = [
-                {prop: 'username', label: '用户名', width: '180'},
-                {prop: 'name', label: '姓名', width: '180'},
-                {prop: 'telphone', label: '联系方式', width: '180'},
-            ]
-        } else {
-            this.tableConfig.cols = [
-                {prop: 'thirdPartyName', label: '单位', width: '180'},
-                {prop: 'name', label: '姓名', width: '180'},
-                {prop: 'telphone', label: '联系方式', width: '180'},
-            ]
-        }
     },
     methods: {
         commit: function () {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
-                    this.form.password = md5(this.form.password)
-                    User.saveUser(this.form).then(() => {
-                        this.operSuccess(this)
-                        this.userInfoDialogVisible = false;
-                    })
+                    if (this.addUser) {
+                        User.saveUser(this.form).then(() => {
+                            this.operSuccess(this)
+                            this.userInfoDialogVisible = false;
+                        })
+                    } else {
+                        User.updateUser(this.form).then(() => {
+                            this.operSuccess(this)
+                            this.userInfoDialogVisible = false;
+                        })
+                    }
                 }
             })
         },
@@ -141,6 +143,7 @@ export default {
         },
         add: function () {
             this.userInfoDialogVisible = true
+            this.addUser = true
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
             });
@@ -149,6 +152,7 @@ export default {
             User.getUser({id: row.id}).then(result => {
                 this.userInfoDialogVisible = true
                 this.form = result.user
+                this.addUser = false
             })
         },
         delete: function (row) {
@@ -170,11 +174,10 @@ export default {
                 data[prop] = config[prop]
             }
             this.tableConfig.currentPage = data.page
-            //过滤用户类别
-            data.thirdParty = this.type !== 'sysuser';
+            data.type = 'STUDENT';
             User.getUsers(data).then(res => {
-                this.tableConfig.data = res.list.content
-                this.tableConfig.total = res.list.totalElements
+                this.tableConfig.data = res.list
+                this.tableConfig.total = res.count
             })
         },
     },

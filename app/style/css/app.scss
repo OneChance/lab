@@ -21,7 +21,7 @@ body {
     width: initial !important;
 }
 
-#left-menu {
+.left-menu {
     min-height: 800px;
 }
 
@@ -49,7 +49,7 @@ body {
     padding-right: 0 !important;
 }
 
-.card-content {
+.card-content-mobile {
     padding-top: 30px;
 }
 
@@ -59,6 +59,10 @@ body {
 
 .box-card {
     margin: 0 20px 0 20px;
+}
+
+.box-card-no-nav {
+    margin-top: 10px;
 }
 
 .tree-btn {
@@ -93,7 +97,7 @@ body {
 //字体图标
 .fa {
     width: 20px;
-    color: #2f673c !important;
+    color: #347dd6 !important;
 }
 
 .success-fa {
@@ -106,7 +110,10 @@ body {
 
 .primary-fa {
     color: #409EFF !important;
+}
 
+.danger-fa {
+    color: #dd6161 !important;
 }
 
 .right-fa {
@@ -133,12 +140,8 @@ body {
     right: 0 !important;
 }
 
-.banner-back {
-    background-color: #2f673c;
-}
-
 .header-bar {
-    background-color: #2f673c;
+    background-color: #347dd6;
 
     .el-submenu__icon-arrow {
         color: white !important;
@@ -147,7 +150,7 @@ body {
 
 .my-menu {
     .el-submenu__icon-arrow {
-        color: #2f673c !important;
+        color: #347dd6 !important;
     }
 }
 
@@ -186,7 +189,7 @@ body {
     color: #fff !important;
 }
 
-#left-menu {
+.left-menu {
     .fa {
         margin-right: 10px;
     }
@@ -418,7 +421,7 @@ body {
 
         //弹出2级菜单图标颜色
         .el-menu--popup i {
-            color: #e1184a !important;
+            color: #347dd6 !important;
         }
     }
 }

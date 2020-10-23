@@ -13,16 +13,19 @@
             <el-col :span="16" class="header-navi">
                 <el-menu :default-active="activeMenuIndex" class="el-menu-demo navi-menu banner-back" mode="horizontal"
                          text-color="#fff"
+                         background-color="#347dd6"
                          active-text-color="#fff"
-                         @select="handleSelect">
-                    <el-menu-item :index="menu.value" v-for="menu in menus" :key="menu.value">
-                        {{ menu.label }}
+                         @select="handleSelect"
+                         router="true">
+                    <el-menu-item :index="menu.url" v-for="menu in menus" :key="menu.id">
+                        {{ menu.name }}
                     </el-menu-item>
                 </el-menu>
             </el-col>
 
             <el-col :span="4" class="header-bar-right">
-                <el-menu class="el-menu-demo banner-back" mode="horizontal"
+                <el-menu class="el-menu-demo" mode="horizontal"
+                         background-color="#347dd6"
                          text-color="#fff"
                          active-text-color="#fff"
                          @select="handleSelect">
@@ -60,20 +63,22 @@
 
 <script>
 require('../style/css/anim.scss');
-import Menu from '../script/server/menu.js'
 import Account from '../script/server/account.js'
 import App from '../script/app.js'
-import LeftMenuFrame from './util/LeftMenuFrame.vue'
-import QuestionBank from "./exam/QuestionBank";
+
 
 export default {
     created: function () {
 
     },
+    watch: {
+        $route(route) {
+            this.setActive(route.path)
+        }
+    },
     data: function () {
         return {
             menus: [],
-            leftMenus: [],
             activeMenuIndex: '',
             userOper: [
                 {
@@ -82,19 +87,18 @@ export default {
                     ]
                 }
             ],
-            currentComponent: 'leftMenuFrame'   //默认加载左边为菜单的组件
         }
     },
     mounted: function () {
-        let comp = this;
-        Menu.getMenu().then(res => {
-            comp.menus = res.menus
-            //comp.leftMenus = comp.menus.filter(menu => menu.value === 'my')[0].children
-        })
 
-        /*Account.getLoginUser().then(res => {
+        Account.getLoginUser().then(res => {
             this.userOper[0].name = res.user.name
-        })*/
+            this.menus = res.menus
+            res.user.menus = res.menus
+            this.global.loginUser = res.user
+            App.hub.$emit('menuInfo')
+            this.setActive(this.$route.path)
+        })
 
         this.$nextTick(() => {
             $('.small-menu-bar').on('click', function (e) {
@@ -109,7 +113,6 @@ export default {
             })();
         };
 
-        App.router.$router.push('/index/questionbank').catch(err => err);
     },
     methods: {
         signOut: function () {
@@ -125,9 +128,20 @@ export default {
             } else {
                 $('.small-menu')[0].style.webkitTransform = "translate(-270px,0px)";
             }
-        }
+        },
+        setActive(path) {
+            if (path === '/index' || path === '/index/' || path === '/index/app' || path === '/index/app/') {
+                App.router.$router.push('/index/app/questionbank').catch(err => err);
+            } else if (path === '/index/sys' || path === '/index/sys/') {
+                App.router.$router.push('/index/sys/user').catch(err => err);
+            } else if (path.indexOf('/index/sys') !== -1) {
+                this.activeMenuIndex = '/index/sys'
+            } else if (path.indexOf('/index/app') !== -1) {
+                this.activeMenuIndex = '/index/app'
+            }
+        },
     },
-    components: {LeftMenuFrame, QuestionBank},
+    components: {},
 }
 </script>
 

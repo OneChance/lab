@@ -5,9 +5,12 @@ export default {
         return Net.post('/login/', data);
     },
     getLoginUser() {
-        return Net.get('/user/get/');
+        return Net.get('/user/self/');
     },
     logOut() {
         return Net.get('/logout/');
     },
+    test(){
+        return Net.get('/');
+    }
 };

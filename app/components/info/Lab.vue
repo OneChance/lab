@@ -2,10 +2,10 @@
     <div>
         <el-row>
             <el-col :span="24">
-                <el-card class="box-card">
+                <el-card class="box-card box-card-no-nav">
                     <el-form :inline="true" class="demo-form-inline">
                         <el-form-item>
-                            <el-button type="primary" @click="add">添加题库</el-button>
+                            <el-button type="primary" @click="add">添加实验室</el-button>
                         </el-form-item>
                     </el-form>
                     <table-component v-bind:tableConfig="tableConfig" style="margin-top: 20px"></table-component>
@@ -39,6 +39,7 @@
 
 import TableComponent from "../util/TableComponent";
 import Config from "../../script/config"
+import NavComponent from "../util/NavComponent";
 
 export default {
     name: "Lab",
@@ -54,11 +55,11 @@ export default {
                 page: true,
                 pageMethod: this.toPage,
                 cols: [
-                    {prop: 'name', label: '名称', width: '900'},
+                    {prop: 'name', label: '名称', width: '800'},
                 ],
                 oper: [
                     {
-                        class: 'fa fa fa-user-o fa-lg click-fa primary-fa',
+                        class: 'fa fa-pencil-square-o fa-lg click-fa warning-fa',
                         tip: {content: '查看', placement: 'right'},
                         event: this.view,
                     },

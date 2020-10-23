@@ -5,6 +5,6 @@ require('./plugin/font-awesome/css/font-awesome.css');
 require('./plugin/bootstrap/js/bootstrap.min.js');
 
 window.onload = function () {
-  App.init();
-  App.router.$mount('#app');
+    App.init()
+    App.router.$mount('#app')
 };

@@ -8,6 +8,7 @@ export default {
         pageSize: 10,
     },
     navs: {
-        'questionbank': {name: '题库', url: '/index/questionbank'},
+        'questionbank': {name: '题库', url: '/index/app/questionbank'},
+        'samplebank': {name: '标本库', url: '/index/app/samplebank'},
     }
 };

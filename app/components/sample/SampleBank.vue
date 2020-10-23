@@ -6,14 +6,13 @@
                 <el-card class="box-card">
                     <el-form :inline="true" class="demo-form-inline">
                         <el-form-item>
-                            <el-button type="primary" @click="add">添加题库</el-button>
+                            <el-button type="primary" @click="add">添加标本大类</el-button>
                         </el-form-item>
                     </el-form>
                     <table-component v-bind:tableConfig="tableConfig" style="margin-top: 20px"></table-component>
                 </el-card>
             </el-col>
         </el-row>
-
 
         <el-dialog :visible.sync="visible"
                    :close-on-click-modal="false">
@@ -44,10 +43,10 @@ import NavComponent from "../util/NavComponent";
 import Config from "../../script/config"
 
 export default {
-    name: "QuestionBank",
+    name: "SampleBank",
     data: function () {
         return {
-            navData: [Config.navs.questionbank],
+            navData: [Config.navs.samplebank],
             visible: false,
             form: {
                 name: ''
@@ -61,9 +60,9 @@ export default {
                 ],
                 oper: [
                     {
-                        class: 'fa fa-pencil-square-o fa-lg click-fa warning-fa',
-                        tip: {content: '修改', placement: 'right'},
-                        event: this.edit,
+                        class: 'fa fa fa-user-o fa-lg click-fa primary-fa',
+                        tip: {content: '查看', placement: 'right'},
+                        event: this.view,
                     },
                 ]
             },
@@ -78,11 +77,9 @@ export default {
         add() {
             this.visible = true
         },
-        edit(row) {
-            this.visible = true
-        },
-        addItem(row) {
-            App.router.$router.push({name: 'onebank', params: {bankName: row.name}}).catch(err => err);
+        view(row) {
+            console.log(row.name)
+            App.router.$router.push({name: 'onesample', params: {typeName: row.name}}).catch(err => err);
         },
         addCommit() {
             this.list.push(this.form);
