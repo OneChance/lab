@@ -1,7 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 import cookie from 'vue-cookie';
 import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+//路由模块
 import Sign from '../components/Sign.vue';
 import Index from '../components/Index.vue';
 import MobileApp from '../components/MobileApp.vue';
@@ -19,29 +24,35 @@ import Teacher from "../components/info/Teacher";
 import SysCompnent from "../components/SysCompnent";
 import SysRole from "../components/sys/SysRole";
 import SysUser from "../components/sys/SysUser";
+
 import Global from "./global"
 
+//网络工具
+axios.defaults.withCredentials = true;
+Vue.use(VueAxios, axios);
+
 // ElementUI
-import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
 
 // 设置COOKIE工具
-Vue.prototype.$cookie = cookie;
+Vue.use(cookie)
+
+//自定义全局变量
 Vue.prototype.global = Global;
 
 // 使用路由插件
 Vue.use(VueRouter);
-Vue.use(ElementUI);
 
+//消除重复路由控制台错误提示
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
     return originalPush.call(this, location).catch(err => err)
 }
 
 export default {
-    router: null,
-    hub: null,
+    vueG: null,  //全局Vue对象
     init() {
-        if (!this.router) {
+        if (!this.vueG) {
             const routes = [
                 {path: '/', redirect: '/sign'},
                 {path: '/sign', component: Sign},
@@ -120,11 +131,9 @@ export default {
                 routes,
             });
 
-            this.router = new Vue({
+            this.vueG = new Vue({
                 router,
             });
-
-            this.hub = new Vue();
         }
     },
 };

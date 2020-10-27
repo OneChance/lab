@@ -14,7 +14,7 @@ export default {
         if (this.global.loginUser.menus) {
             this.setMenu()
         } else {
-            App.hub.$on('menuInfo', () => {
+            App.vueG.$on('menuInfo', () => {
                 this.setMenu()
             })
         }

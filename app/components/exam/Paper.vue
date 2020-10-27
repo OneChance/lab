@@ -84,7 +84,7 @@ export default {
                             type: 'warning',
                             duration: 5000
                         });
-                        App.router.$router.push('/application').catch(err => err)
+                        App.vueG.$router.push('/application').catch(err => err)
                         break;
                 }
             });
@@ -101,7 +101,7 @@ export default {
                 type: 'success',
                 duration: 3000
             });
-            App.router.$router.push('/application').catch(err => err)
+            App.vueG.$router.push('/application').catch(err => err)
         }
     },
     components: {

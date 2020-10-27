@@ -56,6 +56,8 @@
 import TableComponent from "../util/TableComponent";
 import NavComponent from "../util/NavComponent";
 import Config from "../../script/config";
+import Common from "../../script/common";
+import Exam from "../../script/server/manage/exam";
 
 export default {
     name: "QuestionBank",
@@ -90,12 +92,10 @@ export default {
                     },
                 ]
             },
-            list: [],
         }
     },
     mounted: function () {
-        this.tableConfig.currentPage = 1
-        this.tableConfig.data = this.list
+        this.list()
     },
     methods: {
         add() {
@@ -130,6 +130,25 @@ export default {
                     type: 'warning'
                 });
             }
+        },
+        list(config) {
+            let data = Common.copyObject(Config.page)
+            for (let prop in config) {
+                data[prop] = config[prop]
+            }
+            this.tableConfig.currentPage = data.page
+            Exam.getQuestions(data).then(res => {
+                this.tableConfig.data = res.list
+                this.tableConfig.total = res.count
+            })
+        },
+        operSuccess(comp) {
+            this.visible = false
+            comp.$message({
+                message: '操作成功',
+                type: 'success'
+            });
+            comp.list({page: 1})
         },
     },
     components: {

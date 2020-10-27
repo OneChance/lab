@@ -5,15 +5,15 @@
                 <div slot="header" class="clearfix header">
                     <span class="sign-title">实验室管理系统</span>
                 </div>
-                <el-form :model="form">
-                    <el-form-item>
-                        <el-input v-model="name" placeholder="用户名"></el-input>
+                <el-form :model="form" :rules="rules" ref="form">
+                    <el-form-item prop="name">
+                        <el-input v-model="form.name" placeholder="用户名"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="password">
+                        <el-input v-model="form.password" placeholder="密码"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-input v-model="password" placeholder="密码"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" class="sign-btn sign-local-btn" @click="signIn" disabled="disabled">
+                        <el-button type="primary" class="sign-btn sign-local-btn" @click="signIn">
                             登陆
                         </el-button>
                     </el-form-item>
@@ -35,31 +35,30 @@ import App from '../script/app.js'
 export default {
     data: function () {
         return {
-            name: '',
-            password: ''
-        }
-    },
-    watch: {
-        name: function () {
-            this.checkInput();
-        },
-        password: function () {
-            this.checkInput();
+            form: {
+                name: '',
+                password: ''
+            },
+            rules: {
+                name: [
+                    {required: true, message: '请输入用户名', trigger: 'blur'},
+                ],
+                password: [
+                    {required: true, message: '请输入密码', trigger: 'blur'},
+                ],
+            },
         }
     },
     methods: {
-        checkInput: function () {
-            if (this.password && this.name) {
-                $(".sign-local-btn").removeAttr("disabled").removeClass("is-disabled")
-            } else {
-                $(".sign-local-btn").attr("disabled", "disabled").addClass("is-disabled")
-            }
-        },
         signIn: function () {
-            Account.signIn({
-                username: this.name,
-                password: this.password
-            }).then(this.signCallback);
+            this.$refs['form'].validate((valid) => {
+                if (valid) {
+                    Account.signIn({
+                        username: this.form.name,
+                        password: this.form.password
+                    }).then(this.signCallback);
+                }
+            });
         },
         authCenter: function () {
             window.location.href = "https://uaaap.yzu.edu.cn/cas/login?service=http%3a%2f%2fdemo.ceeg.cn/sys/index.page";
@@ -69,7 +68,7 @@ export default {
                 //保存token
                 localStorage.setItem("apm_token", res.token);
                 this.$cookie.set('apm_token', res.token);
-                App.router.$router.push('index').catch(err => err)
+                App.vueG.$router.push('index').catch(err => err)
             }
         },
     },

@@ -22,10 +22,10 @@ export default {
     },
     methods: {
         toAppointment() {
-            App.router.$router.push('appointment').catch(err => err)
+            App.vueG.$router.push('appointment').catch(err => err)
         },
         toExam() {
-            App.router.$router.push('exam').catch(err => err)
+            App.vueG.$router.push('exam').catch(err => err)
         }
     },
     components: {},

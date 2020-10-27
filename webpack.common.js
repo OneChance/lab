@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
 
 const commonCssLoader = [
     MiniCssExtractPlugin.loader,
@@ -38,21 +37,7 @@ module.exports = {
                             {
                                 loader: 'babel-loader',
                                 options: {
-                                    presets: [
-                                        [
-                                            '@vue/babel-preset-jsx',
-                                            {
-                                                useBuiltIns: 'usage',
-                                                corejs: {
-                                                    version: 3
-                                                },
-                                                targets: {
-                                                    chrome: '60',
-                                                    firefox: '60'
-                                                }
-                                            }
-                                        ]
-                                    ],
+                                    presets: ['@vue/babel-preset-jsx'],
                                     cacheDirectory: true
                                 }
                             },
@@ -78,7 +63,6 @@ module.exports = {
         extensions: ['.js', '.css', '.scss', '.vue'],
         alias: {
             'vue': 'vue/dist/vue.min.js',
-            'svg': 'svg.js/dist/svg.min.js',
         }
     },
     plugins: [

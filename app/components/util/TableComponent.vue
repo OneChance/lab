@@ -99,7 +99,7 @@ export default {
     mounted: function () {
         let comp = this
         comp.elementSize(document.body.clientWidth)
-        App.hub.$on('windowResize', (width) => {
+        App.vueG.$on('windowResize', (width) => {
             comp.elementSize(width)
         })
     },

@@ -96,7 +96,7 @@ export default {
             this.menus = res.menus
             res.user.menus = res.menus
             this.global.loginUser = res.user
-            App.hub.$emit('menuInfo')
+            App.vueG.$emit('menuInfo')
             this.setActive(this.$route.path)
         })
 
@@ -109,7 +109,7 @@ export default {
 
         window.onresize = () => {
             return (() => {
-                App.hub.$emit('windowResize', document.body.clientWidth)
+                App.vueG.$emit('windowResize', document.body.clientWidth)
             })();
         };
 
@@ -117,7 +117,7 @@ export default {
     methods: {
         signOut: function () {
             Account.logOut().then(() => {
-                App.router.$router.push('sign').catch(err => err);
+                App.vueG.$router.push('sign').catch(err => err);
             })
             this.$cookie.delete('apm_token');
             localStorage.removeItem("apm_token");
@@ -134,11 +134,11 @@ export default {
             let sysMenu = this.global.loginUser.menus.filter(m => m.url === '/index/sys')[0]
             if (path === '/index' || path === '/index/' || path === '/index/app' || path === '/index/app/') {
                 if (appMenu) {
-                    App.router.$router.push(appMenu.childrens[0].url).catch(err => err);
+                    App.vueG.$router.push(appMenu.childrens[0].url).catch(err => err);
                 }
             } else if (path === '/index/sys' || path === '/index/sys/') {
                 if (sysMenu) {
-                    App.router.$router.push(sysMenu.childrens[0].url).catch(err => err);
+                    App.vueG.$router.push(sysMenu.childrens[0].url).catch(err => err);
                 }
             } else if (path.indexOf('/index/sys') !== -1) {
                 this.activeMenuIndex = '/index/sys'

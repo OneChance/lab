@@ -79,7 +79,7 @@ export default {
         },
         view(row) {
             console.log(row.name)
-            App.router.$router.push({name: 'onesample', params: {bankName: row.name}}).catch(err => err);
+            App.vueG.$router.push({name: 'onesample', params: {bankName: row.name}}).catch(err => err);
         },
         addCommit() {
             this.list.push(this.form);

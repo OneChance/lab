@@ -13,6 +13,9 @@ export default {
     deleteQB(data) {
         return Net.delete('/role/' + data.id + '/');
     },
+    getQBs(data) {
+        return Net.get('/role/list/', data);
+    },
     saveQuestion(data) {
         return Net.jsonPost('/role/', data);
     },
@@ -24,5 +27,8 @@ export default {
     },
     deleteQuestion(data) {
         return Net.delete('/role/' + data.id + '/');
+    },
+    getQuestions(data) {
+        return Net.get('/role/list/', data);
     },
 };

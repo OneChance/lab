@@ -40,6 +40,8 @@ import TableComponent from "../util/TableComponent";
 import App from "../../script/app";
 import NavComponent from "../util/NavComponent";
 import Config from "../../script/config"
+import Common from "../../script/common";
+import Exam from "../../script/server/manage/exam";
 
 export default {
     name: "QuestionBanks",
@@ -75,12 +77,10 @@ export default {
                     },
                 ]
             },
-            list: [{name: 'test1'}, {name: 'test2'}],
         }
     },
     mounted: function () {
-        this.tableConfig.currentPage = 1
-        this.tableConfig.data = this.list
+        this.list()
     },
     methods: {
         add() {
@@ -93,7 +93,7 @@ export default {
             this.visible = true
         },
         view(row) {
-            App.router.$router.push({path: 'questionbank', query: {id: '1', name: row.name}}).catch(err => err);
+            App.vueG.$router.push({path: 'questionbank', query: {id: '1', name: row.name}}).catch(err => err);
         },
         addCommit() {
             this.$refs['form'].validate((valid) => {
@@ -102,7 +102,26 @@ export default {
                     console.log('add complete')
                 }
             })
-        }
+        },
+        list(config) {
+            let data = Common.copyObject(Config.page)
+            for (let prop in config) {
+                data[prop] = config[prop]
+            }
+            this.tableConfig.currentPage = data.page
+            Exam.getQBs(data).then(res => {
+                this.tableConfig.data = res.list
+                this.tableConfig.total = res.count
+            })
+        },
+        operSuccess(comp) {
+            this.visible = false
+            comp.$message({
+                message: '操作成功',
+                type: 'success'
+            });
+            comp.list({page: 1})
+        },
     },
     components: {
         TableComponent, NavComponent

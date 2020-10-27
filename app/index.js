@@ -6,5 +6,5 @@ require('./plugin/bootstrap/js/bootstrap.min.js');
 
 window.onload = function () {
     App.init()
-    App.router.$mount('#app')
+    App.vueG.$mount('#app')
 };
