@@ -42,6 +42,7 @@ import NavComponent from "../util/NavComponent";
 import Config from "../../script/config"
 import Common from "../../script/common";
 import Exam from "../../script/server/manage/exam";
+import User from "../../script/server/user";
 
 export default {
     name: "QuestionBanks",
@@ -50,6 +51,7 @@ export default {
             navData: [Config.navs.questionbank],
             visible: false,
             form: {
+                id: '',
                 name: ''
             },
             rules: {
@@ -71,6 +73,12 @@ export default {
                         event: this.edit,
                     },
                     {
+                        class: 'fa fa-trash-o fa-lg click-fa danger-fa',
+                        tip: {content: '删除', placement: 'right'},
+                        event: this.delete,
+                        check: true
+                    },
+                    {
                         class: 'fa fa-file-text-o fa-lg click-fa primary-fa',
                         tip: {content: '查看', placement: 'top'},
                         event: this.view,
@@ -90,17 +98,28 @@ export default {
             });
         },
         edit(row) {
-            this.visible = true
+            Exam.getQB({id: row.id}).then(result => {
+                this.visible = true
+                this.form = result.question_bank
+            })
         },
         view(row) {
-            App.vueG.$router.push({path: 'questionbank', query: {id: '1', name: row.name}}).catch(err => err);
+            App.vueG.$router.push({path: 'questionbank', query: {id: row.id, name: row.name}}).catch(err => err);
         },
         addCommit() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                     this.visible = false
-                    console.log('add complete')
+                    Exam.saveQB(this.form).then(() => {
+                        this.operSuccess(this)
+                        this.visible = false;
+                    })
                 }
+            })
+        },
+        delete(row) {
+            Exam.deleteQB({id: row.id}).then(() => {
+                this.operSuccess(this)
             })
         },
         list(config) {

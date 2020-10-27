@@ -20,17 +20,17 @@
                    :close-on-click-modal="false">
             <template>
                 <el-form ref="form" :model="form" :rules="rules" label-width="80px" :inline="true">
-                    <el-form-item label="题目" prop="question">
-                        <el-input type="textarea" v-model="form.question" style="width:700px"></el-input>
+                    <el-form-item label="题目" prop="title">
+                        <el-input type="textarea" v-model="form.title" style="width:700px"></el-input>
                     </el-form-item>
                     <div v-for="(option,index) in form.options">
                         <el-form-item label="选项" :prop="'options.' + index + '.answer'"
                                       :rules="{required: true, message: '请填写选项内容', trigger: 'blur'}">
                             <el-input v-model="option.answer" style="width:560px"></el-input>
-                            <el-tooltip :content="option.right?'正确答案':'错误答案'" placement="top">
+                            <el-tooltip :content="option.correct?'正确答案':'错误答案'" placement="top">
                                 <el-switch
                                     style="margin-left: 10px"
-                                    v-model="option.right"
+                                    v-model="option.correct"
                                     active-color="#13ce66"
                                     inactive-color="#ff4949">
                                 </el-switch>
@@ -69,8 +69,10 @@ export default {
             }],
             visible: false,
             form: {
-                question: '',
-                options: [{answer: '', right: false}],
+                id: '',
+                bankId: this.$route.query.id,
+                title: '',
+                options: [{answer: '', correct: false}],
             },
             rules: {
                 question: [
@@ -82,13 +84,19 @@ export default {
                 page: true,
                 pageMethod: this.toPage,
                 cols: [
-                    {prop: 'question', label: '题目', width: '800'},
+                    {prop: 'title', label: '题目', width: '800'},
                 ],
                 oper: [
                     {
-                        class: 'fa fa-pencil-square-o  fa-lg click-fa primary-fa',
-                        tip: {content: '编辑', placement: 'right'},
-                        event: this.view,
+                        class: 'fa fa-pencil-square-o  fa-lg click-fa warning-fa',
+                        tip: {content: '编辑', placement: 'top'},
+                        event: this.edit,
+                    },
+                    {
+                        class: 'fa fa-trash-o fa-lg click-fa danger-fa',
+                        tip: {content: '删除', placement: 'right'},
+                        event: this.delete,
+                        check: true
                     },
                 ]
             },
@@ -100,24 +108,35 @@ export default {
     methods: {
         add() {
             this.visible = true
+            this.$nextTick(() => {
+                this.$refs['form'].resetFields();
+            });
         },
-        view() {
-
+        edit(row) {
+            Exam.getQuestion({id: row.id}).then(result => {
+                this.visible = true
+                this.form = result.question
+            })
+        },
+        delete(row) {
+            Exam.deleteQuestion({id: row.id}).then(() => {
+                this.operSuccess(this)
+            })
         },
         addCommit() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
-                    console.log(this.form)
-                    this.list.push(this.form);
-                    this.tableConfig.data = this.list;
-                    this.tableConfig.total = this.list.length
+                    Exam.saveQuestion(this.form).then(() => {
+                        this.operSuccess(this)
+                        this.visible = false;
+                    })
                 }
             })
         },
         addOption: function () {
             this.form.options.push({
                 answer: '',
-                right: false,
+                correct: false,
             })
         },
         removeOption: function (option) {
@@ -137,6 +156,7 @@ export default {
                 data[prop] = config[prop]
             }
             this.tableConfig.currentPage = data.page
+            data.bankId = this.$route.query.id
             Exam.getQuestions(data).then(res => {
                 this.tableConfig.data = res.list
                 this.tableConfig.total = res.count

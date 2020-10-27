@@ -33,8 +33,8 @@ export default {
     name: "SampleMobile",
     data: function () {
         return {
-            img: require("../../assets/images/1.jpg"),
-            sound: require("../../assets/sounds/1.mp3"),
+            img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1603776687302&di=97b3f291aae9dddaa1dea90b5d504eba&imgtype=0&src=http%3A%2F%2Ffjmingfeng.com%2Fimg%2F4%2F6317624851%2F62%2Fcf04b6c0cbd07a0aa3c9823935002b58%2F8964229371%2F2917198424.jpg",
+            sound: "",
         }
     },
     mounted: function () {

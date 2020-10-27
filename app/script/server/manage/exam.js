@@ -2,33 +2,35 @@ import Net from '../net';
 
 export default {
     saveQB(data) {
-        return Net.jsonPost('/role/', data);
-    },
-    updateQB(data) {
-        return Net.put('/role/' + data.id + '/', data);
+        if (data.id) {
+            return Net.put('/question/bank/' + data.id + '/', data);
+        } else {
+            return Net.jsonPost('/question/bank/', data);
+        }
     },
     getQB(data) {
-        return Net.get('/role/' + data.id + '/');
+        return Net.get('/question/bank/' + data.id + '/');
     },
     deleteQB(data) {
-        return Net.delete('/role/' + data.id + '/');
+        return Net.delete('/question/bank/' + data.id + '/');
     },
     getQBs(data) {
-        return Net.get('/role/list/', data);
+        return Net.get('/question/bank/list/', data);
     },
     saveQuestion(data) {
-        return Net.jsonPost('/role/', data);
-    },
-    updateQuestion(data) {
-        return Net.put('/role/' + data.id + '/', data);
+        if (data.id) {
+            return Net.put('/question/' + data.id + '/', data);
+        } else {
+            return Net.jsonPost('/question/', data);
+        }
     },
     getQuestion(data) {
-        return Net.get('/role/' + data.id + '/');
+        return Net.get('/question/' + data.id + '/');
     },
     deleteQuestion(data) {
-        return Net.delete('/role/' + data.id + '/');
+        return Net.delete('/question/' + data.id + '/');
     },
     getQuestions(data) {
-        return Net.get('/role/list/', data);
+        return Net.get('/question/list/', data);
     },
 };

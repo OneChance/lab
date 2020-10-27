@@ -62,7 +62,7 @@
 </template>
 
 <script>
-require('../style/css/anim.scss');
+
 import Account from '../script/server/account.js'
 import App from '../script/app.js'
 

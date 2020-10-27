@@ -7,7 +7,7 @@
 
 <script>
 
-require('../style/css/anim.scss');
+
 import App from '../script/app.js'
 
 export default {

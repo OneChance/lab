@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --host 0.0.0.0 --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js --display-modules",
-    "dll": "webpack --config webpack.dll.js --display-modules"
+    "build": "webpack --config webpack.prod.js --display-modules"
   },
   "author": "huasi",
   "license": "ISC",
