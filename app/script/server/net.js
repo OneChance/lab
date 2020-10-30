@@ -84,14 +84,14 @@ const request = function (api, type, data, progress) {
         if (!response) {
             App.vueG.$notify.error({
                 title: '错误',
-                message: '服务器响应超时',
+                message: '响应超时',
             });
         }
         return response.data;
     }).catch((e) => {
         App.vueG.$notify.error({
             title: '错误',
-            message: e.response.data.error_msg,
+            message: e.response.data.error_msg ? e.response.data.error_msg : '服务异常',
         });
         if (e.response.data.error_code === 1001) {
             App.vueG.$router.push('/sign').catch(err => err);

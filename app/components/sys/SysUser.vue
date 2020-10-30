@@ -25,20 +25,8 @@
                     <el-form-item label="密码" prop="password">
                         <el-input v-model="form.password"></el-input>
                     </el-form-item>
-                    <el-form-item label="是否登陆" prop="isLogin">
-                        <el-tooltip :content="form.isLogin?'是':'否'" placement="top">
-                            <el-switch
-                                v-model="form.isLogin"
-                                active-color="#13ce66"
-                                inactive-color="#ff4949">
-                            </el-switch>
-                        </el-tooltip>
-                    </el-form-item>
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="单位名称" prop="thirdPartyName" v-if="type === 'intermediary'">
-                        <el-input v-model="form.thirdPartyName"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱" prop="email">
                         <el-input v-model="form.email"></el-input>
@@ -78,7 +66,8 @@ export default {
                 name: '',
                 email: '',
                 telphone: '',
-                isLogin: false
+                login: true,
+                type: 'TEACHER'
             },
             rules: {
                 username: [
@@ -174,7 +163,8 @@ export default {
                 data[prop] = config[prop]
             }
             this.tableConfig.currentPage = data.page
-            data.type = 'STUDENT';
+            data.type = 'TEACHER';
+            data.login = true
             User.getUsers(data).then(res => {
                 this.tableConfig.data = res.list
                 this.tableConfig.total = res.count

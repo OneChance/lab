@@ -11,7 +11,7 @@ import Print from '../plugin/print/print'
 //路由模块
 import Sign from '../components/Sign.vue';
 import Index from '../components/Index.vue';
-import MobileApp from '../components/MobileApp.vue';
+import Error from '../components/Error.vue';
 import AppCompnent from "../components/AppCompnent";
 import Appointment from "../components/appointment/Appointment";
 import QuestionBanks from "../components/exam/QuestionBanks";
@@ -23,6 +23,7 @@ import SampleInfo from "../components/sample/SampleInfo";
 import Paper from "../components/exam/Paper";
 import Lab from "../components/info/Lab";
 import Teacher from "../components/info/Teacher";
+import Student from "../components/info/Student";
 import SysCompnent from "../components/SysCompnent";
 import SysRole from "../components/sys/SysRole";
 import SysUser from "../components/sys/SysUser";
@@ -93,6 +94,11 @@ export default {
                                     component: Teacher
                                 },
                                 {
+                                    path: 'student',
+                                    name: 'student',
+                                    component: Student
+                                },
+                                {
                                     path: 'samplebanks',
                                     name: 'samplebanks',
                                     component: SampleBanks,
@@ -128,7 +134,7 @@ export default {
                         },
                     ]
                 },
-                {path: '/mobile', component: MobileApp},
+                {path: '/error', component: Error},
                 {path: '/appointment', component: Appointment},
                 {path: '/sample', component: Sample},
                 {path: '/exam', component: Paper},

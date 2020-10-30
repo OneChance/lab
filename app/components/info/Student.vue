@@ -14,7 +14,7 @@
         </el-card>
 
         <!--信息Dialog-->
-        <el-dialog title="值班教师信息"
+        <el-dialog title="学生信息"
                    :visible.sync="userInfoDialogVisible"
                    :close-on-click-modal="false">
             <template>
@@ -22,11 +22,22 @@
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="邮箱" prop="email">
-                        <el-input v-model="form.email"></el-input>
+                    <el-form-item label="学年" prop="term.year">
+                        <el-date-picker
+                            v-model="form.term.year"
+                            type="year"
+                            placeholder="选择学年">
+                        </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="联系方式" prop="telphone">
-                        <el-input v-model="form.telphone"></el-input>
+                    <el-form-item label="学期" prop="term.num">
+                        <el-select v-model="form.term.num" placeholder="请选择">
+                            <el-option
+                                v-for="num in nums"
+                                :key="num.value"
+                                :label="num.label"
+                                :value="num.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-form>
             </template>
@@ -56,14 +67,18 @@ export default {
             addUser: true,
             form: {
                 name: '',
-                email: '',
-                telphone: '',
-                type: 'TEACHER',
-                login: false,
+                term: {year: '', num: ''},
+                type: 'STUDENT'
             },
             rules: {
                 name: [
-                    {required: true, message: '请输入姓名', trigger: 'blur'},
+                    {required: true, message: '请输入用户名', trigger: 'blur'},
+                ],
+                'term.year': [
+                    {required: true, message: '请选择学年', trigger: 'blur'},
+                ],
+                'term.num': [
+                    {required: true, message: '请选择学期', trigger: 'blur'},
                 ],
             },
             tableConfig: {
@@ -72,7 +87,7 @@ export default {
                 pageMethod: this.toPage,
                 cols: [
                     {prop: 'name', label: '姓名'},
-                    {prop: 'telphone', label: '联系方式'},
+                    {prop: 'term.year', label: '学期', formatter: this.termFormatter},
                 ],
                 oper: [
                     {
@@ -88,7 +103,8 @@ export default {
                     }
                 ]
             },
-            userInfoDialogVisible: false
+            userInfoDialogVisible: false,
+            nums: [{value: 1, label: '第一学期'}, {value: 2, label: '第二学期'}]
         }
     },
     mounted: function () {
@@ -148,13 +164,15 @@ export default {
                 data[prop] = config[prop]
             }
             this.tableConfig.currentPage = data.page
-            data.type = 'TEACHER';
-            data.login = false
+            data.type = 'STUDENT';
             User.getUsers(data).then(res => {
                 this.tableConfig.data = res.list
                 this.tableConfig.total = res.count
             })
         },
+        termFormatter(row) {
+            return ''
+        }
     },
     components: {
         TableComponent
