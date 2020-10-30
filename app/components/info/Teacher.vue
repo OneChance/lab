@@ -19,8 +19,11 @@
 
             <template>
                 <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-                    <el-form-item label="名称" prop="username">
+                    <el-form-item label="姓名" prop="name">
                         <el-input v-model="form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="联系方式" prop="link">
+                        <el-input v-model="form.link"></el-input>
                     </el-form-item>
                 </el-form>
             </template>

@@ -20,31 +20,48 @@
                    :close-on-click-modal="false">
             <template>
                 <el-form ref="form" :model="form" :rules="rules" label-width="80px" :inline="true">
-                    <el-form-item label="标本名称" prop="name">
-                        <el-input type="textarea" v-model="form.name" style="width:700px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="标本描述" prop="name">
-                        <el-input type="textarea" v-model="form.name" style="width:700px"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-upload class="upload-demo" action="noAction" :http-request="upload"
-                                   :with-credentials="true" :on-preview="handlePreview"
-                                   :on-remove="handleRemove" :before-remove="beforeRemove"
-                                   multiple
-                                   :file-list="form.imgFile">
-                            <el-button size="small" type="primary" class="upload-btn" @click="toUpload('img')">
-                                上传标本图片
-                            </el-button>
-                        </el-upload>
-                    </el-form-item>
-                    <div v-for="(kp,index) in form.kps">
-                        <el-button @click.prevent="removeOption(kp)">删除</el-button>
-                    </div>
+                    <el-tabs type="card">
+                        <el-tab-pane label="基本信息">
+                            <el-form-item label="标本名称" prop="name">
+                                <el-input type="textarea" v-model="form.name" style="width:700px"></el-input>
+                            </el-form-item>
+                            <el-form-item label="标本描述" prop="name">
+                                <el-input type="textarea" v-model="form.name" style="width:700px"></el-input>
+                            </el-form-item>
+                            <el-form-item label="标本图片" prop="imgFile">
+                                <el-upload
+                                    action="noAction"
+                                    :http-request="upload"
+                                    list-type="picture-card"
+                                    :on-preview="handlePictureCardPreview"
+                                    :on-remove="handleRemove"
+                                    :file-list="form.imgFile">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <el-dialog :visible.sync="picCardVisible" size="tiny" append-to-body>
+                                    <img width="100%" :src="picCardUrl" alt="">
+                                </el-dialog>
+                            </el-form-item>
+                        </el-tab-pane>
+                        <el-tab-pane label="知识点">
+                            <div v-for="(kp,index) in form.kps">
+                                <el-form-item label="标题" prop="'kps.' + index + '.title'"
+                                              :rules="{required: true, message: '请填写标题', trigger: 'blur'}">
+                                    <el-input type="text" v-model="kp.title" style="width:626px"></el-input>
+                                </el-form-item>
+                                <el-form-item label="内容" prop="'kps.' + index + '.content'"
+                                              :rules="{required: true, message: '请填写内容', trigger: 'blur'}">
+                                    <el-input type="textarea" v-model="kp.content" style="width:626px"></el-input>
+                                    <el-button @click.prevent="removeKp(kp)">删除</el-button>
+                                </el-form-item>
+                            </div>
+                            <el-button @click="addKp" type="success" plain>新增知识点</el-button>
+                        </el-tab-pane>
+                    </el-tabs>
                 </el-form>
             </template>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="visible = false">取 消</el-button>
-                <el-button @click="addOption">新增选项</el-button>
                 <el-button type="primary" @click="addCommit()">确 定</el-button>
             </div>
         </el-dialog>
@@ -84,6 +101,8 @@ export default {
         return {
             visible: false,
             qrVisisble: false,
+            picCardVisible: false,
+            picCardUrl: '',
             navData: [Config.navs.samplebank, {
                 'name': this.$route.query.name,
                 'url': '/index/app/samplebank?id=' + this.$route.query.id + '&name=' + this.$route.query.name
@@ -93,7 +112,7 @@ export default {
                 description: '',
                 imgFiles: [],
                 audioFiles: [],
-                kps: []
+                kps: [{title: '', content: ''}]
             },
             rules: {
                 name: [
@@ -217,14 +236,31 @@ export default {
         handleRemove(file) {
 
         },
-        beforeRemove(file) {
-
+        handlePictureCardPreview(file) {
+            this.picCardUrl = file.url;
+            this.picCardVisible = true;
         },
         genQr() {
             this.qrVisisble = true
         },
         printQr() {
             this.$print(this.$refs.qrArea)
+        },
+        addKp() {
+            this.form.kps.push({
+                title: '', content: ''
+            })
+        },
+        removeKp(kp) {
+            let index = this.form.kps.indexOf(kp)
+            if (index > 0) {
+                this.form.kps.splice(index, 1)
+            } else {
+                this.$message({
+                    message: '第一行无法删除',
+                    type: 'warning'
+                });
+            }
         }
     },
     components: {

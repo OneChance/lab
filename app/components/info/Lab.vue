@@ -19,8 +19,17 @@
 
             <template>
                 <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-                    <el-form-item label="名称" prop="username">
+                    <el-form-item label="编号" prop="no">
+                        <el-input v-model="form.no"></el-input>
+                    </el-form-item>
+                    <el-form-item label="名称" prop="name">
                         <el-input v-model="form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="容纳人数" prop="capacity">
+                        <el-input v-model="form.capacity"></el-input>
+                    </el-form-item>
+                    <el-form-item label="预留人数" prop="reserve">
+                        <el-input v-model="form.reserve"></el-input>
                     </el-form-item>
                 </el-form>
             </template>
