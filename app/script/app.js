@@ -5,6 +5,8 @@ import VueAxios from 'vue-axios';
 import cookie from 'vue-cookie';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import Print from '../plugin/print/print'
+
 
 //路由模块
 import Sign from '../components/Sign.vue';
@@ -24,6 +26,7 @@ import Teacher from "../components/info/Teacher";
 import SysCompnent from "../components/SysCompnent";
 import SysRole from "../components/sys/SysRole";
 import SysUser from "../components/sys/SysUser";
+import Score from "../components/exam/Score"
 
 import Global from "./global"
 
@@ -48,6 +51,9 @@ const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
     return originalPush.call(this, location).catch(err => err)
 }
+
+//打印插件
+Vue.use(Print)
 
 export default {
     vueG: null,  //全局Vue对象
@@ -125,6 +131,7 @@ export default {
                 {path: '/appointment', component: Appointment},
                 {path: '/sample', component: Sample},
                 {path: '/exam', component: Paper},
+                {path: '/score', component: Score},
             ];
 
             const router = new VueRouter({

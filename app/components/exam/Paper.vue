@@ -7,7 +7,7 @@
         </el-tag>
         <question :ref="'question'+question.id" v-bind:question="question" v-for="question of questions"
                   :key="question.id"></question>
-        <el-card class="box-card mobile-card content-center">
+        <el-card class="box-card content-center submit-card">
             <el-button type="primary" @click="submit">提交考卷</el-button>
         </el-card>
     </div>
@@ -116,5 +116,10 @@ export default {
     z-index: 1;
     top: 5px;
     right: 5px;
+}
+
+.submit-card {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 </style>

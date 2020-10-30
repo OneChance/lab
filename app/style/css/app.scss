@@ -359,8 +359,9 @@ body {
 
 //mobile----------------------------------------
 .mobile-card {
-    height: 100%;
+    height: calc(100vh - 42px);
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .btn-mobile-full {
