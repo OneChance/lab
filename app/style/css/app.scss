@@ -296,6 +296,10 @@ body {
     padding-bottom: 10px;
 }
 
+.el-table .success-row {
+    background: #f0f9eb;
+}
+
 //分页导航
 .page-nav {
     margin-top: 10px;
@@ -358,6 +362,19 @@ body {
 }
 
 //mobile----------------------------------------
+
+.mobile-item {
+    width: 100% !important;
+}
+
+.mobile-div {
+    padding: 10px;
+}
+
+.mobile-item-row {
+    margin-bottom: 10px;
+}
+
 .mobile-card {
     height: calc(100vh - 42px);
     margin-top: 20px;

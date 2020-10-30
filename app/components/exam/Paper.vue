@@ -65,7 +65,7 @@ export default {
     },
     mounted: function () {
         this.$nextTick(() => {
-            $('.timer').countdown(100000 + new Date().valueOf(), (event) => {
+            $('.timer').countdown(5000 + new Date().valueOf(), (event) => {
                 let $this = $(this.$el);
                 switch (event.type) {
                     case "seconds":
@@ -84,7 +84,7 @@ export default {
                             type: 'warning',
                             duration: 5000
                         });
-                        App.vueG.$router.push('/application').catch(err => err)
+                        App.vueG.$router.push('/score').catch(err => err)
                         break;
                 }
             });
@@ -101,7 +101,7 @@ export default {
                 type: 'success',
                 duration: 3000
             });
-            App.vueG.$router.push('/application').catch(err => err)
+            App.vueG.$router.push('/score').catch(err => err)
         }
     },
     components: {

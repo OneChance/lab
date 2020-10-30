@@ -27,6 +27,7 @@ import SysCompnent from "../components/SysCompnent";
 import SysRole from "../components/sys/SysRole";
 import SysUser from "../components/sys/SysUser";
 import Score from "../components/exam/Score"
+import TeacherMobile from "../components/info/TeacherMobile";
 
 import Global from "./global"
 
@@ -132,6 +133,7 @@ export default {
                 {path: '/sample', component: Sample},
                 {path: '/exam', component: Paper},
                 {path: '/score', component: Score},
+                {path: '/teacherRate', component: TeacherMobile},
             ];
 
             const router = new VueRouter({

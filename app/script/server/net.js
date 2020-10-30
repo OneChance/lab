@@ -93,7 +93,7 @@ const request = function (api, type, data, progress) {
             title: '错误',
             message: e.response.data.error_msg,
         });
-        if (e.response.data.error_code === '1001') {
+        if (e.response.data.error_code === 1001) {
             App.vueG.$router.push('/sign').catch(err => err);
         }
         return new Promise(() => {

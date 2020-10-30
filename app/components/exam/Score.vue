@@ -1,8 +1,19 @@
 <template>
-    <div>
-        <el-card class="box-card mobile-card content-center">
-            <p class="score">{{ score }}</p>
-        </el-card>
+    <div class="score-table">
+        <el-table
+            :data="scores"
+            border
+            :row-class-name="tableRowClassName"
+            style="width: 100%">
+            <el-table-column
+                prop="time"
+                label="考试时间">
+            </el-table-column>
+            <el-table-column
+                prop="score"
+                label="分数">
+            </el-table-column>
+        </el-table>
     </div>
 </template>
 
@@ -13,22 +24,30 @@ export default {
     name: "Score",
     data: function () {
         return {
-            score: '80',
+            scores: [
+                {time: '2020-10-20 18:30:00', score: 80},
+                {time: '2020-10-15 8:30:00', score: 90},
+                {time: '2020-10-10 13:30:00', score: 70}
+            ],
         }
     },
     mounted: function () {
 
     },
-    methods: {},
+    methods: {
+        tableRowClassName({row, rowIndex}) {
+            if (rowIndex === 1) {
+                return 'success-row';
+            }
+            return '';
+        }
+    },
     components: {},
 }
 </script>
 
 <style scoped>
-.score {
-    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-    font-size: 350%;;
-    font-weight: bolder;
-    color: #347dd6;;
+.score-table {
+    padding: 10px;
 }
 </style>

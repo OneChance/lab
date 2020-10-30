@@ -19,7 +19,7 @@
                    class="form-dialog"
                    :close-on-click-modal="false">
             <template>
-                <el-form ref="form" :model="form" :rules="rules" label-width="80px" :inline="true">
+                <el-form ref="form" :model="form" :rules="rules" label-width="80px" :inline="false">
                     <el-tabs type="card">
                         <el-tab-pane label="基本信息">
                             <el-form-item label="标本名称" prop="name">
@@ -36,20 +36,32 @@
                                     :on-preview="handlePictureCardPreview"
                                     :on-remove="handleRemove"
                                     :file-list="form.imgFile">
-                                    <i class="el-icon-plus"></i>
+                                    <i class="el-icon-plus" @click="toUpload('img')"></i>
                                 </el-upload>
                                 <el-dialog :visible.sync="picCardVisible" size="tiny" append-to-body>
                                     <img width="100%" :src="picCardUrl" alt="">
                                 </el-dialog>
                             </el-form-item>
+                            <el-form-item label="音频文件">
+                                <el-upload
+                                    action="noAction"
+                                    :http-request="upload"
+                                    :on-preview="handleAudioPreview"
+                                    :on-remove="handleAudioRemove"
+                                    :show-file-list="false">
+                                    <audio v-if="form.audioFile" :src="form.audioFile.url" controls="controls"></audio>
+                                    <el-button v-else size="small" type="primary" @click="toUpload('audio')">点击上传
+                                    </el-button>
+                                </el-upload>
+                            </el-form-item>
                         </el-tab-pane>
                         <el-tab-pane label="知识点">
                             <div v-for="(kp,index) in form.kps">
-                                <el-form-item label="标题" prop="'kps.' + index + '.title'"
+                                <el-form-item label="标题" :prop="'kps.' + index + '.title'"
                                               :rules="{required: true, message: '请填写标题', trigger: 'blur'}">
                                     <el-input type="text" v-model="kp.title" style="width:626px"></el-input>
                                 </el-form-item>
-                                <el-form-item label="内容" prop="'kps.' + index + '.content'"
+                                <el-form-item label="内容" :prop="'kps.' + index + '.content'"
                                               :rules="{required: true, message: '请填写内容', trigger: 'blur'}">
                                     <el-input type="textarea" v-model="kp.content" style="width:626px"></el-input>
                                     <el-button @click.prevent="removeKp(kp)">删除</el-button>
@@ -72,7 +84,7 @@
                    :close-on-click-modal="false">
             <template>
                 <section ref="qrArea">
-                    <vue-qr :correctLevel="3" :autoColor="false" colorDark="#313a90" :logoSrc="qr.icon"
+                    <vue-qr :correctLevel="3" :autoColor="false" :colorDark="qr.color" :logoSrc="qr.icon"
                             :text="qr.url" size="400" :margin="0" :logoMargin="3"></vue-qr>
                 </section>
             </template>
@@ -111,7 +123,7 @@ export default {
                 name: '',
                 description: '',
                 imgFiles: [],
-                audioFiles: [],
+                audioFile: '',
                 kps: [{title: '', content: ''}]
             },
             rules: {
@@ -147,7 +159,8 @@ export default {
             uploadType: '',
             qr: {
                 url: 'http://www.baidu.com',
-                icon: ''
+                icon: '',
+                color: "#313a90",
             }
         }
     },
@@ -208,10 +221,9 @@ export default {
             this.uploadType = type
         },
         upload(content) {
-            let comp = this
             let fd = new FormData()
             fd.append('formFile', content.file)
-            Upload.upload(comp.uploadParams.id, fd, (event) => {
+            Upload.upload(3, (event) => {
                 let num = event.loaded / event.total * 100 | 0;
                 content.onProgress({
                     percent: num
@@ -226,7 +238,7 @@ export default {
                 if (this.uploadType === 'img') {
                     this.form.imgFiles.push(fileData)
                 } else {
-                    this.form.audioFiles.push(fileData)
+                    this.form.audioFiles = fileData
                 }
             })
         },

@@ -1,15 +1,26 @@
 <template>
     <el-card class="box-card mobile-card">
         <el-form :model="form">
-            <el-form-item prop="appointmentDate">
-                <el-date-picker v-model="aForm.appointmentDate"
+            <el-form-item prop="lab">
+                <el-select v-model="form.lab" placeholder="请选择实验室" class="mobile-item">
+                    <el-option
+                        v-for="lab in labs"
+                        :key="lab.value"
+                        :label="lab.label"
+                        :value="lab.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="appointmentDate" >
+                <el-date-picker v-model="form.appointmentDate"
                                 format="yyyy-MM-dd"
                                 @change="dateChoose"
+                                class="mobile-item"
                                 value-format="yyyy-MM-dd" type="date" placeholder="选择预约时间">
                 </el-date-picker>
             </el-form-item>
 
-            <el-checkbox-group v-model="aForm.chooseTimeZone">
+            <el-checkbox-group v-model="form.chooseTimeZone">
                 <el-checkbox :label="zone.id" border v-for="zone of this.availableTimeZone"
                              :key="zone.id"
                              class="time-zone">{{ zone.name }}
@@ -28,7 +39,8 @@
 export default {
     data: function () {
         return {
-            aForm: {
+            form: {
+                lab: '',
                 appointmentDate: '',
                 chooseTimeZone: []
             },
@@ -43,6 +55,12 @@ export default {
                 {id: 8, name: '15:00--16:00'},
                 {id: 9, name: '16:00--17:00'},
                 {id: 10, name: '17:00--18:00'},
+            ],
+            labs: [
+                {
+                    value: '1',
+                    label: '第一实验室'
+                },
             ],
         }
     },

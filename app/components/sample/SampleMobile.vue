@@ -4,14 +4,14 @@
             <span>XXX标本</span>
         </div>
 
-        <div><img :src="img" alt="" style="width: 100%"></div>
+        <div class="mobile-item-row">描述</div>
 
-        <div>
+        <div class="mobile-item-row">
+            <img :src="img" alt="" style="width: 100%">
+        </div>
+        <div class="mobile-item-row">
             <audio :src="sound" controls="controls"></audio>
         </div>
-
-        <div>简化流程：设计简洁直观的操作流程；</div>
-
         <el-collapse v-model="activeNames" @change="handleChange">
             <el-collapse-item title="知识点1" name="1">
                 <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
