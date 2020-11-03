@@ -53,7 +53,6 @@ import Common from '../../script/common';
 
 export default {
     name: "SysUser",
-    props: ['type'],
     data: function () {
         return {
             query: {

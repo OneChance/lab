@@ -1,8 +1,8 @@
 <template>
     <div class="mobile-div">
         <el-collapse v-model="activeNames" @change="handleChange">
-            <el-collapse-item :title="teacher.info.name" :name="teacher.info.id" v-for="teacher of teachers"
-                              :key="teacher.info.id">
+            <el-collapse-item :title="teacher.name" :name="teacher.id" v-for="teacher of teachers"
+                              :key="teacher.id">
                 <div class="mobile-item-row">
                     <el-rate v-model="teacher.rate"
                              show-text
@@ -22,24 +22,31 @@
 
 <script>
 
+import Common from "../../script/common";
+import Config from "../../script/config";
+import User from "../../script/server/user";
+
 export default {
     name: "TeacherRate",
     data: function () {
         return {
-            teachers: [
-                {info: {id: 1, name: '张老师'}, rate: '', comment: ''},
-                {info: {id: 2, name: '李老师'}, rate: '', comment: ''},
-                {info: {id: 3, name: '王老师'}, rate: '', comment: ''},
-            ],
+            teachers: [],
             texts: ['极差', '失望', '一般', '满意', '很棒']
         }
     },
     mounted: function () {
-
+        User.getUsers({
+            page: 1,
+            pageSize: 99999999,
+            type: 'TEACHER',
+            login: false
+        }).then(res => {
+            this.teachers = res.list
+        })
     },
     methods: {
         submitRate(teacher) {
-            console.log(teacher)
+            console.log({id: teacher.id, rate: teacher.rate, comment: teacher.comment})
         }
     },
     components: {},

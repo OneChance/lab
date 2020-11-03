@@ -33,4 +33,16 @@ export default {
     getQuestions(data) {
         return Net.get('/question/list/', data);
     },
+    checkExam() {
+        return Net.get('/exam/in/', {});
+    },
+    startExam(data) {
+        return Net.get('/exam/start/', data);
+    },
+    commitAnswer(data) {
+        return Net.jsonPost('/exam/answer/', data, true);
+    },
+    commitPaper(data) {
+        return Net.jsonPost('/exam/submit/', data);
+    }
 };

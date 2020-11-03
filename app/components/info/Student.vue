@@ -22,15 +22,17 @@
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="学年" prop="term.year">
+                    <el-form-item label="学年" prop="overTerm.year">
                         <el-date-picker
-                            v-model="form.term.year"
+                            v-model="form.overTerm.year"
                             type="year"
+                            format="yyyy"
+                            value-format="yyyy"
                             placeholder="选择学年">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="学期" prop="term.num">
-                        <el-select v-model="form.term.num" placeholder="请选择">
+                    <el-form-item label="学期" prop="overTerm.num">
+                        <el-select v-model="form.overTerm.num" placeholder="请选择">
                             <el-option
                                 v-for="num in nums"
                                 :key="num.value"
@@ -57,8 +59,7 @@ import Config from "../../script/config";
 import Common from '../../script/common';
 
 export default {
-    name: "SysUser",
-    props: ['type'],
+    name: "Student",
     data: function () {
         return {
             query: {
@@ -67,17 +68,17 @@ export default {
             addUser: true,
             form: {
                 name: '',
-                term: {year: '', num: ''},
+                overTerm: {year: '', num: ''},
                 type: 'STUDENT'
             },
             rules: {
                 name: [
                     {required: true, message: '请输入用户名', trigger: 'blur'},
                 ],
-                'term.year': [
+                'overTerm.year': [
                     {required: true, message: '请选择学年', trigger: 'blur'},
                 ],
-                'term.num': [
+                'overTerm.num': [
                     {required: true, message: '请选择学期', trigger: 'blur'},
                 ],
             },
@@ -141,6 +142,7 @@ export default {
         edit: function (row) {
             User.getUser({id: row.id}).then(result => {
                 this.userInfoDialogVisible = true
+                result.user.overTerm.year = result.user.overTerm.year + ""
                 this.form = result.user
                 this.addUser = false
             })
@@ -171,7 +173,7 @@ export default {
             })
         },
         termFormatter(row) {
-            return ''
+            return row.overTerm.year + '年第' + row.overTerm.num + '学期'
         }
     },
     components: {

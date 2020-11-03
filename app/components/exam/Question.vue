@@ -1,10 +1,10 @@
 <template>
     <el-card class="box-card question-card">
         <div>
-            {{ question.index }}.{{ question.question }}
+            {{ index + 1 }}.{{ question.title }}
         </div>
         <div v-for="(option,index) of question.options" :key="option.id" class="answer">
-            <el-radio v-model="choose.value" :label="option.id" border>
+            <el-radio v-model="choose.answer" :label="option.answer" @change="commitAnswer" border>
                 {{ indexDescription[index] }}. {{ option.answer }}
             </el-radio>
         </div>
@@ -14,24 +14,33 @@
 
 <script>
 
+import Exam from "../../script/server/manage/exam"
 
 export default {
     name: "Question",
-    props: ['question'],
+    props: ['question', 'index', 'paperId'],
     data: function () {
         return {
             choose: {
                 id: this.question.id,
-                value: 0
+                paperId: this.paperId,
+                answer: ''
             },
             indexDescription: ["A", "B", "C", "D"]
         }
     },
     mounted: function () {
-
-
+        this.choose.answer = this.question.answer
     },
-    methods: {},
+    methods: {
+        commitAnswer() {
+            Exam.commitAnswer(this.choose).then(res => {
+                if (res.exception) {
+                    this.choose.answer = ''
+                }
+            })
+        }
+    },
     components: {},
 }
 </script>

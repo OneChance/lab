@@ -4,30 +4,30 @@ import App from "../app";
 const qs = require('qs');
 
 export default {
-    get(api, data) {
-        return request(api, 'get', data);
+    get(api, data, doException) {
+        return request(api, 'get', data, doException);
     },
-    jsonPost(api, data) {
-        return request(api, 'json_post', data);
+    jsonPost(api, data, doException) {
+        return request(api, 'json_post', data, doException);
     },
-    post(api, data) {
-        return request(api, 'post', data);
+    post(api, data, doException) {
+        return request(api, 'post', data, doException);
     },
-    axiosUpload(api, data, progress) {
-        return request(api, 'file', data, progress);
+    axiosUpload(api, data, progress, doException) {
+        return request(api, 'file', data, doException, progress);
     },
-    download(url) {
-        return request(url, 'download');
+    download(url, doException) {
+        return request(url, 'download', null, doException);
     },
-    put(api, data) {
-        return request(api, 'put', data);
+    put(api, data, doException) {
+        return request(api, 'put', data, doException);
     },
-    delete(api) {
-        return request(api, 'delete');
+    delete(api, doException) {
+        return request(api, 'delete', null, doException);
     }
 };
 
-const request = function (api, type, data, progress) {
+const request = function (api, type, data, doException, progress) {
     let axiosRequest;
     const fullURL = Env.baseURL + api;
 
@@ -96,7 +96,11 @@ const request = function (api, type, data, progress) {
         if (e.response.data.error_code === 1001) {
             App.vueG.$router.push('/sign').catch(err => err);
         }
-        return new Promise(() => {
-        })
+        if (doException) {
+            return {exception: true}
+        } else {
+            return new Promise(() => {
+            })
+        }
     });
 };
