@@ -18,7 +18,7 @@
                    :visible.sync="userInfoDialogVisible"
                    :close-on-click-modal="false">
             <template>
-                <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                <el-form ref="form" :model="form" :rules="rules" label-width="80px" class="demo-ruleForm">
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
@@ -76,10 +76,10 @@ export default {
                     {required: true, message: '请输入用户名', trigger: 'blur'},
                 ],
                 'overTerm.year': [
-                    {required: true, message: '请选择学年', trigger: 'blur'},
+                    {required: true, message: '请选择学年', trigger: 'change'},
                 ],
                 'overTerm.num': [
-                    {required: true, message: '请选择学期', trigger: 'blur'},
+                    {required: true, message: '请选择学期', trigger: 'change'},
                 ],
             },
             tableConfig: {

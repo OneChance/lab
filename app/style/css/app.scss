@@ -292,8 +292,6 @@ body {
 
 .el-form-item__error {
     position: relative;
-    padding-top: 0;
-    padding-bottom: 10px;
 }
 
 .el-table .success-row {
@@ -365,6 +363,7 @@ body {
 
 .mobile-item {
     width: 100% !important;
+    margin-bottom: 10px !important;
 }
 
 .mobile-div {
