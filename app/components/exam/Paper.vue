@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-tag type="warning" class="time-tip" v-if="started">
+        <el-tag type="warning" class="time-tip" v-if="status==='started'">
             <div class="timer">
                 考试剩余时间:<span class="hours"></span>:<span class="minutes"></span>:<span class="seconds"></span>
             </div>
@@ -10,10 +10,10 @@
                   v-bind:paperId="paperId"
                   v-for="(question,index) of questions"
                   :key="question.id"></question>
-        <div class=" content-center submit-card" v-if="!started">
+        <div class=" content-center submit-card" v-if="status==='not-started'">
             <el-button type="primary" @click="start">开始考试</el-button>
         </div>
-        <el-card class="box-card content-center submit-card" v-if="started">
+        <el-card class="box-card content-center submit-card" v-if="status==='started'">
             <el-button type="primary" @click="submit">提交考卷</el-button>
         </el-card>
     </div>
@@ -32,28 +32,34 @@ export default {
     name: "Paper",
     data: function () {
         return {
-            started: false,
+            status: 'no-status',
+            examId: '',
             paperId: '',
             questions: []
         }
     },
     mounted: function () {
         Exam.checkExam().then(res => {
-            this.started = res.start
-            this.paperId = res.paper.id
-            this.exam(res.paper.questions, res.paper.startTime, res.exam.duration)
+            if (res.paper) {
+                this.exam(res)
+            } else {
+                this.status = 'not-started'
+                this.examId = res.exam.id
+            }
         })
     },
     methods: {
         start() {
-            Exam.startExam({paperId: this.paperId}).then(res => {
-                this.exam(res.paper.questions, res.paper.startTime, res.exam.duration)
+            Exam.startExam({examId: this.examId}).then(res => {
+                this.exam(res)
             })
         },
-        exam(questions, startTime, duration) {
-            this.questions = questions
+        exam(res) {
+            this.status = 'started'
+            this.paperId = res.paper.id
+            this.questions = res.paper.questions
             this.$nextTick(() => {
-                $('.timer').countdown((duration * 1000) + new Date(startTime).valueOf(), (event) => {
+                $('.timer').countdown((res.exam.duration * 1000) + new Date(res.paper.startTime).valueOf(), (event) => {
                     let $this = $(this.$el);
                     switch (event.type) {
                         case "seconds":
@@ -89,7 +95,7 @@ export default {
                         duration: 3000
                     });
                 }
-                App.vueG.$router.push('/score').catch(err => err)
+                App.vueG.$router.push('/wx/score').catch(err => err)
             })
         }
     },

@@ -19,8 +19,14 @@
                    :close-on-click-modal="false">
             <template>
                 <el-form ref="form" :model="form" :rules="rules" label-width="80px" class="demo-ruleForm">
+                    <el-form-item label="学号" prop="username">
+                        <el-input v-model="form.username" placeholder="学号"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="password">
+                        <el-input v-model="form.password" placeholder="密码"></el-input>
+                    </el-form-item>
                     <el-form-item label="姓名" prop="name">
-                        <el-input v-model="form.name"></el-input>
+                        <el-input v-model="form.name" placeholder="姓名"></el-input>
                     </el-form-item>
                     <el-form-item label="学年" prop="overTerm.year">
                         <el-date-picker
@@ -63,15 +69,23 @@ export default {
     data: function () {
         return {
             query: {
-                userName: ''
+                username: ''
             },
             addUser: true,
             form: {
+                username: '',
+                password: '',
                 name: '',
                 overTerm: {year: '', num: ''},
                 type: 'STUDENT'
             },
             rules: {
+                username: [
+                    {required: true, message: '请输入学号', trigger: 'blur'},
+                ],
+                password: [
+                    {required: true, message: '请输入密码', trigger: 'blur'},
+                ],
                 name: [
                     {required: true, message: '请输入用户名', trigger: 'blur'},
                 ],
@@ -105,7 +119,8 @@ export default {
                 ]
             },
             userInfoDialogVisible: false,
-            nums: [{value: 1, label: '第一学期'}, {value: 2, label: '第二学期'}]
+            nums: [{value: 1, label: '第一学期'}, {value: 2, label: '第二学期'}],
+            passwordTemp: '',
         }
     },
     mounted: function () {
@@ -115,6 +130,10 @@ export default {
         commit: function () {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
+                    //如果密码未修改,当前显示的是加密后的密码,保存时不在传递,防止重复加密
+                    if (this.form.password === this.passwordTemp) {
+                        this.form.password = ''
+                    }
                     if (this.addUser) {
                         User.saveUser(this.form).then(() => {
                             this.operSuccess(this)
@@ -145,6 +164,7 @@ export default {
                 result.user.overTerm.year = result.user.overTerm.year + ""
                 this.form = result.user
                 this.addUser = false
+                this.passwordTemp = result.user.password
             })
         },
         delete: function (row) {

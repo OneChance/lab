@@ -49,7 +49,7 @@ const request = function (api, type, data, doException, progress) {
         axiosRequest = App.vueG.axios.create({
             baseURL: Env.baseURL,
             headers: {'Content-Type': 'multipart/form-data'},
-        }).post(fullURL, data, {
+        }).post('fullURL', data, {
             headers: {Authorization: token},
             onUploadProgress: progress,
         });
@@ -89,12 +89,28 @@ const request = function (api, type, data, doException, progress) {
         }
         return response.data;
     }).catch((e) => {
-        App.vueG.$notify.error({
-            title: '错误',
-            message: e.response.data.error_msg ? e.response.data.error_msg : '服务异常',
-        });
+
+        if (App.vueG.$route.path.indexOf('/wx/') !== -1) {
+            App.vueG.$message({
+                showClose: true,
+                message: e.response.data.error_msg ? e.response.data.error_msg : '服务异常',
+                type: 'error',
+                duration: 5000
+            });
+        } else {
+            App.vueG.$notify.error({
+                title: '错误',
+                message: e.response.data.error_msg ? e.response.data.error_msg : '服务异常',
+            });
+        }
+
         if (e.response.data.error_code === 1001) {
-            App.vueG.$router.push('/sign').catch(err => err);
+            if (App.vueG.$route.path.indexOf('/wx/') !== -1) {
+                localStorage.setItem("currentPath", App.vueG.$route.path);
+                App.vueG.$router.push('/wx/loginM').catch(err => err);
+            } else {
+                App.vueG.$router.push('/sign').catch(err => err);
+            }
         }
         if (doException) {
             return {exception: true}

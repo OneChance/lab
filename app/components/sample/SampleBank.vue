@@ -46,9 +46,7 @@
                                 <el-upload
                                     action="noAction"
                                     :http-request="upload"
-                                    :on-preview="handleAudioPreview"
-                                    :on-remove="handleAudioRemove"
-                                    :show-file-list="false">
+                                    :on-remove="handleAudioRemove">
                                     <audio v-if="form.audioFile" :src="form.audioFile.url" controls="controls"></audio>
                                     <el-button v-else size="small" type="primary" @click="toUpload('audio')">点击上传
                                     </el-button>
@@ -238,7 +236,8 @@ export default {
                 if (this.uploadType === 'img') {
                     this.form.imgFiles.push(fileData)
                 } else {
-                    this.form.audioFiles = fileData
+                    console.log(content)
+                    this.form.audioFile = fileData
                 }
             })
         },
@@ -247,6 +246,9 @@ export default {
         },
         handleRemove(file) {
 
+        },
+        handleAudioRemove(file) {
+            this.form.audioFile = ''
         },
         handlePictureCardPreview(file) {
             this.picCardUrl = file.url;

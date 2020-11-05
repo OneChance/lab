@@ -4,7 +4,8 @@
             {{ index + 1 }}.{{ question.title }}
         </div>
         <div v-for="(option,index) of question.options" :key="option.id" class="answer">
-            <el-radio v-model="choose.answer" :label="option.answer" @change="commitAnswer" border>
+            <el-radio v-model="choose.answer" :label="option.answer" @change="commitAnswer" border
+                      class="question">
                 {{ indexDescription[index] }}. {{ option.answer }}
             </el-radio>
         </div>
@@ -49,6 +50,10 @@ export default {
 
 .question-card {
     margin-top: 15px;
+}
+
+.question {
+    width: 100% !important;
 }
 
 .answer {

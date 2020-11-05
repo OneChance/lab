@@ -1,8 +1,8 @@
 <template id="index">
     <div class="mobile-div">
         <el-form :model="form" :rules="rules" ref="form">
-            <el-form-item class="mobile-item" prop="no">
-                <el-input v-model="form.no" placeholder="学号"></el-input>
+            <el-form-item class="mobile-item" prop="username">
+                <el-input v-model="form.username" placeholder="学号"></el-input>
             </el-form-item>
             <el-form-item class="mobile-item" prop="password">
                 <el-input type="password" v-model="form.password" placeholder="密码"></el-input>
@@ -16,6 +16,7 @@
 <script>
 
 import App from "../script/app";
+import Account from "../script/server/account";
 
 export default {
     created: function () {
@@ -24,7 +25,7 @@ export default {
     data: function () {
         return {
             form: {
-                no: '',
+                username: '',
                 password: '',
             },
             rules: {
@@ -44,9 +45,11 @@ export default {
         login() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
-                    console.log(this.form)
-                    /*localStorage.setItem("apm_token", res.token);
-                    this.$cookie.set('apm_token', res.token);*/
+                    Account.signIn(this.form).then(res => {
+                        localStorage.setItem("apm_token", res.token);
+                        this.$cookie.set('apm_token', res.token);
+                        App.vueG.$router.push(localStorage.getItem('currentPath')).catch(err => err)
+                    });
                 }
             });
         },

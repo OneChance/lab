@@ -403,6 +403,12 @@ body {
     height: auto;
 }
 
+.scores {
+    .el-alert__title {
+        font-size: larger;
+    }
+}
+
 //适配小屏幕
 @media screen and (max-width: 480px) {
     body {
@@ -443,5 +449,18 @@ body {
         .el-menu--popup i {
             color: #347dd6 !important;
         }
+
+        .el-message {
+            min-width: 350px;
+        }
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .el-table {
+        font-size: 12px;
+    }
+    .el-message {
+        min-width: 300px !important;
     }
 }

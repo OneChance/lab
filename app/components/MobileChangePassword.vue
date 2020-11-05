@@ -62,7 +62,7 @@ export default {
             });
         },
         cancel() {
-            App.vueG.$router.push('/loginM').catch(err => err)
+            App.vueG.$router.push('/wx/loginM').catch(err => err)
         }
     },
     components: {},

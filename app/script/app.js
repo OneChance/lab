@@ -136,14 +136,14 @@ export default {
                         },
                     ]
                 },
-                {path: '/error', component: Error},
-                {path: '/appointment', component: Appointment},
-                {path: '/sample', component: Sample},
-                {path: '/exam', component: Paper},
-                {path: '/score', component: Score},
-                {path: '/teacherRate', component: TeacherMobile},
-                {path: '/loginM', component: MobileLogin},
-                {path: '/changePasswordM', component: MobileChangePassword},
+                {path: '/wx/error', component: Error},
+                {path: '/wx/appointment', component: Appointment},
+                {path: '/wx/sample', component: Sample},
+                {path: '/wx/exam', component: Paper},
+                {path: '/wx/score', component: Score},
+                {path: '/wx/teacherRate', component: TeacherMobile},
+                {path: '/wx/loginM', name: '/wx/loginM', component: MobileLogin},
+                {path: '/wx/changePasswordM', component: MobileChangePassword},
             ];
 
             const router = new VueRouter({
