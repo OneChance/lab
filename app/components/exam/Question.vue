@@ -35,10 +35,8 @@ export default {
     },
     methods: {
         commitAnswer() {
-            Exam.commitAnswer(this.choose).then(res => {
-                if (res.exception) {
-                    this.choose.answer = ''
-                }
+            Exam.commitAnswer(this.choose).catch(res => {
+                this.choose.answer = ''
             })
         }
     },

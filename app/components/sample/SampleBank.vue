@@ -35,7 +35,7 @@
                                     list-type="picture-card"
                                     :on-preview="handlePictureCardPreview"
                                     :on-remove="handleRemove"
-                                    :file-list="form.imgFile">
+                                    :file-list="form.imgFiles">
                                     <i class="el-icon-plus" @click="toUpload('img')"></i>
                                 </el-upload>
                                 <el-dialog :visible.sync="picCardVisible" size="tiny" append-to-body>
@@ -47,9 +47,10 @@
                                     action="noAction"
                                     :http-request="upload"
                                     :on-remove="handleAudioRemove">
-                                    <audio v-if="form.audioFile" :src="form.audioFile.url" controls="controls"></audio>
-                                    <el-button v-else size="small" type="primary" @click="toUpload('audio')">点击上传
+                                    <el-button v-if="!form.audioFile" size="small" type="primary"
+                                               @click="toUpload('audio')">点击上传
                                     </el-button>
+                                    <audio v-else :src="form.audioFile.url" controls="controls"></audio>
                                 </el-upload>
                             </el-form-item>
                         </el-tab-pane>
@@ -103,6 +104,7 @@ import Config from "../../script/config";
 import Sample from "../../script/server/manage/sample";
 import Common from "../../script/common";
 import Upload from "../../script/server/upload";
+import Env from "../../script/server/env"
 import VueQr from 'vue-qr'
 
 export default {
@@ -216,12 +218,13 @@ export default {
             comp.list({page: 1})
         },
         toUpload(type) {
+            console.log(type)
             this.uploadType = type
         },
         upload(content) {
             let fd = new FormData()
             fd.append('formFile', content.file)
-            Upload.upload(3, (event) => {
+            Upload.upload(fd, (event) => {
                 let num = event.loaded / event.total * 100 | 0;
                 content.onProgress({
                     percent: num
@@ -231,12 +234,13 @@ export default {
                 let fileData = {
                     'id': res.id,
                     'uid': content.file.uid,
-                    'name': content.file.name
+                    'name': content.file.name,
+                    'url': Env.baseURL + '/file/download/?id=' + res.id,
                 }
+                console.log(this.uploadType)
                 if (this.uploadType === 'img') {
                     this.form.imgFiles.push(fileData)
                 } else {
-                    console.log(content)
                     this.form.audioFile = fileData
                 }
             })

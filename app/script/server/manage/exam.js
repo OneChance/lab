@@ -40,7 +40,7 @@ export default {
         return Net.get('/exam/start/', data);
     },
     commitAnswer(data) {
-        return Net.jsonPost('/exam/answer/', data, true);
+        return Net.jsonPost('/exam/answer/', data);
     },
     commitPaper(data) {
         return Net.jsonPost('/exam/submit/', data);

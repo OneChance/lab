@@ -46,15 +46,15 @@ export default {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                     Account.signIn(this.form).then(res => {
-                        localStorage.setItem("apm_token", res.token);
-                        this.$cookie.set('apm_token', res.token);
+                        localStorage.setItem("ssm_token", res.token);
+                        this.$cookie.set('ssm_token', res.token);
                         App.vueG.$router.push(localStorage.getItem('currentPath')).catch(err => err)
                     });
                 }
             });
         },
         changePassword() {
-            App.vueG.$router.push('/changePasswordM').catch(err => err)
+            App.vueG.$router.push('/wx/changePasswordM').catch(err => err)
         }
     },
     components: {},

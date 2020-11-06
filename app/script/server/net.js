@@ -4,37 +4,37 @@ import App from "../app";
 const qs = require('qs');
 
 export default {
-    get(api, data, doException) {
-        return request(api, 'get', data, doException);
+    get(api, data) {
+        return request(api, 'get', data);
     },
-    jsonPost(api, data, doException) {
-        return request(api, 'json_post', data, doException);
+    jsonPost(api, data) {
+        return request(api, 'json_post', data);
     },
-    post(api, data, doException) {
-        return request(api, 'post', data, doException);
+    post(api, data) {
+        return request(api, 'post', data);
     },
-    axiosUpload(api, data, progress, doException) {
-        return request(api, 'file', data, doException, progress);
+    axiosUpload(api, data, progress) {
+        return request(api, 'file', data, progress);
     },
-    download(url, doException) {
-        return request(url, 'download', null, doException);
+    download(url) {
+        return request(url, 'download');
     },
-    put(api, data, doException) {
-        return request(api, 'put', data, doException);
+    put(api, data) {
+        return request(api, 'put', data);
     },
-    delete(api, doException) {
-        return request(api, 'delete', null, doException);
+    delete(api) {
+        return request(api, 'delete');
     }
 };
 
-const request = function (api, type, data, doException, progress) {
+const request = function (api, type, data, progress) {
     let axiosRequest;
     const fullURL = Env.baseURL + api;
 
     //获取token
-    let token = localStorage.getItem('apm_token');
+    let token = localStorage.getItem('ssm_token');
     if (!token) {
-        token = App.vueG.$cookie.get('apm_token')
+        token = App.vueG.$cookie.get('ssm_token')
     }
     if (!token) {
         token = '';
@@ -49,7 +49,7 @@ const request = function (api, type, data, doException, progress) {
         axiosRequest = App.vueG.axios.create({
             baseURL: Env.baseURL,
             headers: {'Content-Type': 'multipart/form-data'},
-        }).post('fullURL', data, {
+        }).post(fullURL, data, {
             headers: {Authorization: token},
             onUploadProgress: progress,
         });
@@ -81,12 +81,6 @@ const request = function (api, type, data, doException, progress) {
     }
 
     return axiosRequest.then((response) => {
-        if (!response) {
-            App.vueG.$notify.error({
-                title: '错误',
-                message: '响应超时',
-            });
-        }
         return response.data;
     }).catch((e) => {
 
@@ -112,11 +106,9 @@ const request = function (api, type, data, doException, progress) {
                 App.vueG.$router.push('/sign').catch(err => err);
             }
         }
-        if (doException) {
-            return {exception: true}
-        } else {
-            return new Promise(() => {
-            })
-        }
+
+        return new Promise((resolve, reject) => {
+            reject()
+        })
     });
 };
