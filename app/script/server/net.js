@@ -24,13 +24,13 @@ export default {
     },
     delete(api) {
         return request(api, 'delete');
+    },
+    getToken() {
+        return _getToken()
     }
 };
 
-const request = function (api, type, data, progress) {
-    let axiosRequest;
-    const fullURL = Env.baseURL + api;
-
+const _getToken = function () {
     //获取token
     let token = localStorage.getItem('ssm_token');
     if (!token) {
@@ -39,6 +39,14 @@ const request = function (api, type, data, progress) {
     if (!token) {
         token = '';
     }
+    return token
+}
+
+const request = function (api, type, data, progress) {
+    let axiosRequest;
+    const fullURL = Env.baseURL + api;
+
+    let token = _getToken()
 
     if (type === 'download') {
         axiosRequest = App.vueG.axios.get(api, {
@@ -48,10 +56,13 @@ const request = function (api, type, data, progress) {
     } else if (type === 'file') {
         axiosRequest = App.vueG.axios.create({
             baseURL: Env.baseURL,
-            headers: {'Content-Type': 'multipart/form-data'},
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': token
+            },
+            onUploadProgress: progress
         }).post(fullURL, data, {
-            headers: {Authorization: token},
-            onUploadProgress: progress,
+            cancelToken: data.get('formFile').source.token
         });
     } else if (type === 'get') {
         axiosRequest = App.vueG.axios.get(fullURL, {
@@ -84,26 +95,30 @@ const request = function (api, type, data, progress) {
         return response.data;
     }).catch((e) => {
 
-        if (App.vueG.$route.path.indexOf('/wx/') !== -1) {
-            App.vueG.$message({
-                showClose: true,
-                message: e.response.data.error_msg ? e.response.data.error_msg : '服务异常',
-                type: 'error',
-                duration: 5000
-            });
-        } else {
-            App.vueG.$notify.error({
-                title: '错误',
-                message: e.response.data.error_msg ? e.response.data.error_msg : '服务异常',
-            });
-        }
+        if (e.message && e.message === 'cancel-upload') {
 
-        if (e.response.data.error_code === 1001) {
+        } else {
             if (App.vueG.$route.path.indexOf('/wx/') !== -1) {
-                localStorage.setItem("currentPath", App.vueG.$route.path);
-                App.vueG.$router.push('/wx/loginM').catch(err => err);
+                App.vueG.$message({
+                    showClose: true,
+                    message: e.response.data.error_msg ? e.response.data.error_msg : '服务异常',
+                    type: 'error',
+                    duration: 5000
+                });
             } else {
-                App.vueG.$router.push('/sign').catch(err => err);
+                App.vueG.$notify.error({
+                    title: '错误',
+                    message: e.response.data.error_msg ? e.response.data.error_msg : '服务异常',
+                });
+            }
+
+            if (e.response.data.error_code === 1001) {
+                if (App.vueG.$route.path.indexOf('/wx/') !== -1) {
+                    localStorage.setItem("currentPath", App.vueG.$route.path);
+                    App.vueG.$router.push('/wx/loginM').catch(err => err);
+                } else {
+                    App.vueG.$router.push('/sign').catch(err => err);
+                }
             }
         }
 

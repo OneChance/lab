@@ -30,13 +30,17 @@
                             </el-form-item>
                             <el-form-item label="标本图片" prop="imgFile">
                                 <el-upload
-                                    action="noAction"
-                                    :http-request="upload"
+                                    :action="uploadAction"
                                     list-type="picture-card"
+                                    name="formFile"
+                                    :headers="uploadHeaders"
+                                    with-credentials="true"
+                                    :on-success="imgSuccess"
                                     :on-preview="handlePictureCardPreview"
+                                    :before-remove="beforeRemove"
                                     :on-remove="handleRemove"
                                     :file-list="form.imgFiles">
-                                    <i class="el-icon-plus" @click="toUpload('img')"></i>
+                                    <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <el-dialog :visible.sync="picCardVisible" size="tiny" append-to-body>
                                     <img width="100%" :src="picCardUrl" alt="">
@@ -44,11 +48,14 @@
                             </el-form-item>
                             <el-form-item label="音频文件">
                                 <el-upload
-                                    action="noAction"
-                                    :http-request="upload"
+                                    :action="uploadAction"
+                                    name="formFile"
+                                    :headers="uploadHeaders"
+                                    with-credentials="true"
+                                    :on-success="audioSuccess"
+                                    :before-remove="beforeRemove"
                                     :on-remove="handleAudioRemove">
-                                    <el-button v-if="!form.audioFile" size="small" type="primary"
-                                               @click="toUpload('audio')">点击上传
+                                    <el-button v-if="!form.audioFile" size="small" type="primary">点击上传
                                     </el-button>
                                     <audio v-else :src="form.audioFile.url" controls="controls"></audio>
                                 </el-upload>
@@ -103,8 +110,8 @@ import NavComponent from "../util/NavComponent";
 import Config from "../../script/config";
 import Sample from "../../script/server/manage/sample";
 import Common from "../../script/common";
-import Upload from "../../script/server/upload";
 import Env from "../../script/server/env"
+import Upload from "../../script/server/upload"
 import VueQr from 'vue-qr'
 
 export default {
@@ -161,11 +168,15 @@ export default {
                 url: 'http://www.baidu.com',
                 icon: '',
                 color: "#313a90",
-            }
+            },
         }
     },
     mounted: function () {
         this.list()
+        this.uploadAction = Env.baseURL + '/file/upload/'
+        this.uploadHeaders = {
+            Authorization: Upload.getToken()
+        }
     },
     methods: {
         add() {
@@ -217,41 +228,29 @@ export default {
             });
             comp.list({page: 1})
         },
-        toUpload(type) {
-            console.log(type)
-            this.uploadType = type
-        },
-        upload(content) {
-            let fd = new FormData()
-            fd.append('formFile', content.file)
-            Upload.upload(fd, (event) => {
-                let num = event.loaded / event.total * 100 | 0;
-                content.onProgress({
-                    percent: num
-                })
-            }).then(res => {
-                content.onSuccess()
-                let fileData = {
-                    'id': res.id,
-                    'uid': content.file.uid,
-                    'name': content.file.name,
-                    'url': Env.baseURL + '/file/download/?id=' + res.id,
-                }
-                console.log(this.uploadType)
-                if (this.uploadType === 'img') {
-                    this.form.imgFiles.push(fileData)
-                } else {
-                    this.form.audioFile = fileData
-                }
+        imgSuccess: function (response, file) {
+            this.form.imgFiles.push({
+                id: response.id,
+                uid: file.uid,
+                url: file.url
             })
+        },
+        audioSuccess: function (response, file) {
+            this.form.audioFile = {
+                id: response.id,
+                url: file.url
+            }
+        },
+        beforeRemove(file) {
+            return this.$confirm(`确定移除 ${file.name}？`)
         },
         handlePreview(file) {
             window.open(Env.baseURL + file.url)
         },
         handleRemove(file) {
-
+            this.form.imgFiles = this.form.imgFiles.filter(f => f.uid !== file.uid)
         },
-        handleAudioRemove(file) {
+        handleAudioRemove() {
             this.form.audioFile = ''
         },
         handlePictureCardPreview(file) {

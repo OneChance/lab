@@ -105,7 +105,7 @@ export default {
             })
         },
         view(row) {
-            App.vueG.$router.push({path: 'onesample', query: {id: row.id, name: row.name}}).catch(err => err);
+            this.$router.push({path: 'onesample', query: {id: row.id, name: row.name}}).catch(err => err);
         },
         addCommit() {
             this.$refs['form'].validate((valid) => {

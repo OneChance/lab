@@ -30,7 +30,6 @@
 <script>
 
 import Account from '../script/server/account.js'
-import App from '../script/app.js'
 
 export default {
     data: function () {
@@ -66,9 +65,9 @@ export default {
         signCallback: function (res) {
             if (res) {
                 //保存token
-                localStorage.setItem("apm_token", res.token);
-                this.$cookie.set('apm_token', res.token);
-                App.vueG.$router.push('index').catch(err => err)
+                localStorage.setItem("ssm_token", res.token);
+                this.$cookie.set('ssm_token', res.token);
+                this.$router.push('index').catch(err => err)
             }
         },
     },
