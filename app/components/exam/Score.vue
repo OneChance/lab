@@ -6,7 +6,7 @@
             :row-class-name="tableRowClassName"
             style="width: 100%">
             <el-table-column
-                prop="time"
+                prop="startTime"
                 label="考试时间">
             </el-table-column>
             <el-table-column
@@ -29,6 +29,9 @@
 
 <script>
 
+import Exam from "../../script/server/manage/exam"
+import Config from "../../script/config"
+
 export default {
     name: "Score",
     data: function () {
@@ -38,12 +41,10 @@ export default {
         }
     },
     mounted: function () {
-        this.scores = [
-            {time: '2020-10-20 18:30:00', score: 80},
-            {time: '2020-10-15 8:30:00', score: 90},
-            {time: '2020-10-10 13:30:00', score: 70}
-        ]
-        this.finalScore = Math.max(...this.scores.map(s => s.score))
+        Exam.scores(Config.allPage).then(res => {
+            this.scores = res.list
+            this.finalScore = Math.max(...this.scores.map(s => s.score))
+        })
     },
     methods: {
         tableRowClassName({row, rowIndex}) {

@@ -26,12 +26,8 @@ body {
 }
 
 .box-card {
-    .el-input {
-        margin-bottom: 10px;
-    }
-
     .el-form-item {
-        margin-bottom: 0 !important;
+        margin-bottom: 10px !important;
     }
 }
 
@@ -251,25 +247,26 @@ body {
 .form-table {
     width: 100%;
     font-family: verdana, arial, sans-serif;
-    font-size: 11px;
+    font-size: 15px;
     color: #333333;
     border-width: 1px;
-    border-color: #666666;
+    border-color: #adaeb3;
     border-collapse: collapse;
 
     th {
         border-width: 1px;
         padding: 8px;
         border-style: solid;
-        border-color: #666666;
-        background-color: #f9f8f8;
+        border-color: #adaeb3;
+        color: #909399;
+        background-color: #f5f7fa;
     }
 
     td {
         border-width: 1px;
         padding: 8px;
         border-style: solid;
-        border-color: #666666;
+        border-color: #adaeb3;
         background-color: #ffffff;
     }
 
@@ -361,14 +358,23 @@ body {
 
 //mobile----------------------------------------
 
+
 .mobile-item {
     width: 100% !important;
     margin-bottom: 10px !important;
     margin-left: 0 !important;
 }
 
+.mobile-item-width {
+    width: 100% !important;
+}
+
 .mobile-div {
     padding: 10px;
+
+    .el-form-item {
+        margin-bottom: 0 !important;
+    }
 }
 
 .mobile-item-row {

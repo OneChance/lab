@@ -117,7 +117,7 @@ export default {
     methods: {
         signOut: function () {
             Account.logOut().then(() => {
-                App.vueG.$router.push('sign').catch(err => err);
+                App.vueG.$router.push('/sign').catch(err => err);
             })
             this.$cookie.delete('apm_token');
             localStorage.removeItem("apm_token");

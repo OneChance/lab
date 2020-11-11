@@ -161,10 +161,12 @@ export default {
         edit: function (row) {
             User.getUser({id: row.id}).then(result => {
                 this.userInfoDialogVisible = true
-                result.user.overTerm.year = result.user.overTerm.year + ""
-                this.form = result.user
-                this.addUser = false
-                this.passwordTemp = result.user.password
+                this.$nextTick(() => {
+                    result.user.overTerm.year = result.user.overTerm.year + ""
+                    this.form = result.user
+                    this.addUser = false
+                    this.passwordTemp = result.user.password
+                });
             })
         },
         delete: function (row) {

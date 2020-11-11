@@ -14,6 +14,7 @@ import Index from '../components/Index.vue';
 import Error from '../components/Error.vue';
 import AppCompnent from "../components/AppCompnent";
 import Appointment from "../components/appointment/Appointment";
+import Appointments from "../components/appointment/Appointments";
 import QuestionBanks from "../components/exam/QuestionBanks";
 import QuestionBank from "../components/exam/QuestionBank";
 import SampleBanks from "../components/sample/SampleBanks";
@@ -144,6 +145,7 @@ export default {
                 {path: '/wx/teacherRate', component: TeacherMobile},
                 {path: '/wx/loginM', name: '/wx/loginM', component: MobileLogin},
                 {path: '/wx/changePasswordM', component: MobileChangePassword},
+                {path: '/wx/appointments', component: Appointments},
             ];
 
             const router = new VueRouter({

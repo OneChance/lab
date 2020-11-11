@@ -50,10 +50,34 @@ export default {
         return head + s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整');
     },
     copyObject(from) {
-        const to = {};
-        for (const prop in from) {
-            to[prop] = from[prop];
-        }
-        return to;
+        let temp = JSON.stringify(from)
+        return JSON.parse(temp)
     },
+    message(comp, type, content, close, duration) {
+        duration = duration ? duration : 3000
+        comp.$message({
+            showClose: close,
+            message: content,
+            type: type,
+            duration: duration
+        });
+    },
+    dateFormat(fmt, date) {
+        let ret;
+        const opt = {
+            "Y+": date.getFullYear().toString(),
+            "m+": (date.getMonth() + 1).toString(),
+            "d+": date.getDate().toString(),
+            "H+": date.getHours().toString(),
+            "M+": date.getMinutes().toString(),
+            "S+": date.getSeconds().toString()
+        };
+        for (let k in opt) {
+            ret = new RegExp("(" + k + ")").exec(fmt);
+            if (ret) {
+                fmt = fmt.replace(ret[1], (ret[1].length === 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+            }
+        }
+        return fmt;
+    }
 };

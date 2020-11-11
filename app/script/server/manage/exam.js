@@ -34,7 +34,7 @@ export default {
         return Net.get('/question/list/', data);
     },
     checkExam() {
-        return Net.get('/exam/in/', {});
+        return Net.get('/exam/in/');
     },
     startExam(data) {
         return Net.get('/exam/start/', data);
@@ -44,5 +44,8 @@ export default {
     },
     commitPaper(data) {
         return Net.jsonPost('/exam/submit/', data);
+    },
+    scores(data) {
+        return Net.get('/exam/paper/list/',data);
     }
 };

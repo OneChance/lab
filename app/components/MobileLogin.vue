@@ -1,6 +1,9 @@
 <template id="index">
     <div class="mobile-div">
         <el-form :model="form" :rules="rules" ref="form">
+            <el-form-item class="mobile-item" prop="name">
+                <el-input v-model="form.name" placeholder="姓名"></el-input>
+            </el-form-item>
             <el-form-item class="mobile-item" prop="username">
                 <el-input v-model="form.username" placeholder="学号"></el-input>
             </el-form-item>
@@ -29,6 +32,9 @@ export default {
                 password: '',
             },
             rules: {
+                name: [
+                    {required: true, message: '请输入姓名', trigger: 'change'},
+                ],
                 no: [
                     {required: true, message: '请输入学号', trigger: 'change'},
                 ],

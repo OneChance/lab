@@ -2,7 +2,7 @@
     <div>
         <div class="center">
             <el-card class="box-card login-card">
-                <div slot="header" class="clearfix header">
+                <div slot="header" class="header">
                     <span class="sign-title">实验室管理系统</span>
                 </div>
                 <el-form :model="form" :rules="rules" ref="form">
@@ -12,14 +12,8 @@
                     <el-form-item prop="password">
                         <el-input type="password" v-model="form.password" placeholder="密码"></el-input>
                     </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" class="sign-btn sign-local-btn" @click="signIn">
-                            登陆
-                        </el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" class="sign-btn" @click="authCenter">统一身份认证</el-button>
-                    </el-form-item>
+                    <el-button type="primary" class="sign-btn sign-local-btn" @click="signIn">登陆</el-button>
+                    <el-button type="primary" class="sign-btn" @click="authCenter">统一身份认证</el-button>
                 </el-form>
             </el-card>
         </div>
@@ -94,17 +88,9 @@ export default {
     text-align: center;
 }
 
-.clearfix:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0;
-}
-
 .sign-btn {
     width: 100%;
+    margin-left: 0 !important;
 }
 
 .center {
@@ -117,16 +103,6 @@ export default {
     background-color: #f7f3f3;
     display: flex;
     justify-content: center;
-}
-
-.logo img {
-    vertical-align: middle;
-    padding-right: 10px;
-}
-
-.logo span {
-    border-left: 1px solid #b9bfcf;
-    padding-left: 10px;
 }
 
 .foot {

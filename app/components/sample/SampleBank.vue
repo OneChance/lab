@@ -28,7 +28,7 @@
                             <el-form-item label="标本描述" prop="name">
                                 <el-input type="textarea" v-model="form.name" style="width:700px"></el-input>
                             </el-form-item>
-                            <el-form-item label="标本图片" prop="imgFile">
+                            <el-form-item label="标本图片" prop="imgFiles">
                                 <el-upload
                                     :action="uploadAction"
                                     list-type="picture-card"
@@ -55,7 +55,8 @@
                                     :on-success="audioSuccess"
                                     :before-remove="beforeRemove"
                                     :on-remove="handleAudioRemove">
-                                    <el-button v-if="!form.audioFile" size="small" type="primary">点击上传
+                                    <el-button v-if="!form.audioFile" type="primary">
+                                        上传<i class="el-icon-upload el-icon--right"></i>
                                     </el-button>
                                     <audio v-else :src="form.audioFile.url" controls="controls"></audio>
                                 </el-upload>
