@@ -53,10 +53,7 @@ export default {
         }
     },
     mounted: function () {
-        Appointment.gets(Config.allPage).then(res => {
-            let appointments = res.list
-            this.splitAppointment(appointments)
-        })
+        this.list()
     },
     methods: {
         splitAppointment(list) {
@@ -64,6 +61,8 @@ export default {
                 if (list[i].bookHour2) {
                     let another = Common.copyObject(list[i])
                     another.bookHour = another.bookHour2
+                    another.bookHour2 = ''
+                    list[i].bookHour2 = ''
                     this.appointments.push(list[i])
                     this.appointments.push(another)
                 } else {
@@ -77,10 +76,31 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                console.log(appointment.id, appointment.bookHour)
+                let update = {}
+                let aList = this.appointments.filter(a => a.id === appointment.id)
+                if (aList.length === 1) {
+                    Appointment.delete({id: appointment.id}).then(res => {
+                        this.cancelOk()
+                    })
+                } else {
+                    update = aList.filter(a => a.bookHour !== appointment.bookHour)[0]
+                    Appointment.save(update).then(res => {
+                        this.cancelOk()
+                    })
+                }
             }).catch(() => {
             });
-
+        },
+        cancelOk() {
+            Common.message(this, 'success', '预约已取消', true)
+            this.list()
+        },
+        list() {
+            this.appointments = []
+            Appointment.gets(Config.allPage).then(res => {
+                let appointments = res.list
+                this.splitAppointment(appointments)
+            })
         }
     },
     components: {},
