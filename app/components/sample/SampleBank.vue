@@ -20,63 +20,71 @@
                    :close-on-click-modal="false">
             <template>
                 <el-form ref="form" :model="form" :rules="rules" label-width="80px" :inline="false">
-                    <el-tabs type="card">
-                        <el-tab-pane label="基本信息">
-                            <el-form-item label="标本名称" prop="name">
-                                <el-input type="textarea" v-model="form.name" style="width:700px"></el-input>
-                            </el-form-item>
-                            <el-form-item label="标本描述" prop="name">
-                                <el-input type="textarea" v-model="form.name" style="width:700px"></el-input>
-                            </el-form-item>
-                            <el-form-item label="标本图片" prop="imgFiles">
-                                <el-upload
-                                    :action="uploadAction"
-                                    list-type="picture-card"
-                                    name="formFile"
-                                    :headers="uploadHeaders"
-                                    with-credentials="true"
-                                    :on-success="imgSuccess"
-                                    :on-preview="handlePictureCardPreview"
-                                    :before-remove="beforeRemove"
-                                    :on-remove="handleRemove"
-                                    :file-list="form.imgFiles">
-                                    <i class="el-icon-plus"></i>
-                                </el-upload>
-                                <el-dialog :visible.sync="picCardVisible" size="tiny" append-to-body>
-                                    <img width="100%" :src="picCardUrl" alt="">
-                                </el-dialog>
-                            </el-form-item>
-                            <el-form-item label="音频文件">
-                                <el-upload
-                                    :action="uploadAction"
-                                    name="formFile"
-                                    :headers="uploadHeaders"
-                                    with-credentials="true"
-                                    :on-success="audioSuccess"
-                                    :before-remove="beforeRemove"
-                                    :on-remove="handleAudioRemove">
-                                    <el-button v-if="!form.audioFile" type="primary">
-                                        上传<i class="el-icon-upload el-icon--right"></i>
-                                    </el-button>
-                                    <audio v-else :src="form.audioFile.url" controls="controls"></audio>
-                                </el-upload>
-                            </el-form-item>
-                        </el-tab-pane>
-                        <el-tab-pane label="知识点">
-                            <div v-for="(kp,index) in form.kps">
-                                <el-form-item label="标题" :prop="'kps.' + index + '.title'"
-                                              :rules="{required: true, message: '请填写标题', trigger: 'blur'}">
-                                    <el-input type="text" v-model="kp.title" style="width:626px"></el-input>
-                                </el-form-item>
-                                <el-form-item label="内容" :prop="'kps.' + index + '.content'"
-                                              :rules="{required: true, message: '请填写内容', trigger: 'blur'}">
-                                    <el-input type="textarea" v-model="kp.content" style="width:626px"></el-input>
-                                    <el-button @click.prevent="removeKp(kp)">删除</el-button>
-                                </el-form-item>
-                            </div>
-                            <el-button @click="addKp" type="success" plain>新增知识点</el-button>
-                        </el-tab-pane>
-                    </el-tabs>
+                    <el-form-item label="实验室" prop="laboratory.id">
+                        <el-select v-model="form.laboratory.id" placeholder="请选择实验室" class="mobile-item-width"
+                                   @change="chooseLab">
+                            <el-option
+                                v-for="lab in labs"
+                                :key="lab.id"
+                                :label="lab.name"
+                                :value="lab.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="标本名称" prop="name">
+                        <el-input type="textarea" v-model="form.name" class="mobile-item-width"></el-input>
+                    </el-form-item>
+                    <el-form-item label="标本描述" prop="description">
+                        <el-input type="textarea" v-model="form.description"
+                                  class="mobile-item-width"></el-input>
+                    </el-form-item>
+                    <el-form-item label="标本图片" prop="imgFiles">
+                        <el-upload
+                            :action="uploadAction"
+                            list-type="picture-card"
+                            name="formFile"
+                            :headers="uploadHeaders"
+                            with-credentials="true"
+                            :on-success="imgSuccess"
+                            :on-preview="handlePictureCardPreview"
+                            :before-remove="beforeRemove"
+                            :on-remove="handleRemove"
+                            :file-list="form.imgFiles">
+                            <i class="el-icon-plus"></i>
+                        </el-upload>
+                        <el-dialog :visible.sync="picCardVisible" size="tiny" append-to-body>
+                            <img width="100%" :src="picCardUrl" alt="">
+                        </el-dialog>
+                    </el-form-item>
+                    <el-form-item label="音频文件" prop="audioFile">
+                        <el-upload
+                            :action="uploadAction"
+                            name="formFile"
+                            :headers="uploadHeaders"
+                            with-credentials="true"
+                            :on-success="audioSuccess"
+                            :before-remove="beforeRemove"
+                            :on-remove="handleAudioRemove"
+                            :file-list="form.audioFile">
+                            <el-button v-if="!form.audioFile.length" type="primary">
+                                上传<i class="el-icon-upload el-icon--right"></i>
+                            </el-button>
+                            <audio ref="audio" v-else :src="form.audioFile[0].url" controls="controls"></audio>
+                        </el-upload>
+                    </el-form-item>
+                    <el-divider>知识点</el-divider>
+                    <div v-for="(kp,index) in form.kps">
+                        <el-form-item label="标题" :prop="'kps.' + index + '.title'"
+                                      :rules="{required: true, message: '请填写标题', trigger: 'blur'}">
+                            <el-input type="text" v-model="kp.title" style="width:626px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="内容" :prop="'kps.' + index + '.content'"
+                                      :rules="{required: true, message: '请填写内容', trigger: 'blur'}">
+                            <el-input type="textarea" v-model="kp.content" style="width:626px"></el-input>
+                            <el-button @click.prevent="removeKp(kp)">删除</el-button>
+                        </el-form-item>
+                    </div>
+                    <el-button @click="addKp" type="success" plain>新增知识点</el-button>
                 </el-form>
             </template>
             <div slot="footer" class="dialog-footer">
@@ -114,9 +122,24 @@ import Common from "../../script/common";
 import Env from "../../script/server/env"
 import Upload from "../../script/server/upload"
 import VueQr from 'vue-qr'
+import Lab from "../../script/server/manage/lab";
 
 export default {
     name: "SampleBank",
+    watch: {
+        visible(vis) {
+            if (!vis) {
+                if (this.$refs.audio) {
+                    this.$refs.audio.pause()
+                }
+            } else {
+                if (this.$refs['form']) {
+                    this.$refs['form'].resetFields();
+                }
+                this.form.kps = [{title: '', content: ''}]
+            }
+        }
+    },
     data: function () {
         return {
             visible: false,
@@ -128,15 +151,27 @@ export default {
                 'url': '/index/app/samplebank?id=' + this.$route.query.id + '&name=' + this.$route.query.name
             }],
             form: {
+                laboratory: {id: ''},
                 name: '',
                 description: '',
                 imgFiles: [],
-                audioFile: '',
-                kps: [{title: '', content: ''}]
+                audioFile: [],
+                kps: [{title: '', content: ''}],
+                imgIds: '',
+                audioId: '',
             },
             rules: {
+                'laboratory.id': [
+                    {required: true, message: '请选择实验室', trigger: 'blur'},
+                ],
                 name: [
                     {required: true, message: '请填写标本名称', trigger: 'blur'},
+                ],
+                imgFiles: [
+                    {required: true, message: '请上传图片', trigger: 'blur'},
+                ],
+                audioFile: [
+                    {required: true, message: '请上传音频', trigger: 'blur'},
                 ],
             },
             tableConfig: {
@@ -170,6 +205,7 @@ export default {
                 icon: '',
                 color: "#313a90",
             },
+            labs: [],
         }
     },
     mounted: function () {
@@ -178,18 +214,20 @@ export default {
         this.uploadHeaders = {
             Authorization: Upload.getToken()
         }
+        Lab.gets(Config.allPage).then(res => {
+            this.labs = res.list
+        })
     },
     methods: {
         add() {
             this.visible = true
-            this.$nextTick(() => {
-                this.$refs['form'].resetFields();
-            });
         },
         edit(row) {
             Sample.getSample({id: row.id}).then(result => {
                 this.visible = true
-                this.form = result.question
+                this.$nextTick(() => {
+                    this.form = result.question
+                })
             })
         },
         delete(row) {
@@ -200,10 +238,13 @@ export default {
         addCommit() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
-                    Sample.saveSample(this.form).then(() => {
+                    this.form.imgIds = this.form.imgFiles.map(img => img.id).toString()
+                    this.form.audioId = this.form.audioFile[0].id
+                    console.log(this.form)
+                    /*Sample.saveSample(this.form).then(() => {
                         this.operSuccess(this)
                         this.visible = false;
-                    })
+                    })*/
                 }
             })
         },
@@ -233,14 +274,16 @@ export default {
             this.form.imgFiles.push({
                 id: response.id,
                 uid: file.uid,
-                url: file.url
+                url: Env.baseURL + '/file/download/?id=' + response.id
             })
         },
         audioSuccess: function (response, file) {
-            this.form.audioFile = {
+            this.form.audioFile.push({
                 id: response.id,
-                url: file.url
-            }
+                uid: file.uid,
+                name: file.name,
+                url: Env.baseURL + '/file/download/?id=' + response.id
+            })
         },
         beforeRemove(file) {
             return this.$confirm(`确定移除 ${file.name}？`)
@@ -252,7 +295,7 @@ export default {
             this.form.imgFiles = this.form.imgFiles.filter(f => f.uid !== file.uid)
         },
         handleAudioRemove() {
-            this.form.audioFile = ''
+            this.form.audioFile = []
         },
         handlePictureCardPreview(file) {
             this.picCardUrl = file.url;
