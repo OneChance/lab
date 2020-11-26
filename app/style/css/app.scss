@@ -371,9 +371,30 @@ body {
 
 .mobile-div {
     padding: 10px;
+    background-color: #f1f0f0;
+
+    * {
+        font-size: 1.02em;
+    }
 
     .el-form-item {
-        margin-bottom: 0 !important;
+        margin-bottom: 0;
+    }
+
+    .el-input__inner {
+        height: 50px;
+    }
+
+    .el-checkbox {
+        height: 45px;
+    }
+
+    .el-button {
+        font-size: 1.3em;
+    }
+
+    .el-card {
+        margin: 10px 0 10px 0
     }
 }
 
@@ -410,8 +431,17 @@ body {
 }
 
 .scores {
+
+    height: calc(100vh - 20px);
+
     .el-alert__title {
         font-size: larger;
+    }
+
+    .el-table {
+        td {
+            font-size: 0.8em;
+        }
     }
 }
 

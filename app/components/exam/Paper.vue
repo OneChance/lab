@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="mobile-div">
         <el-tag type="warning" class="time-tip" v-if="status==='started'">
             <div class="timer">
                 考试剩余时间:<span class="hours"></span>:<span class="minutes"></span>:<span class="seconds"></span>

@@ -3,8 +3,7 @@
         <el-table
             :data="scores"
             border
-            :row-class-name="tableRowClassName"
-            style="width: 100%">
+            :row-class-name="tableRowClassName">
             <el-table-column
                 prop="startTime"
                 label="考试时间">

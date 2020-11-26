@@ -84,7 +84,7 @@ export default {
                 page: true,
                 pageMethod: this.toPage,
                 cols: [
-                    {prop: 'title', label: '题目', width: '800'},
+                    {prop: 'title', label: '题目', width: '700'},
                 ],
                 oper: [
                     {

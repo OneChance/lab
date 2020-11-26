@@ -1,6 +1,6 @@
 <template id="index">
     <div class="mobile-div">
-        <el-form :model="form" :rules="rules" ref="form">
+        <el-form :model="form" :rules="rules" ref="form" class="login">
             <el-form-item class="mobile-item" prop="name">
                 <el-input v-model="form.name" placeholder="姓名"></el-input>
             </el-form-item>
@@ -30,6 +30,7 @@ export default {
             form: {
                 username: '',
                 password: '',
+                name: '',
             },
             rules: {
                 name: [
@@ -68,5 +69,8 @@ export default {
 </script>
 
 <style scoped>
-
+.login {
+    /*margin-top: 20vh;*/
+    height: calc(100vh - 20px);
+}
 </style>

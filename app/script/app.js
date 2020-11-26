@@ -33,7 +33,6 @@ import TeacherMobile from "../components/info/TeacherMobile";
 import MobileLogin from "../components/MobileLogin";
 import MobileChangePassword from "../components/MobileChangePassword";
 
-import Global from "./global"
 
 //网络工具
 axios.defaults.withCredentials = true;
@@ -44,9 +43,6 @@ Vue.use(ElementUI);
 
 // 设置COOKIE工具
 Vue.use(cookie)
-
-//自定义全局变量
-Vue.prototype.global = Global;
 
 // 使用路由插件
 Vue.use(VueRouter);
@@ -154,6 +150,11 @@ export default {
 
             this.vueG = new Vue({
                 router,
+                data: function () {
+                    return {
+                        loginUser: {},
+                    }
+                }
             });
         }
     },

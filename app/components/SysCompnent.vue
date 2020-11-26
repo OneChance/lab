@@ -6,15 +6,14 @@
 <script>
 
 import LeftMenuFrame from "./util/LeftMenuFrame";
-import App from "../script/app";
 
 export default {
     name: "SysComponent",
     mounted: function () {
-        if (this.global.loginUser.menus) {
+        if (this.$root.loginUser.menus) {
             this.setMenu()
         } else {
-            App.vueG.$on('menuInfo', () => {
+            this.$root.$on('menuInfo', () => {
                 this.setMenu()
             })
         }
@@ -27,7 +26,7 @@ export default {
     },
     methods: {
         setMenu() {
-            let sysMenu = this.global.loginUser.menus.filter(m => m.url === '/index/sys')[0]
+            let sysMenu = this.$root.loginUser.menus.filter(m => m.url === '/index/sys')[0]
             if (sysMenu) {
                 this.leftMenus = sysMenu.childrens
             }
