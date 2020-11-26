@@ -20,8 +20,8 @@
                    :close-on-click-modal="false">
             <template>
                 <el-form ref="form" :model="form" :rules="rules" label-width="80px" :inline="false">
-                    <el-form-item label="实验室" prop="laboratory.id">
-                        <el-select v-model="form.laboratory.id" placeholder="请选择实验室" class="mobile-item-width"
+                    <el-form-item label="实验室" prop="laboratoryId">
+                        <el-select v-model="form.laboratoryId" placeholder="请选择实验室" class="mobile-item-width"
                                    @change="chooseLab">
                             <el-option
                                 v-for="lab in labs"
@@ -99,7 +99,7 @@
                    :close-on-click-modal="false">
             <template>
                 <section ref="qrArea">
-                    <vue-qr :correctLevel="3" :autoColor="false" :colorDark="qr.color" :logoSrc="qr.icon"
+                    <vue-qr :correctLevel="3" :autoColor="false" :colorDark="qr.color" :logoSrc="qr.logoSrc"
                             :text="qr.url" size="400" :margin="0" :logoMargin="3"></vue-qr>
                 </section>
             </template>
@@ -151,7 +151,9 @@ export default {
                 'url': '/index/app/samplebank?id=' + this.$route.query.id + '&name=' + this.$route.query.name
             }],
             form: {
-                laboratory: {id: ''},
+                id: '',
+                bankId: this.$route.query.id,
+                laboratoryId: '',
                 name: '',
                 description: '',
                 imgFiles: [],
@@ -179,7 +181,7 @@ export default {
                 page: true,
                 pageMethod: this.toPage,
                 cols: [
-                    {prop: 'sampleName', label: '标本名称', width: '600'},
+                    {prop: 'name', label: '标本名称', width: '600'},
                 ],
                 oper: [
                     {
@@ -201,9 +203,10 @@ export default {
             },
             uploadType: '',
             qr: {
-                url: 'http://www.baidu.com',
+                url: '',
                 icon: '',
                 color: "#313a90",
+                logoSrc: ''
             },
             labs: [],
         }
@@ -220,13 +223,34 @@ export default {
     },
     methods: {
         add() {
+            this.form.id = ''
             this.visible = true
         },
         edit(row) {
             Sample.getSample({id: row.id}).then(result => {
                 this.visible = true
                 this.$nextTick(() => {
-                    this.form = result.question
+                    let _this = this
+                    for (let prop in result.specimen) {
+                        this.form[prop] = result.specimen[prop]
+                    }
+                    //image
+                    if (this.form.imgIds) {
+                        this.form.imgIds.split(',').forEach(id => {
+                            this.form.imgFiles.push({
+                                id: id,
+                                url: Env.baseURL + '/file/download/?id=' + id
+                            })
+                        })
+                    }
+                    //audio
+                    if (this.form.audioId) {
+                        this.form.audioFile.push({
+                            id: this.form.audioId,
+                            name: result.specimen.audio.name,
+                            url: Env.baseURL + '/file/download/?id=' + this.form.audioId
+                        })
+                    }
                 })
             })
         },
@@ -241,10 +265,10 @@ export default {
                     this.form.imgIds = this.form.imgFiles.map(img => img.id).toString()
                     this.form.audioId = this.form.audioFile[0].id
                     console.log(this.form)
-                    /*Sample.saveSample(this.form).then(() => {
+                    Sample.saveSample(this.form).then(() => {
                         this.operSuccess(this)
                         this.visible = false;
-                    })*/
+                    })
                 }
             })
         },
@@ -256,8 +280,6 @@ export default {
             this.tableConfig.currentPage = data.page
             data.bankId = this.$route.query.id
             Sample.getSamples(data).then(res => {
-                res.count = 1
-                res.list = [{name: 'test'}]
                 this.tableConfig.data = res.list
                 this.tableConfig.total = res.count
             })
@@ -301,7 +323,13 @@ export default {
             this.picCardUrl = file.url;
             this.picCardVisible = true;
         },
-        genQr() {
+        genQr(row) {
+            let imgId = row.imgIds
+            if (imgId.indexOf(',') !== -1) {
+                imgId = imgId.split(',')[0]
+            }
+            this.qr.logoSrc = Env.baseURL + '/file/download/?id=' + imgId
+            this.qr.url = Env.baseURL.replace('api', '') + '/#/wx/sample?id=' + row.id
             this.qrVisisble = true
         },
         printQr() {

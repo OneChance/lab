@@ -9,7 +9,7 @@
                             <el-button type="primary" @click="add">添加标本大类</el-button>
                         </el-form-item>
                     </el-form>
-                    <table-component v-bind:tableConfig="tableConfig" style="margin-top: 20px"></table-component>
+                    <table-component v-bind:tableConfig="tableConfig" style="margin-top: 10px"></table-component>
                 </el-card>
             </el-col>
         </el-row>
@@ -88,30 +88,32 @@ export default {
         }
     },
     mounted: function () {
-        this.tableConfig.currentPage = 1
-        this.tableConfig.data = this.list
+        this.list()
     },
     methods: {
         add() {
             this.visible = true
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
+                this.form.id = ''
             });
         },
         edit(row) {
             Sample.getSB({id: row.id}).then(result => {
                 this.visible = true
-                this.form = result.question_bank
+                this.$nextTick(() => {
+                    this.form = result.specimen_bank
+                })
             })
         },
         view(row) {
-            this.$router.push({path: 'onesample', query: {id: row.id, name: row.name}}).catch(err => err);
+            this.$router.push({path: 'samplebank', query: {id: row.id, name: row.name}}).catch(err => err);
         },
         addCommit() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                     this.visible = false
-                    Sample.saveQB(this.form).then(() => {
+                    Sample.saveSB(this.form).then(() => {
                         this.operSuccess(this)
                         this.visible = false;
                     })
