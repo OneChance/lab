@@ -205,7 +205,7 @@ export default {
             qr: {
                 url: '',
                 icon: '',
-                color: "#313a90",
+                color: "#384ade",
                 logoSrc: ''
             },
             labs: [],
@@ -219,6 +219,9 @@ export default {
         }
         Lab.gets(Config.allPage).then(res => {
             this.labs = res.list
+        })
+        Sample.getSB({id: this.$route.query.id}).then(res => {
+            this.qr.color = '#b82370'
         })
     },
     methods: {

@@ -18,9 +18,12 @@
                    :close-on-click-modal="false">
 
             <template>
-                <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                <el-form ref="form" :model="form" :rules="rules" label-width="100px">
                     <el-form-item label="名称" prop="name">
                         <el-input v-model="form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="二维码颜色" prop="color">
+                        <el-color-picker v-model="form.color"></el-color-picker>
                     </el-form-item>
                 </el-form>
             </template>
@@ -52,7 +55,8 @@ export default {
             visible: false,
             form: {
                 id: '',
-                name: ''
+                name: '',
+                color: ''
             },
             rules: {
                 name: [
