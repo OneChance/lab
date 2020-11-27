@@ -373,6 +373,11 @@ body {
     padding: 10px;
     background-color: #f1f0f0;
 
+    .full-height {
+        height: calc(100vh - 20px);
+        overflow: scroll;
+    }
+
     * {
         font-size: 1.02em;
     }
@@ -398,6 +403,7 @@ body {
     }
 }
 
+
 .mobile-item-row {
     margin-bottom: 10px;
 }
@@ -421,6 +427,12 @@ body {
 
 .content-center {
     text-align: center;
+}
+
+.vertical-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .el-radio.is-bordered {

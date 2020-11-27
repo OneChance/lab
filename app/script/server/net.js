@@ -114,7 +114,7 @@ const request = function (api, type, data, progress) {
 
             if (e.response.data.error_code === 1001) {
                 if (App.vueG.$route.path.indexOf('/wx/') !== -1) {
-                    localStorage.setItem("currentPath", App.vueG.$route.path);
+                    localStorage.setItem("currentPath", App.vueG.$route.fullPath);
                     App.vueG.$router.push('/wx/loginM').catch(err => err);
                 } else {
                     App.vueG.$router.push('/sign').catch(err => err);

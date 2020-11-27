@@ -1,6 +1,6 @@
 <template>
     <div class="mobile-div">
-        <el-form ref="form" :model="form" :rules="rules">
+        <el-form ref="form" :model="form" :rules="rules" class="full-height">
             <el-form-item>
                 <el-select v-model="form.laboratory.id" placeholder="请选择实验室" class="mobile-item" @change="chooseLab">
                     <el-option

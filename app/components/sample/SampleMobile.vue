@@ -1,6 +1,6 @@
 <template>
     <div class="mobile-div">
-        <div style="height: 100vh">
+        <div class="full-height">
             <el-card class="box-card mobile-card">
                 <div slot="header" class="clearfix">
                     <span>{{ name }}</span>
@@ -41,7 +41,6 @@ export default {
     },
     mounted: function () {
         Sample.getSample({id: this.$route.query.id}).then(res => {
-            console.log(res)
             this.name = res.specimen.name
             this.description = res.specimen.description
             let imgId = res.specimen.imgIds

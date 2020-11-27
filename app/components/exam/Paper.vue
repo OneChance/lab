@@ -1,21 +1,23 @@
 <template>
     <div class="mobile-div">
-        <el-tag type="warning" class="time-tip" v-if="status==='started'">
-            <div class="timer">
-                考试剩余时间:<span class="hours"></span>:<span class="minutes"></span>:<span class="seconds"></span>
+        <div class="full-height">
+            <el-tag type="warning" class="time-tip" v-if="status==='started'">
+                <div class="timer">
+                    考试剩余时间:<span class="hours"></span>:<span class="minutes"></span>:<span class="seconds"></span>
+                </div>
+            </el-tag>
+            <question v-bind:question="question"
+                      v-bind:index="index"
+                      v-bind:paperId="paperId"
+                      v-for="(question,index) of questions"
+                      :key="question.id"></question>
+            <div class="content-center vertical-center full-height" v-if="status==='not-started'">
+                <el-button type="primary" @click="start">开始考试</el-button>
             </div>
-        </el-tag>
-        <question v-bind:question="question"
-                  v-bind:index="index"
-                  v-bind:paperId="paperId"
-                  v-for="(question,index) of questions"
-                  :key="question.id"></question>
-        <div class=" content-center submit-card" v-if="status==='not-started'">
-            <el-button type="primary" @click="start">开始考试</el-button>
+            <el-card class="box-card content-center submit-card" v-if="status==='started'">
+                <el-button type="primary" @click="submit">提交考卷</el-button>
+            </el-card>
         </div>
-        <el-card class="box-card content-center submit-card" v-if="status==='started'">
-            <el-button type="primary" @click="submit">提交考卷</el-button>
-        </el-card>
     </div>
 </template>
 
