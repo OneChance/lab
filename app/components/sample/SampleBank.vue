@@ -205,7 +205,7 @@ export default {
             qr: {
                 url: '',
                 icon: '',
-                color: "#384ade",
+                color: '',
                 logoSrc: ''
             },
             labs: [],
@@ -221,7 +221,7 @@ export default {
             this.labs = res.list
         })
         Sample.getSB({id: this.$route.query.id}).then(res => {
-            this.qr.color = '#b82370'
+            this.qr.color = res.specimen_bank.color
         })
     },
     methods: {

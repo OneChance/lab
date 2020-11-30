@@ -135,7 +135,7 @@ export default {
                 },
                 {path: '/wx/error', component: Error},
                 {path: '/wx/appointment', component: Appointment},
-                {path: '/wx/sample', component: Sample},
+                {path: '/wx/sample2', component: Sample},
                 {path: '/wx/exam', component: Paper},
                 {path: '/wx/score', component: Score},
                 {path: '/wx/teacherRate', component: TeacherMobile},

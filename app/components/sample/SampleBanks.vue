@@ -30,7 +30,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="visible = false">取 消</el-button>
-                <el-button type="primary" @click="visible=false;addCommit()">确 定</el-button>
+                <el-button type="primary" @click="addCommit()">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -56,7 +56,7 @@ export default {
             form: {
                 id: '',
                 name: '',
-                color: ''
+                color: '#347dd6'
             },
             rules: {
                 name: [
@@ -116,7 +116,6 @@ export default {
         addCommit() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
-                    this.visible = false
                     Sample.saveSB(this.form).then(() => {
                         this.operSuccess(this)
                         this.visible = false;
