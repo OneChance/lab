@@ -20,6 +20,9 @@
                    :close-on-click-modal="false">
             <template>
                 <el-form ref="form" :model="form" :rules="rules" label-width="80px" :inline="false">
+                    <el-form-item label="标本编码" prop="code">
+                        <el-input v-model="form.code"></el-input>
+                    </el-form-item>
                     <el-form-item label="实验室" prop="laboratoryId">
                         <el-select v-model="form.laboratoryId" placeholder="请选择实验室" class="mobile-item-width"
                                    @change="chooseLab">
@@ -98,9 +101,10 @@
                    width="440px"
                    :close-on-click-modal="false">
             <template>
-                <section ref="qrArea">
+                <section ref="qrArea" style="position: relative">
+                    <div class="code" ref="qrNo">{{ qr.code }}</div>
                     <vue-qr :correctLevel="3" :autoColor="false" :colorDark="qr.color" :logoSrc="qr.logoSrc"
-                            :text="qr.url" size="400" :margin="0" :logoMargin="3"></vue-qr>
+                            :text="qr.url" :size="qr.size" :margin="0" :logoMargin="3"></vue-qr>
                 </section>
             </template>
             <div slot="footer" class="dialog-footer">
@@ -152,6 +156,7 @@ export default {
             }],
             form: {
                 id: '',
+                code: '',
                 bankId: this.$route.query.id,
                 laboratoryId: '',
                 name: '',
@@ -163,6 +168,9 @@ export default {
                 audioId: '',
             },
             rules: {
+                'code': [
+                    {required: true, message: '请填写标本编码', trigger: 'blur'},
+                ],
                 'laboratory.id': [
                     {required: true, message: '请选择实验室', trigger: 'blur'},
                 ],
@@ -206,7 +214,9 @@ export default {
                 url: '',
                 icon: '',
                 color: '',
-                logoSrc: ''
+                logoSrc: '',
+                size: 400,
+                code: ''
             },
             labs: [],
         }
@@ -331,9 +341,14 @@ export default {
             if (imgId.indexOf(',') !== -1) {
                 imgId = imgId.split(',')[0]
             }
-            this.qr.logoSrc = Env.baseURL + '/file/download/?id=' + imgId
+            this.qr.code = row.code
             this.qr.url = Env.baseURL.replace('api', '') + '/#/wx/sample?id=' + row.id
             this.qrVisisble = true
+            this.$nextTick(() => {
+                this.$refs.qrNo.style.top = (this.qr.size / 2 - 43) + 'px'
+                this.$refs.qrNo.style.left = (this.qr.size / 2 - 43) + 'px'
+                this.$refs.qrNo.style.border = '1px solid ' + this.qr.color
+            })
         },
         printQr() {
             this.$print(this.$refs.qrArea)
@@ -364,5 +379,16 @@ export default {
 <style scoped>
 .el-dialog {
     width: 295px;
+}
+
+.code {
+    height: 86px;
+    width: 86px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    border-radius: 5px;
 }
 </style>
