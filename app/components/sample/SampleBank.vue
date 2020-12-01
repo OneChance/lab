@@ -337,10 +337,6 @@ export default {
             this.picCardVisible = true;
         },
         genQr(row) {
-            let imgId = row.imgIds
-            if (imgId.indexOf(',') !== -1) {
-                imgId = imgId.split(',')[0]
-            }
             this.qr.code = row.code
             this.qr.url = Env.baseURL.replace('api', '') + '/#/wx/sample?id=' + row.id
             this.qrVisisble = true
@@ -348,6 +344,7 @@ export default {
                 this.$refs.qrNo.style.top = (this.qr.size / 2 - 43) + 'px'
                 this.$refs.qrNo.style.left = (this.qr.size / 2 - 43) + 'px'
                 this.$refs.qrNo.style.border = '1px solid ' + this.qr.color
+                this.$refs.qrNo.style.color = this.qr.color
             })
         },
         printQr() {
@@ -390,5 +387,7 @@ export default {
     justify-content: center;
     position: absolute;
     border-radius: 5px;
+    font-size: 30px;
+    font-weight: bold;
 }
 </style>

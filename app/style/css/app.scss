@@ -358,6 +358,9 @@ body {
 
 //mobile----------------------------------------
 
+.el-message-box {
+    width: 90%;
+}
 
 .mobile-item {
     width: 100% !important;
@@ -400,6 +403,13 @@ body {
 
     .el-card {
         margin: 10px 0 10px 0
+    }
+}
+
+.kp-title {
+    .el-collapse-item__header {
+        font-weight: bold;
+        font-size: 0.9em;
     }
 }
 

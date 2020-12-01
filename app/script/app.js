@@ -32,7 +32,7 @@ import Score from "../components/exam/Score"
 import TeacherMobile from "../components/info/TeacherMobile";
 import MobileLogin from "../components/MobileLogin";
 import MobileChangePassword from "../components/MobileChangePassword";
-
+import MobileMy from "../components/MobileMy";
 
 //网络工具
 axios.defaults.withCredentials = true;
@@ -135,13 +135,14 @@ export default {
                 },
                 {path: '/wx/error', component: Error},
                 {path: '/wx/appointment', component: Appointment},
-                {path: '/wx/sample2', component: Sample},
+                {path: '/wx/sample', component: Sample},
                 {path: '/wx/exam', component: Paper},
                 {path: '/wx/score', component: Score},
                 {path: '/wx/teacherRate', component: TeacherMobile},
                 {path: '/wx/loginM', name: '/wx/loginM', component: MobileLogin},
                 {path: '/wx/changePasswordM', component: MobileChangePassword},
                 {path: '/wx/appointments', component: Appointments},
+                {path: '/wx/my', component: MobileMy},
             ];
 
             const router = new VueRouter({

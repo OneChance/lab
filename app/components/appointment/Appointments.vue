@@ -1,34 +1,36 @@
 <template>
     <div class="mobile-div">
-        <table v-for="appointment of appointments" :key="appointment.id" class="form-table mobile-item"
-               v-if="appointments.length>0">
-            <tr>
-                <th style="width: 30%">实验室</th>
-                <td>{{ appointment.laboratory.name }}</td>
-            </tr>
-            <tr>
-                <th style="width: 30%">日期</th>
-                <td>{{ appointment.bookDay }}</td>
-            </tr>
-            <tr>
-                <th style="width: 30%">时间段</th>
-                <td>{{ appointment.bookHour | formatZone }}</td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <el-button type="danger" plain class="mobile-item-width"
-                               @click="cancel(appointment)">取消预约
-                    </el-button>
-                </td>
-            </tr>
-        </table>
-        <el-alert v-if="appointments.length===0"
-                  title="无预约记录"
-                  type="info"
-                  center
-                  show-icon
-                  :closable="false">
-        </el-alert>
+        <div class="full-height">
+            <table v-for="appointment of appointments" :key="appointment.id" class="form-table mobile-item"
+                   v-if="appointments.length>0">
+                <tr>
+                    <th style="width: 30%">实验室</th>
+                    <td>{{ appointment.laboratory.name }}</td>
+                </tr>
+                <tr>
+                    <th style="width: 30%">日期</th>
+                    <td>{{ appointment.bookDay }}</td>
+                </tr>
+                <tr>
+                    <th style="width: 30%">时间段</th>
+                    <td>{{ appointment.bookHour | formatZone }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <el-button type="danger" plain class="mobile-item-width"
+                                   @click="cancel(appointment)">取消预约
+                        </el-button>
+                    </td>
+                </tr>
+            </table>
+            <el-alert v-if="appointments.length===0"
+                      title="无预约记录"
+                      type="info"
+                      center
+                      show-icon
+                      :closable="false">
+            </el-alert>
+        </div>
     </div>
 </template>
 

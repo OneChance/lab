@@ -85,8 +85,8 @@ export default {
             Account.logOut().then(() => {
                 this.$router.push('/sign').catch(err => err);
             })
-            this.$cookie.delete('apm_token');
-            localStorage.removeItem("apm_token");
+            this.$cookie.delete('ssm_token');
+            localStorage.removeItem("ssm_token");
         },
         handleSelect(key) {
             if (key === 'signOut') {

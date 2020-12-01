@@ -2,10 +2,10 @@
     <div class="mobile-div">
         <div class="full-height">
             <el-card class="box-card mobile-card">
-                <div slot="header" class="clearfix">
+                <div slot="header" class="sample-title">
                     <span>{{ name }}</span>
                 </div>
-                <div class="mobile-item-row">{{ description }}</div>
+                <div class="mobile-item-row sample-description">{{ description }}</div>
                 <div class="mobile-item-row">
                     <img :src="img" alt="" style="width: 100%">
                 </div>
@@ -13,8 +13,8 @@
                     <audio :src="sound" controls="controls"></audio>
                 </div>
                 <el-collapse v-model="activeNames" @change="handleChange">
-                    <el-collapse-item :title="kp.title" :name="kp.id" v-for="kp in kps" :key="kp.id">
-                        <div>{{ kp.content }}</div>
+                    <el-collapse-item :title="kp.title" :name="kp.id" v-for="kp in kps" :key="kp.id" class="kp-title">
+                        <div class="kp-content">{{ kp.content }}</div>
                     </el-collapse-item>
                 </el-collapse>
             </el-card>
@@ -58,5 +58,18 @@ export default {
 </script>
 
 <style scoped>
+.sample-title {
+    font-size: 1.1em;
+    font-weight: bold;
+}
 
+.sample-description {
+    font-weight: 300;
+    font-size: 0.9em;
+}
+
+.kp-content {
+    font-weight: 300;
+    font-size: 0.8em;
+}
 </style>

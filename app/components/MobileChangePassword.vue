@@ -1,6 +1,6 @@
 <template id="index">
     <div class="mobile-div">
-        <el-form :model="form" :rules="rules" ref="form">
+        <el-form :model="form" :rules="rules" ref="form" class="full-height">
             <el-form-item class="mobile-item" prop="no">
                 <el-input v-model="form.no" placeholder="学号"></el-input>
             </el-form-item>
@@ -17,8 +17,6 @@
 </template>
 
 <script>
-
-import App from "../script/app";
 
 export default {
     created: function () {
@@ -57,12 +55,12 @@ export default {
                         type: 'success',
                         duration: 3000
                     });
-                    App.vueG.$router.push('/loginM').catch(err => err)
+                    this.$router.push('/loginM').catch(err => err)
                 }
             });
         },
         cancel() {
-            App.vueG.$router.push('/wx/loginM').catch(err => err)
+            this.$router.push('/wx/loginM').catch(err => err)
         }
     },
     components: {},

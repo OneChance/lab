@@ -18,7 +18,6 @@
 
 <script>
 
-import App from "../script/app";
 import Account from "../script/server/account";
 
 export default {
@@ -55,13 +54,13 @@ export default {
                     Account.signIn(this.form).then(res => {
                         localStorage.setItem("ssm_token", res.token);
                         this.$cookie.set('ssm_token', res.token);
-                        App.vueG.$router.push(localStorage.getItem('currentPath')).catch(err => err)
+                        this.$router.push(localStorage.getItem('currentPath')).catch(err => err)
                     });
                 }
             });
         },
         changePassword() {
-            App.vueG.$router.push('/wx/changePasswordM').catch(err => err)
+            this.$router.push('/wx/changePasswordM').catch(err => err)
         }
     },
     components: {},
