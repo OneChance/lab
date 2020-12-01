@@ -49,6 +49,7 @@ export default {
                 this.examId = res.exam.id
             }
         })
+        document.title = '考试'
     },
     methods: {
         start() {

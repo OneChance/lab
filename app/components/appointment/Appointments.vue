@@ -56,6 +56,7 @@ export default {
     },
     mounted: function () {
         this.list()
+        document.title = '我的预约'
     },
     methods: {
         splitAppointment(list) {

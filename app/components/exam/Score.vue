@@ -42,8 +42,11 @@ export default {
     mounted: function () {
         Exam.scores(Config.allPage).then(res => {
             this.scores = res.list
-            this.finalScore = Math.max(...this.scores.map(s => s.score))
+            if (this.scores.length > 0) {
+                this.finalScore = Math.max(...this.scores.map(s => s.score))
+            }
         })
+        document.title = '成绩查询'
     },
     methods: {
         tableRowClassName({row, rowIndex}) {

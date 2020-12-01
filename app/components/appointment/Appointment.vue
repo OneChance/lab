@@ -116,6 +116,7 @@ export default {
         Lab.gets(Config.allPage).then(res => {
             this.labs = res.list
         })
+        document.title = '实验室预约'
     },
 }
 </script>

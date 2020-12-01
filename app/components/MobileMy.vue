@@ -40,6 +40,7 @@ export default {
         Account.getLoginUser().then(res => {
             this.$root.loginUser = res.user
         })
+        document.title = '个人信息'
     },
     methods: {
         logout() {

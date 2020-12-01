@@ -43,7 +43,7 @@ export default {
         }
     },
     mounted: function () {
-
+        document.title = '修改密码'
     },
     methods: {
         change() {

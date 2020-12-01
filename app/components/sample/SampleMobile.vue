@@ -51,6 +51,7 @@ export default {
             this.sound = Env.baseURL + '/file/download/?id=' + res.specimen.audioId
             this.kps = res.specimen.kps
         })
+        document.title = '标本信息'
     },
     methods: {},
     components: {},

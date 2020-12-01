@@ -45,7 +45,7 @@ export default {
         }
     },
     mounted: function () {
-
+        document.title = '登录'
     },
     methods: {
         login() {
