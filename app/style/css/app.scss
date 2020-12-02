@@ -465,11 +465,16 @@ body {
     }
 }
 
-.aplayer-time {
-    .aplayer-icon {
-        display: none; //隐藏播放器不需要的按钮
+.aplayer-controller {
+    margin-bottom: 5px;
+
+    .aplayer-time {
+        .aplayer-icon {
+            display: none; //隐藏播放器不需要的按钮
+        }
     }
 }
+
 
 //适配小屏幕
 @media screen and (max-width: 480px) {
