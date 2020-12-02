@@ -5,12 +5,12 @@
                 <div slot="header" class="sample-title">
                     <span>{{ name }}</span>
                 </div>
+                <div class="mobile-item-row">
+                    <aplayer autoplay :music="audio"/>
+                </div>
                 <div class="mobile-item-row sample-description">{{ description }}</div>
                 <div class="mobile-item-row">
                     <img :src="img" alt="" style="width: 100%">
-                </div>
-                <div class="mobile-item-row">
-                    <audio :src="sound" controls="controls"></audio>
                 </div>
                 <el-collapse v-model="activeNames" @change="handleChange">
                     <el-collapse-item :title="kp.title" :name="kp.id" v-for="kp in kps" :key="kp.id" class="kp-title">
@@ -27,6 +27,7 @@
 
 import Sample from "../../script/server/manage/sample";
 import Env from "../../script/server/env";
+import Aplayer from 'vue-aplayer'
 
 export default {
     name: "SampleMobile",
@@ -35,7 +36,7 @@ export default {
             name: '',
             description: '',
             img: '',
-            sound: '',
+            audio: {},
             kps: []
         }
     },
@@ -50,11 +51,17 @@ export default {
             this.img = Env.baseURL + '/file/download/?id=' + imgId
             this.sound = Env.baseURL + '/file/download/?id=' + res.specimen.audioId
             this.kps = res.specimen.kps
+            this.audio = {
+                title: res.specimen.name,
+                artist: ' ',
+                src: Env.baseURL + '/file/download/?id=' + res.specimen.audioId,
+                pic: Env.baseURL + '/file/download/?id=' + imgId
+            }
         })
         document.title = '标本信息'
     },
     methods: {},
-    components: {},
+    components: {Aplayer},
 }
 </script>
 

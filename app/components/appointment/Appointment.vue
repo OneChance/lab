@@ -85,8 +85,6 @@ export default {
                 Common.message(this, 'error', '请选择预约时段', true);
             } else if (this.chooseTimeZone.length > 2) {
                 Common.message(this, 'error', '选择的时段不能超过2小时', true);
-            } else if (this.chooseTimeZone.length === 2 && Math.abs(this.chooseTimeZone[0] - this.chooseTimeZone[1]) !== 1) {
-                Common.message(this, 'error', '必须选择相邻的时段', true);
             } else {
                 this.form.bookHour = this.chooseTimeZone[0]
                 if (this.chooseTimeZone.length === 2) {
