@@ -12,7 +12,8 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <el-button type="danger" plain class="mobile-item-width"
+                        <el-button type="warning" plain @click="changePassword" class="mobile-item">修改密码</el-button>
+                        <el-button type="danger" plain class="mobile-item"
                                    @click="logout()">注销
                         </el-button>
                     </td>
@@ -51,6 +52,9 @@ export default {
             this.$cookie.delete('ssm_token');
             localStorage.removeItem("ssm_token");
         },
+        changePassword() {
+            this.$router.push('/wx/changePasswordM').catch(err => err)
+        }
     },
     components: {},
 }

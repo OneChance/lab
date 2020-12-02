@@ -11,7 +11,6 @@
                 <el-input type="password" v-model="form.password" placeholder="密码"></el-input>
             </el-form-item>
             <el-button type="success" plain @click="login" class="mobile-item">登陆</el-button>
-            <el-button type="warning" plain @click="changePassword" class="mobile-item">修改密码</el-button>
         </el-form>
     </div>
 </template>
@@ -59,9 +58,6 @@ export default {
                 }
             });
         },
-        changePassword() {
-            this.$router.push('/wx/changePasswordM').catch(err => err)
-        }
     },
     components: {},
 }

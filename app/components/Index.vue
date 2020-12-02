@@ -31,6 +31,7 @@
                          @select="handleSelect">
                     <el-submenu index="userOper">
                         <template slot="title">{{ $root.loginUser.name }}</template>
+                        <el-menu-item index="changePassword">修改密码</el-menu-item>
                         <el-menu-item index="signOut">退出</el-menu-item>
                     </el-submenu>
                 </el-menu>
@@ -41,6 +42,25 @@
         <div class="main_center" id="main_center">
             <router-view></router-view>
         </div>
+
+        <el-dialog title="修改密码"
+                   :visible.sync="changePasswordDialog"
+                   :close-on-click-modal="false">
+            <template>
+                <el-form ref="passForm" :model="passForm" :rules="passForm.rules" label-width="80px">
+                    <el-form-item label="新密码" prop="newPass">
+                        <el-input type='password' v-model="passForm.newPass"></el-input>
+                    </el-form-item>
+                    <el-form-item label="确认密码" prop="confirmPass">
+                        <el-input type='password' v-model="passForm.confirmPass"></el-input>
+                    </el-form-item>
+                </el-form>
+            </template>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="changePasswordDialog = false">取 消</el-button>
+                <el-button type="primary" @click="changePassword">确 定</el-button>
+            </div>
+        </el-dialog>
 
     </div>
 </template>
@@ -62,6 +82,19 @@ export default {
         return {
             menus: [],
             activeMenuIndex: '',
+            changePasswordDialog: false,
+            passForm: {
+                newPass: '',
+                confirmPass: '',
+                rules: {
+                    newPass: [
+                        {required: true, message: '请输入新密码', trigger: 'blur'},
+                    ],
+                    confirmPass: [
+                        {required: true, message: '请确认新密码', trigger: 'blur'},
+                    ],
+                }
+            },
         }
     },
     mounted: function () {
@@ -81,6 +114,28 @@ export default {
         };
     },
     methods: {
+        changePassword: function () {
+            this.$refs['passForm'].validate((valid) => {
+                if (valid) {
+                    if (this.passForm.newPass !== this.passForm.confirmPass) {
+                        this.$notify.error({
+                            title: '错误',
+                            message: '新密码与确认密码不一致'
+                        });
+                    } else {
+                        Account.updatePassword({
+                            password: this.passForm.newPass
+                        }).then(() => {
+                            this.changePasswordDialog = false
+                            this.$message({
+                                message: '密码已修改',
+                                type: 'success'
+                            });
+                        })
+                    }
+                }
+            })
+        },
         signOut: function () {
             Account.logOut().then(() => {
                 this.$router.push('/sign').catch(err => err);
@@ -91,6 +146,11 @@ export default {
         handleSelect(key) {
             if (key === 'signOut') {
                 this.signOut()
+            } else if (key === 'changePassword') {
+                this.changePasswordDialog = true
+                this.$nextTick(() => {
+                    this.$refs.passForm.resetFields();
+                })
             }
         },
         setActive(path) {

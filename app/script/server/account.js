@@ -10,7 +10,10 @@ export default {
     logOut() {
         return Net.get('/logout/');
     },
-    test(){
+    test() {
         return Net.get('/');
+    },
+    updatePassword: function (data) {
+        return Net.put('/user/password/', data);
     }
 };
