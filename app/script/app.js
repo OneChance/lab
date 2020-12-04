@@ -33,6 +33,7 @@ import TeacherMobile from "../components/info/TeacherMobile";
 import MobileLogin from "../components/MobileLogin";
 import MobileChangePassword from "../components/MobileChangePassword";
 import MobileMy from "../components/MobileMy";
+import QrCodeExport from "../components/sample/QrCodeExport";
 
 //网络工具
 axios.defaults.withCredentials = true;
@@ -111,6 +112,11 @@ export default {
                                     path: 'sampleinfo',
                                     name: 'sampleinfo',
                                     component: SampleInfo
+                                },
+                                {
+                                    path: 'qrcodeexport',
+                                    name: 'qrcodeexport',
+                                    component: QrCodeExport
                                 },
                             ]
                         },

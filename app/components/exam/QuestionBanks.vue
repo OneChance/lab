@@ -122,6 +122,9 @@ export default {
                 this.operSuccess(this)
             })
         },
+        toPage: function (val) {
+            this.list({page: val})
+        },
         list(config) {
             let data = Common.copyObject(Config.page)
             for (let prop in config) {

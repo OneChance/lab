@@ -13,7 +13,6 @@
                         <el-input type="password" v-model="form.password" placeholder="密码"></el-input>
                     </el-form-item>
                     <el-button type="primary" class="sign-btn sign-local-btn" @click="signIn">登陆</el-button>
-                    <el-button type="primary" class="sign-btn" @click="authCenter">统一身份认证</el-button>
                 </el-form>
             </el-card>
         </div>
@@ -53,9 +52,6 @@ export default {
                 }
             });
         },
-        authCenter: function () {
-            window.location.href = "https://uaaap.yzu.edu.cn/cas/login?service=http%3a%2f%2fdemo.ceeg.cn/sys/index.page";
-        },
         signCallback: function (res) {
             if (res) {
                 //保存token
@@ -73,8 +69,8 @@ export default {
 <style scoped>
 
 .login-card {
-    width: 350px;
-    height: 350px;
+    width: 300px;
+    height: 240px;
     margin-top: 160px;
 }
 

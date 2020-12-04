@@ -77,12 +77,10 @@
                     </el-form-item>
                     <el-divider>知识点</el-divider>
                     <div v-for="(kp,index) in form.kps">
-                        <el-form-item label="标题" :prop="'kps.' + index + '.title'"
-                                      :rules="{required: true, message: '请填写标题', trigger: 'blur'}">
+                        <el-form-item label="标题" :prop="'kps.' + index + '.title'">
                             <el-input type="text" v-model="kp.title" style="width:626px"></el-input>
                         </el-form-item>
-                        <el-form-item label="内容" :prop="'kps.' + index + '.content'"
-                                      :rules="{required: true, message: '请填写内容', trigger: 'blur'}">
+                        <el-form-item label="内容" :prop="'kps.' + index + '.content'">
                             <el-input type="textarea" v-model="kp.content" style="width:626px"></el-input>
                             <el-button @click.prevent="removeKp(kp)">删除</el-button>
                         </el-form-item>
@@ -110,6 +108,7 @@
             <div slot="footer" class="dialog-footer">
                 <el-button @click="qrVisisble = false">取 消</el-button>
                 <el-button type="primary" @click="printQr()">打印</el-button>
+                <el-button type="success" @click="downloadQr()">下载</el-button>
             </div>
         </el-dialog>
     </div>
@@ -127,6 +126,7 @@ import Env from "../../script/server/env"
 import Upload from "../../script/server/upload"
 import VueQr from 'vue-qr'
 import Lab from "../../script/server/manage/lab";
+import html2canvas from 'html2canvas'
 
 export default {
     name: "SampleBank",
@@ -177,9 +177,9 @@ export default {
                 name: [
                     {required: true, message: '请填写标本名称', trigger: 'blur'},
                 ],
-                imgFiles: [
+                /*imgFiles: [
                     {required: true, message: '请上传图片', trigger: 'blur'},
-                ],
+                ],*/
                 audioFile: [
                     {required: true, message: '请上传音频', trigger: 'blur'},
                 ],
@@ -216,7 +216,8 @@ export default {
                 color: '',
                 logoSrc: '',
                 size: 400,
-                code: ''
+                code: '',
+                name: ''
             },
             labs: [],
         }
@@ -277,13 +278,15 @@ export default {
                 if (valid) {
                     this.form.imgIds = this.form.imgFiles.map(img => img.id).toString()
                     this.form.audioId = this.form.audioFile[0].id
-                    console.log(this.form)
                     Sample.saveSample(this.form).then(() => {
                         this.operSuccess(this)
                         this.visible = false;
                     })
                 }
             })
+        },
+        toPage: function (val) {
+            this.list({page: val})
         },
         list(config) {
             let data = Common.copyObject(Config.page)
@@ -337,15 +340,48 @@ export default {
             this.picCardVisible = true;
         },
         genQr(row) {
+            this.qr.name = row.name
             this.qr.code = row.code
             this.qr.url = Env.baseURL.replace('api', '') + '/#/wx/sample?id=' + row.id
             this.qrVisisble = true
             this.$nextTick(() => {
+                console.log(this.$refs.qrNo)
                 this.$refs.qrNo.style.top = (this.qr.size / 2 - 43) + 'px'
                 this.$refs.qrNo.style.left = (this.qr.size / 2 - 43) + 'px'
                 this.$refs.qrNo.style.border = '1px solid ' + this.qr.color
                 this.$refs.qrNo.style.color = this.qr.color
             })
+        },
+        downloadQr() {
+            window.pageYoffset = 0;
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            // 先获取你要转换为img的dom节点
+            let node = this.$refs.qrArea;//传入的id名称
+            let width = node.offsetWidth; //dom宽
+            let height = node.offsetHeight; //dom高
+            let scale = 2; //放大倍数 这个相当于清晰度 调大一点更清晰一点
+            html2canvas(node, {
+                width: width,
+                heigth: height,
+                backgroundColor: "#ffffff", //背景颜色 为null是透明
+                dpi: window.devicePixelRatio * 2, //按屏幕像素比增加像素
+                scale: scale,
+                X: 0,
+                Y: 0,
+                scrollX: -3, //如果左边多个白边 设置该偏移-3 或者更多
+                scrollY: 0,
+                useCORS: true, //是否使用CORS从服务器加载图像 !!!
+                allowTaint: true //是否允许跨域图像污染画布  !!!
+            }).then(canvas => {
+                // console.log("canvas", canvas);
+                let url = canvas.toDataURL(); //这里上面不设值cors会报错
+                let a = document.createElement("a");//创建一个a标签 用来下载
+                a.download = this.qr.name; //设置下载的图片名称
+                let event = new MouseEvent("click");//增加一个点击事件
+                a.href = url;//此处的url为base64格式的图片资源
+                a.dispatchEvent(event); //触发a的单击事件 即可完成下载
+            });
         },
         printQr() {
             this.$print(this.$refs.qrArea)
