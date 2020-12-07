@@ -70,7 +70,7 @@ export default {
 
 .login-card {
     width: 300px;
-    height: 240px;
+    height: fit-content;
     margin-top: 160px;
 }
 
@@ -111,7 +111,4 @@ export default {
     color: #347dd6;
 }
 
-.sign-local-btn {
-    margin-bottom: 10px;
-}
 </style>

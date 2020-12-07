@@ -23,7 +23,13 @@
                         <el-input v-model="form.username" placeholder="学号"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="password">
-                        <el-input v-model="form.password" placeholder="密码"></el-input>
+                        <el-input type='password' v-model="form.password" placeholder="密码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="状态" prop="state">
+                        <el-radio-group v-model="form.state">
+                            <el-radio-button label="NORMAL">正常</el-radio-button>
+                            <el-radio-button label="DISABLE">禁用</el-radio-button>
+                        </el-radio-group>
                     </el-form-item>
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="form.name" placeholder="姓名"></el-input>
@@ -75,6 +81,7 @@ export default {
             form: {
                 username: '',
                 password: '',
+                state: '',
                 name: '',
                 overTerm: {year: '', num: ''},
                 type: 'STUDENT'
@@ -102,7 +109,16 @@ export default {
                 pageMethod: this.toPage,
                 cols: [
                     {prop: 'name', label: '姓名'},
-                    {prop: 'term.year', label: '学期', formatter: this.termFormatter},
+                    {
+                        prop: 'state',
+                        label: '状态',
+                        width: '80',
+                        formatter: this.stateFormatter,
+                        tag: true,
+                        tagType: this.stateTagFormatter,
+                        tagSize: 'small'
+                    },
+                    {prop: 'term.year', label: '学期', formatter: this.termFormatter, formatterType: 'raw'},
                 ],
                 oper: [
                     {
@@ -196,7 +212,31 @@ export default {
         },
         termFormatter(row) {
             return row.overTerm.year + '年第' + row.overTerm.num + '学期'
-        }
+        },
+        stateTagFormatter(value) {
+            switch (value) {
+                case 'NORMAL':
+                    return 'success'
+                case 'DISABLE':
+                    return 'warning'
+                case 'DELETE':
+                    return 'danger'
+                default:
+                    return ''
+            }
+        },
+        stateFormatter(value) {
+            switch (value) {
+                case 'NORMAL':
+                    return '正常'
+                case 'DISABLE':
+                    return '禁用'
+                case 'DELETE':
+                    return '删除'
+                default:
+                    return ''
+            }
+        },
     },
     components: {
         TableComponent
