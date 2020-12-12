@@ -13,7 +13,7 @@ module.exports = merge(common, {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'js/[name].[chunkhash].js', //manifest
-        publicPath: 'http://demo.ceeg.cn/',
+        publicPath: 'http://tyjp.ntu.edu.cn/',
         chunkFilename: 'js/[name].[chunkhash].js' //其他js
     },
     optimization: {

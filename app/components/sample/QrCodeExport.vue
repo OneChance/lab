@@ -112,7 +112,7 @@ export default {
                     allowTaint: true //是否允许跨域图像污染画布  !!!
                 }).then(canvas => {
                     let imgUri = canvas.toDataURL().split(';base64,')[1]
-                    zip.file(code.name + '.png', imgUri, {base64: true});
+                    zip.file(code.code+'-'+code.name + '.png', imgUri, {base64: true});
                 });
                 promises.push(promise);
             })

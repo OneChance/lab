@@ -16,7 +16,7 @@ module.exports = merge(common, {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'js/[name].[hash].js',
-        publicPath: '//ssm.ceeg.cn/',
+        publicPath: 'http://localhost:8893/',
         chunkFilename: 'js/[name].[hash].js'
     },
 });
