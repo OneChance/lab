@@ -119,6 +119,10 @@ const request = function (api, type, data, progress) {
                 } else {
                     App.vueG.$router.push('/sign').catch(err => err);
                 }
+            } else {
+                if (App.vueG.$route.path.indexOf('/wx/') !== -1) {
+
+                }
             }
         }
 

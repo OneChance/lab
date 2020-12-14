@@ -9,11 +9,19 @@
                     <aplayer autoplay :music="audio"/>
                 </div>
                 <div class="mobile-item-row sample-description">{{ description }}</div>
-                <div class="mobile-item-row">
-                    <img :src="img" alt="" style="width: 100%">
+                <div class="mobile-item-row" v-for="img of imgs">
+                    <el-image
+                        :src="img"
+                        :preview-src-list="[img]">
+                    </el-image>
                 </div>
                 <el-collapse v-model="activeNames" @change="handleChange">
-                    <el-collapse-item :title="kp.title" :name="kp.id" v-for="kp in kps" :key="kp.id" class="kp-title">
+                    <el-collapse-item :name="kp.id" v-for="kp in kps" :key="kp.id" class="kp-title">
+                        <template slot="title">
+                            <span :style="'color:'+(kp.studied?'green':'')" @click="studyKp(kp.id)">{{
+                                    kp.title
+                                }}</span>
+                        </template>
                         <div class="kp-content">{{ kp.content }}</div>
                     </el-collapse-item>
                 </el-collapse>
@@ -35,7 +43,7 @@ export default {
         return {
             name: '',
             description: '',
-            img: '',
+            imgs: [],
             audio: {},
             kps: []
         }
@@ -44,11 +52,13 @@ export default {
         Sample.getSample({id: this.$route.query.id}).then(res => {
             this.name = res.specimen.name
             this.description = res.specimen.description
-            let imgId = res.specimen.imgIds
-            if (imgId.indexOf(',') !== -1) {
-                imgId = imgId.split(',')[0]
-            }
-            this.img = Env.baseURL + '/file/download/?id=' + imgId
+            let imgId = ''
+            res.specimen.imgIds.split(',').forEach(id => {
+                if (!imgId) {
+                    imgId = id
+                }
+                this.imgs.push(Env.baseURL + '/file/download/?id=' + id)
+            })
             this.sound = Env.baseURL + '/file/download/?id=' + res.specimen.audioId
             this.kps = res.specimen.kps
             this.audio = {
@@ -59,8 +69,57 @@ export default {
             }
         })
         document.title = '标本信息'
+
+        //触摸事件转鼠标事件,用于el-image
+        document.addEventListener("touchstart", this.touchHandler, true);
+        document.addEventListener("touchmove", this.touchHandler, true);
+        document.addEventListener("touchend", this.touchHandler, true);
+        document.addEventListener("touchcancel", this.touchHandler, true);
+
+        //记录学习时间
+        /*Sample.study({id: this.$route.query.id}).then(res => {
+            setTimeout(() => {
+                window.opener = null;
+                window.open('', '_self', '');
+                window.close()
+            }, 6000)
+        })
+        setInterval(this.study, 10000000)*/
     },
-    methods: {},
+    methods: {
+        study() {
+            console.log(111)
+        },
+        studyKp(id) {
+            console.log(id)
+        },
+        touchHandler(event) {
+            let touches = event.changedTouches,
+                first = touches[0],
+                type = "";
+            switch (event.type) {
+                case "touchstart":
+                    type = "mousedown";
+                    break;
+                case "touchmove":
+                    type = "mousemove";
+                    break;
+                case "touchend":
+                    type = "mouseup";
+                    break;
+                default:
+                    return;
+            }
+
+            let simulatedEvent = document.createEvent("MouseEvent");
+            simulatedEvent.initMouseEvent(type, true, true, window, 1,
+                first.screenX, first.screenY,
+                first.clientX, first.clientY, false,
+                false, false, false, 0/*left*/, null);
+
+            first.target.dispatchEvent(simulatedEvent);
+        }
+    },
     components: {Aplayer},
 }
 </script>

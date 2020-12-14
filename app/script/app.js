@@ -25,6 +25,7 @@ import Paper from "../components/exam/Paper";
 import Lab from "../components/info/Lab";
 import Teacher from "../components/info/Teacher";
 import Student from "../components/info/Student";
+import Guest from "../components/info/Guest"
 import SysCompnent from "../components/SysCompnent";
 import SysRole from "../components/sys/SysRole";
 import SysUser from "../components/sys/SysUser";
@@ -97,6 +98,11 @@ export default {
                                     path: 'student',
                                     name: 'student',
                                     component: Student
+                                },
+                                {
+                                    path: 'guest',
+                                    name: 'guest',
+                                    component: Guest
                                 },
                                 {
                                     path: 'samplebanks',

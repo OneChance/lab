@@ -410,6 +410,9 @@ body {
     .el-collapse-item__header {
         font-weight: bold;
         font-size: 0.9em;
+        line-height: normal;
+        height: fit-content;
+        padding: 10px 0 10px 0;
     }
 }
 

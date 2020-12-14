@@ -29,10 +29,17 @@
                         <el-radio-group v-model="form.state">
                             <el-radio-button label="NORMAL">正常</el-radio-button>
                             <el-radio-button label="DISABLE">禁用</el-radio-button>
+                            <el-radio-button label="DELETE">删除</el-radio-button>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="form.name" placeholder="姓名"></el-input>
+                    </el-form-item>
+                    <el-form-item label="性别" prop="sex">
+                        <el-radio-group v-model="form.sex">
+                            <el-radio-button label="男">男</el-radio-button>
+                            <el-radio-button label="女">女</el-radio-button>
+                        </el-radio-group>
                     </el-form-item>
                     <el-form-item label="学年" prop="overTerm.year">
                         <el-date-picker
@@ -82,10 +89,12 @@ export default {
                 id: '',
                 username: '',
                 password: '',
-                state: '',
+                state: 'NORMAL',
                 name: '',
+                sex: '',
                 overTerm: {year: '', num: ''},
-                type: 'STUDENT'
+                type: 'STUDENT',
+                login: true,
             },
             rules: {
                 username: [
@@ -95,7 +104,10 @@ export default {
                     {required: true, message: '请输入密码', trigger: 'blur'},
                 ],
                 name: [
-                    {required: true, message: '请输入用户名', trigger: 'blur'},
+                    {required: true, message: '请输入姓名', trigger: 'blur'},
+                ],
+                sex: [
+                    {required: true, message: '请选择性别', trigger: 'blur'},
                 ],
                 'overTerm.year': [
                     {required: true, message: '请选择学年', trigger: 'change'},
