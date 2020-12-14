@@ -95,6 +95,7 @@ export default {
             this.visible = true
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
+                this.form.id = ''
             });
         },
         edit(row) {

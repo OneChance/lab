@@ -79,6 +79,7 @@ export default {
             },
             addUser: true,
             form: {
+                id: '',
                 username: '',
                 password: '',
                 state: '',
@@ -112,7 +113,7 @@ export default {
                     {
                         prop: 'state',
                         label: '状态',
-                        width: '80',
+                        width: '70',
                         formatter: this.stateFormatter,
                         tag: true,
                         tagType: this.stateTagFormatter,
@@ -172,6 +173,7 @@ export default {
             this.addUser = true
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
+                this.form.id = ''
             });
         },
         edit: function (row) {

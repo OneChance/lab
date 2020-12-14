@@ -55,6 +55,7 @@ export default {
             },
             addUser: true,
             form: {
+                id: '',
                 name: '',
                 email: '',
                 telphone: '',
@@ -120,6 +121,7 @@ export default {
             this.addUser = true
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
+                this.form.id = ''
             });
         },
         edit: function (row) {
