@@ -122,18 +122,21 @@ export default {
 
             if (touches.length === 2) {
 
-                simulatedEvent = document.createEvent("WheelEvent");
-
+                /*simulatedEvent = document.createEvent("WheelEvent");
                 if (type === 'mousemove') {
                     let now = touches
-                    /*if (this.getDistance(now[0], now[1]) < this.fingerDistance) {
-                        simulatedEvent.initMouseEvent("DOMMouseScroll", true, null, window, 0, 0, 0, 0, 90, false, false, false, false, 0, null);
-
+                    if (this.getDistance(now[0], now[1]) < this.fingerDistance) {
+                        this.$message('1')
+                        $.Event('DOMMouseScroll', {
+                            "deltaY": -1
+                        })
+                        this.$message('2')
                     } else {
-                        this.$message('big')
-                    }*/
+
+                    }
                     this.fingerDistance = this.getDistance(now[0], now[1])
-                }
+                }*/
+
             } else {
                 simulatedEvent.initMouseEvent(type, true, true, window, 1,
                     first.screenX, first.screenY,
