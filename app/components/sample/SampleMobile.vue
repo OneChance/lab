@@ -45,11 +45,14 @@ export default {
             description: '',
             imgs: [],
             audio: {},
-            kps: []
+            kps: [],
+            interval: 10,
+            studyChecker: {},
+            fingerDistance: 0
         }
     },
     mounted: function () {
-        Sample.getSample({id: this.$route.query.id}).then(res => {
+        Sample.study({id: this.$route.query.id, interval: this.interval}).then(res => {
             this.name = res.specimen.name
             this.description = res.specimen.description
             let imgId = ''
@@ -67,7 +70,11 @@ export default {
                 src: Env.baseURL + '/file/download/?id=' + res.specimen.audioId,
                 pic: Env.baseURL + '/file/download/?id=' + imgId
             }
+        }).catch((e) => {
+            clearInterval(this.studyChecker)
+            this.$router.push({path: '/wx/error'}).catch(err => err);
         })
+
         document.title = '标本信息'
 
         //触摸事件转鼠标事件,用于el-image
@@ -77,14 +84,12 @@ export default {
         document.addEventListener("touchcancel", this.touchHandler, true);
 
         //记录学习时间
-        /*Sample.study({id: this.$route.query.id}).then(res => {
-            setTimeout(() => {
-                window.opener = null;
-                window.open('', '_self', '');
-                window.close()
-            }, 6000)
-        })
-        setInterval(this.study, 10000000)*/
+        this.studyChecker = setInterval(() => {
+            Sample.study({id: this.$route.query.id, interval: this.interval})
+        }, 11000)
+    },
+    beforeDestroy() {
+        clearInterval(this.studyChecker)
     },
     methods: {
         study() {
@@ -94,8 +99,9 @@ export default {
             console.log(id)
         },
         touchHandler(event) {
-            let touches = event.changedTouches,
-                first = touches[0],
+            let touches = event.changedTouches
+
+            let first = touches[0],
                 type = "";
             switch (event.type) {
                 case "touchstart":
@@ -112,12 +118,36 @@ export default {
             }
 
             let simulatedEvent = document.createEvent("MouseEvent");
-            simulatedEvent.initMouseEvent(type, true, true, window, 1,
-                first.screenX, first.screenY,
-                first.clientX, first.clientY, false,
-                false, false, false, 0/*left*/, null);
+
+
+            if (touches.length === 2) {
+
+                simulatedEvent = document.createEvent("WheelEvent");
+
+                if (type === 'mousemove') {
+                    let now = touches
+                    /*if (this.getDistance(now[0], now[1]) < this.fingerDistance) {
+                        simulatedEvent.initMouseEvent("DOMMouseScroll", true, null, window, 0, 0, 0, 0, 90, false, false, false, false, 0, null);
+
+                    } else {
+                        this.$message('big')
+                    }*/
+                    this.fingerDistance = this.getDistance(now[0], now[1])
+                }
+            } else {
+                simulatedEvent.initMouseEvent(type, true, true, window, 1,
+                    first.screenX, first.screenY,
+                    first.clientX, first.clientY, false,
+                    false, false, false, 0/*left*/, null);
+            }
 
             first.target.dispatchEvent(simulatedEvent);
+
+        },
+        getDistance(p1, p2) {
+            let x = p2.pageX - p1.pageX,
+                y = p2.pageY - p1.pageY;
+            return Math.sqrt((x * x) + (y * y));
         }
     },
     components: {Aplayer},

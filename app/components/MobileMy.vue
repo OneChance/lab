@@ -19,7 +19,7 @@
                     </td>
                 </tr>
             </table>
-            <div class="out" v-else>
+            <div class="mobile-center-text" v-else>
                 您已退出登录!
             </div>
         </div>
@@ -61,10 +61,5 @@ export default {
 </script>
 
 <style scoped>
-.out {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
+
 </style>

@@ -28,7 +28,7 @@ export default {
         return Net.get('/specimen/' + data.id + '/');
     },
     study(data) {
-        return Net.get('/specimen/study/' + data.id + '/');
+        return Net.get('/specimen/study/' + data.id + '/?interval=' + data.interval);
     },
     deleteSample(data) {
         return Net.delete('/specimen/' + data.id + '/');

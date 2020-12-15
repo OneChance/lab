@@ -1,12 +1,10 @@
 <template>
     <div class="mobile-div">
-        <el-alert
-            title="请求无效"
-            type="error"
-            center
-            :closable="false"
-            show-icon>
-        </el-alert>
+        <div class="full-height">
+            <div class="mobile-center-text message-error">
+                {{ msg }}
+            </div>
+        </div>
     </div>
 </template>
 
@@ -16,10 +14,14 @@
 export default {
     name: "Error",
     data: function () {
-        return {}
+        return {
+            msg: '操作失败！'
+        }
     },
     mounted: function () {
-
+        if (this.$route.query.msg) {
+            this.msg = this.$route.query.msg
+        }
     },
     methods: {},
     components: {},
@@ -27,5 +29,8 @@ export default {
 </script>
 
 <style scoped>
-
+.message-error {
+    color: #ec3939;
+    text-align: center;
+}
 </style>

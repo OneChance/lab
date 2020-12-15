@@ -416,6 +416,12 @@ body {
     }
 }
 
+.mobile-center-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
 
 .mobile-item-row {
     margin-bottom: 10px;

@@ -120,14 +120,12 @@ const request = function (api, type, data, progress) {
                     App.vueG.$router.push('/sign').catch(err => err);
                 }
             } else {
-                if (App.vueG.$route.path.indexOf('/wx/') !== -1) {
 
-                }
             }
         }
 
         return new Promise((resolve, reject) => {
-            reject()
+            reject(e)
         })
     });
 };
