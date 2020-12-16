@@ -1,6 +1,5 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const BabiliPlugin = require("babili-webpack-plugin");
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
@@ -17,10 +16,6 @@ module.exports = merge(common, {
         chunkFilename: 'js/[name].[chunkhash].js' //其他js
     },
     optimization: {
-        minimizer: [
-            new BabiliPlugin({}),//js压缩
-            new OptimizeCSSPlugin({}) //css压缩
-        ],
         runtimeChunk: {
             name: 'manifest'
         },
@@ -37,6 +32,7 @@ module.exports = merge(common, {
     plugins: [
         new CleanWebpackPlugin(['dist']),
         new webpack.HashedModuleIdsPlugin(),
+        new OptimizeCSSPlugin({}),
         new ImageminPlugin({
             plugins: [
                 ImageminMozjpeg({
