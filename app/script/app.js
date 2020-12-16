@@ -6,6 +6,8 @@ import cookie from 'vue-cookie';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import Print from '../plugin/print/print'
+import preview from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
 
 
 //路由模块
@@ -42,6 +44,9 @@ Vue.use(VueAxios, axios);
 
 // ElementUI
 Vue.use(ElementUI);
+
+//图片预览插件
+Vue.use(preview)
 
 // 设置COOKIE工具
 Vue.use(cookie)

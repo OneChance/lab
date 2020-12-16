@@ -10,10 +10,7 @@
                 </div>
                 <div class="mobile-item-row sample-description">{{ description }}</div>
                 <div class="mobile-item-row" v-for="img of imgs">
-                    <el-image
-                        :src="img"
-                        :preview-src-list="[img]">
-                    </el-image>
+                    <img :src="img" preview="0" style="width: 100%" alt="">
                 </div>
                 <el-collapse v-model="activeNames" @change="handleChange">
                     <el-collapse-item :name="kp.id" v-for="kp in kps" :key="kp.id" class="kp-title">
@@ -52,6 +49,7 @@ export default {
         }
     },
     mounted: function () {
+
         Sample.study({id: this.$route.query.id, interval: this.interval}).then(res => {
             this.name = res.specimen.name
             this.description = res.specimen.description
@@ -122,20 +120,18 @@ export default {
 
             if (touches.length === 2) {
 
-                /*simulatedEvent = document.createEvent("WheelEvent");
+
                 if (type === 'mousemove') {
                     let now = touches
                     if (this.getDistance(now[0], now[1]) < this.fingerDistance) {
+                        simulatedEvent = document.createEvent("WheelEvent");
+                        simulatedEvent.initEvent()
                         this.$message('1')
-                        $.Event('DOMMouseScroll', {
-                            "deltaY": -1
-                        })
-                        this.$message('2')
                     } else {
 
                     }
                     this.fingerDistance = this.getDistance(now[0], now[1])
-                }*/
+                }
 
             } else {
                 simulatedEvent.initMouseEvent(type, true, true, window, 1,
