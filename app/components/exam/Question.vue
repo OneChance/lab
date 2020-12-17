@@ -1,6 +1,6 @@
 <template>
     <el-card class="box-card question-card">
-        <div>
+        <div class="question-title">
             {{ index + 1 }}.{{ question.title }}
         </div>
         <div v-for="(option,index) of question.options" :key="option.id" class="answer">
@@ -52,9 +52,14 @@ export default {
 
 .question {
     width: 100% !important;
+    font-size: 0.9em;
 }
 
 .answer {
     margin-top: 10px;
+}
+
+.question-title {
+    font-weight: bold;
 }
 </style>

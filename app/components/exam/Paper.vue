@@ -12,10 +12,10 @@
                       v-for="(question,index) of questions"
                       :key="question.id"></question>
             <div class="content-center vertical-center" style="height: 100%;" v-if="status==='not-started'">
-                <el-button type="primary" @click="start">开始考试</el-button>
+                <el-button type="primary" @click="start" :loading="startLoading">开始考试</el-button>
             </div>
             <el-card class="box-card content-center submit-card" v-if="status==='started'">
-                <el-button type="primary" @click="submit">提交考卷</el-button>
+                <el-button type="primary" @click="submit" :loading="submitLoading">提交考卷</el-button>
             </el-card>
         </div>
     </div>
@@ -38,7 +38,9 @@ export default {
             status: 'no-status',
             examId: '',
             paperId: '',
-            questions: []
+            questions: [],
+            startLoading: false,
+            submitLoading: false
         }
     },
     mounted: function () {
@@ -56,8 +58,11 @@ export default {
     },
     methods: {
         start() {
+            this.startLoading = true
             Exam.startExam({examId: this.examId}).then(res => {
                 this.exam(res)
+            }).catch(() => {
+                this.startLoading = false
             })
         },
         exam(res) {
@@ -85,6 +90,7 @@ export default {
             })
         },
         submit(auto) {
+            this.submitLoading = true
             Exam.commitPaper({id: this.paperId}).then(res => {
                 if (auto) {
                     this.$message({
@@ -102,6 +108,8 @@ export default {
                     });
                 }
                 App.vueG.$router.push('/wx/score').catch(err => err)
+            }).catch(() => {
+                this.submitLoading = false
             })
         }
     },
@@ -122,5 +130,9 @@ export default {
 .submit-card {
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.timer {
+    font-size: 0.9em;
 }
 </style>

@@ -1,6 +1,12 @@
 <template>
     <div class="mobile-div">
         <div class="full-height">
+
+            <el-card class="box-card mobile-card study-info">
+                已学习该标本{{ studyTime }}分钟
+            </el-card>
+
+
             <el-card class="box-card mobile-card">
                 <div slot="header" class="sample-title">
                     <span>{{ name }}</span>
@@ -46,7 +52,8 @@ export default {
             kps: [],
             interval: 10,
             studyChecker: {},
-            fingerDistance: 0
+            fingerDistance: 0,
+            studyTime: 0
         }
     },
     mounted: function () {
@@ -69,6 +76,7 @@ export default {
                 src: Env.baseURL + '/file/download/?id=' + res.specimen.audioId,
                 pic: Env.baseURL + '/file/download/?id=' + imgId
             }
+            this.studyTime = Math.floor(res.study_timing / 60)
         }).catch((e) => {
             clearInterval(this.studyChecker)
             Router.toError(this)
@@ -84,7 +92,9 @@ export default {
 
         //记录学习时间
         this.studyChecker = setInterval(() => {
-            Sample.study({id: this.$route.query.id, interval: this.interval}).catch((e) => {
+            Sample.study({id: this.$route.query.id, interval: this.interval}).then(res => {
+                this.studyTime = Math.floor(res.study_timing / 60)
+            }).catch((e) => {
                 clearInterval(this.studyChecker)
                 Router.toError(this)
             })
@@ -172,4 +182,11 @@ export default {
     font-weight: 300;
     font-size: 0.8em;
 }
+
+.study-info {
+    text-align: center;
+    font-weight: bold;
+    color: #67C23A;
+}
+
 </style>
