@@ -18,9 +18,12 @@
         <el-dialog :visible.sync="visible"
                    :close-on-click-modal="false">
             <template>
-                <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                <el-form ref="form" :model="form" :rules="rules" label-width="100px">
                     <el-form-item label="名称" prop="name">
                         <el-input v-model="form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="考试抽取题数" prop="questionCount">
+                        <el-input v-model="form.questionCount"></el-input>
                     </el-form-item>
                 </el-form>
             </template>
@@ -52,7 +55,8 @@ export default {
             visible: false,
             form: {
                 id: '',
-                name: ''
+                name: '',
+                questionCount: ''
             },
             rules: {
                 name: [
@@ -101,7 +105,9 @@ export default {
         edit(row) {
             Exam.getQB({id: row.id}).then(result => {
                 this.visible = true
-                this.form = result.question_bank
+                this.$nextTick(() => {
+                    this.form = result.question_bank
+                });
             })
         },
         view(row) {

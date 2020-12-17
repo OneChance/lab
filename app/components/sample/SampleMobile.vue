@@ -33,6 +33,7 @@
 import Sample from "../../script/server/manage/sample";
 import Env from "../../script/server/env";
 import Aplayer from 'vue-aplayer'
+import Router from "../../script/client/router";
 
 export default {
     name: "SampleMobile",
@@ -70,7 +71,7 @@ export default {
             }
         }).catch((e) => {
             clearInterval(this.studyChecker)
-            this.$router.push({path: '/wx/error'}).catch(err => err);
+            Router.toError(this)
         })
 
         document.title = '标本信息'
@@ -83,7 +84,10 @@ export default {
 
         //记录学习时间
         this.studyChecker = setInterval(() => {
-            Sample.study({id: this.$route.query.id, interval: this.interval})
+            Sample.study({id: this.$route.query.id, interval: this.interval}).catch((e) => {
+                clearInterval(this.studyChecker)
+                Router.toError(this)
+            })
         }, 11000)
     },
     beforeDestroy() {

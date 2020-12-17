@@ -11,7 +11,7 @@
                       v-bind:paperId="paperId"
                       v-for="(question,index) of questions"
                       :key="question.id"></question>
-            <div class="content-center vertical-center full-height" v-if="status==='not-started'">
+            <div class="content-center vertical-center" style="height: 100%;" v-if="status==='not-started'">
                 <el-button type="primary" @click="start">开始考试</el-button>
             </div>
             <el-card class="box-card content-center submit-card" v-if="status==='started'">
@@ -29,6 +29,7 @@ require('../../plugin/countdown/js/jquery.countdown.js');
 import App from "../../script/app";
 import Exam from "../../script/server/manage/exam"
 import Question from "./Question";
+import Router from "../../script/client/router"
 
 export default {
     name: "Paper",
@@ -48,6 +49,8 @@ export default {
                 this.status = 'not-started'
                 this.examId = res.exam.id
             }
+        }).catch((e) => {
+            Router.toError(this)
         })
         document.title = '考试'
     },

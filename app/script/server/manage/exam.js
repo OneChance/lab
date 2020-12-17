@@ -46,6 +46,6 @@ export default {
         return Net.jsonPost('/exam/submit/', data);
     },
     scores(data) {
-        return Net.get('/exam/paper/list/',data);
+        return Net.get('/exam/paper/list/', data);
     }
 };
