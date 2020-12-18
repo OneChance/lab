@@ -85,5 +85,5 @@ export default {
         window.open("", "_self");
         window.close();
         history.go(-2)
-    }
+    },
 };

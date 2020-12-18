@@ -4,7 +4,7 @@
             {{ index + 1 }}.{{ question.title }}
         </div>
         <div v-for="(option,index) of question.options" :key="option.id" class="answer">
-            <el-radio v-model="choose.answer" :label="option.answer" @change="commitAnswer" border
+            <el-radio v-model="choose.answer" :label="option.answer" border
                       class="question">
                 {{ indexDescription[index] }}. {{ option.answer }}
             </el-radio>
@@ -14,8 +14,6 @@
 
 
 <script>
-
-import Exam from "../../script/server/manage/exam"
 
 export default {
     name: "Question",
@@ -31,15 +29,9 @@ export default {
         }
     },
     mounted: function () {
-        this.choose.answer = this.question.answer
+
     },
-    methods: {
-        commitAnswer() {
-            Exam.commitAnswer(this.choose).catch(res => {
-                this.choose.answer = ''
-            })
-        }
-    },
+    methods: {},
     components: {},
 }
 </script>

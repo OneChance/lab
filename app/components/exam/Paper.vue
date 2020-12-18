@@ -6,11 +6,13 @@
                     考试剩余时间:<span class="hours"></span>:<span class="minutes"></span>:<span class="seconds"></span>
                 </div>
             </el-tag>
-            <question v-bind:question="question"
-                      v-bind:index="index"
-                      v-bind:paperId="paperId"
-                      v-for="(question,index) of questions"
-                      :key="question.id"></question>
+            <question
+                :ref="'question_'+question.id"
+                v-bind:question="question"
+                v-bind:index="index"
+                v-bind:paperId="paperId"
+                v-for="(question,index) of questions"
+                :key="question.id"></question>
             <div class="content-center vertical-center" style="height: 100%;" v-if="status==='not-started'">
                 <el-button type="primary" @click="start" :loading="startLoading">开始考试</el-button>
             </div>
@@ -26,7 +28,6 @@
 
 require('../../plugin/countdown/js/jquery.countdown.js');
 
-import App from "../../script/app";
 import Exam from "../../script/server/manage/exam"
 import Question from "./Question";
 import Router from "../../script/client/router"
@@ -55,6 +56,16 @@ export default {
             Router.toError(this)
         })
         document.title = '考试'
+
+        document.addEventListener("visibilitychange", () => {
+            let string = document.visibilityState
+            if (string === 'hidden') {
+
+            }
+            if (string === 'visible') {
+                this.$message('欢迎回来！')
+            }
+        });
     },
     methods: {
         start() {
@@ -91,7 +102,15 @@ export default {
         },
         submit(auto) {
             this.submitLoading = true
-            Exam.commitPaper({id: this.paperId}).then(res => {
+            let answers = []
+
+            this.questions.forEach(question => {
+                answers.push(this.$refs['question_' + question.id][0].choose)
+            })
+
+            console.log(answers)
+
+            /*Exam.commitPaper({id: this.paperId}).then(res => {
                 if (auto) {
                     this.$message({
                         showClose: true,
@@ -107,10 +126,10 @@ export default {
                         duration: 3000
                     });
                 }
-                App.vueG.$router.push('/wx/score').catch(err => err)
+                this.$router.push('/wx/score').catch(err => err)
             }).catch(() => {
                 this.submitLoading = false
-            })
+            })*/
         }
     },
     components: {
