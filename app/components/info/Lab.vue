@@ -13,7 +13,6 @@
             </el-col>
         </el-row>
 
-
         <el-dialog title="实验室信息"
                    :visible.sync="visible"
                    :close-on-click-modal="false">

@@ -26,6 +26,7 @@ import SampleInfo from "../components/sample/SampleInfo";
 import Paper from "../components/exam/Paper";
 import Lab from "../components/info/Lab";
 import Teacher from "../components/info/Teacher";
+import Duty from "../components/info/Duty"
 import Student from "../components/info/Student";
 import Guest from "../components/info/Guest"
 import SysCompnent from "../components/SysCompnent";
@@ -98,6 +99,11 @@ export default {
                                     path: 'teacher',
                                     name: 'teacher',
                                     component: Teacher
+                                },
+                                {
+                                    path: 'duty',
+                                    name: 'duty',
+                                    component: Duty
                                 },
                                 {
                                     path: 'student',
