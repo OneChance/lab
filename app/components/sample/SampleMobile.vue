@@ -18,18 +18,33 @@
                 <div class="mobile-item-row" v-for="img of imgs">
                     <img :src="img" preview="0" style="width: 100%" alt="">
                 </div>
-                <el-collapse v-model="activeNames" @change="handleChange">
-                    <el-collapse-item :name="kp.id" v-for="kp in kps" :key="kp.id" class="kp-title">
-                        <template slot="title">
-                            <span :style="'color:'+(kp.studied?'green':'')" @click="studyKp(kp.id)">{{
-                                    kp.title
-                                }}</span>
-                        </template>
-                        <div class="kp-content">{{ kp.content }}</div>
-                    </el-collapse-item>
+                <el-collapse v-model="activeNames">
+                    <div v-for="kp in kps" :key="kp.id" class="kp-title" @click="kpClick(kp)">
+                        <el-collapse-item :name="kp.id">
+                            <template slot="title">
+                            <span :style="{'color':(kp.studied?'#41b883':'#303133')}">
+                                {{ kp.title }}
+                            </span>
+                            </template>
+                            <div class="kp-content">{{ kp.content }}</div>
+                        </el-collapse-item>
+                    </div>
                 </el-collapse>
             </el-card>
         </div>
+
+        <el-dialog
+            title="提示"
+            center
+            :visible.sync="timeout"
+            width="90%"
+            :show-close="false"
+            :close-on-click-modal="false">
+            <span style="font-weight: bold">30分钟已到,点击确定关闭.如需继续学习,请重新扫码!</span>
+            <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="exit()">确 定</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -40,6 +55,7 @@ import Sample from "../../script/server/manage/sample";
 import Env from "../../script/server/env";
 import Aplayer from 'vue-aplayer'
 import Router from "../../script/client/router";
+import Common from "../../script/common"
 
 export default {
     name: "SampleMobile",
@@ -53,7 +69,8 @@ export default {
             interval: 10,
             studyChecker: {},
             fingerDistance: 0,
-            studyTime: 0
+            studyTime: 0,
+            timeout: false
         }
     },
     mounted: function () {
@@ -84,12 +101,6 @@ export default {
 
         document.title = '标本信息'
 
-        //触摸事件转鼠标事件,用于el-image
-        document.addEventListener("touchstart", this.touchHandler, true);
-        document.addEventListener("touchmove", this.touchHandler, true);
-        document.addEventListener("touchend", this.touchHandler, true);
-        document.addEventListener("touchcancel", this.touchHandler, true);
-
         //记录学习时间
         this.studyChecker = setInterval(() => {
             Sample.study({id: this.$route.query.id, interval: this.interval}).then(res => {
@@ -99,69 +110,28 @@ export default {
                 Router.toError(this)
             })
         }, 11000)
+
+        //30分钟后退出
+        setTimeout(() => {
+            this.timeout = true
+            clearInterval(this.studyChecker)
+        }, 1800000)
     },
     beforeDestroy() {
         clearInterval(this.studyChecker)
     },
     methods: {
-        study() {
-            console.log(111)
-        },
-        studyKp(id) {
-            console.log(id)
-        },
-        touchHandler(event) {
-            let touches = event.changedTouches
-
-            let first = touches[0],
-                type = "";
-            switch (event.type) {
-                case "touchstart":
-                    type = "mousedown";
-                    break;
-                case "touchmove":
-                    type = "mousemove";
-                    break;
-                case "touchend":
-                    type = "mouseup";
-                    break;
-                default:
-                    return;
+        kpClick(kp) {
+            if (!kp.studied) {
+                console.log('请求后台记录')
+                kp.studied = true
+                this.$forceUpdate()
             }
-
-            let simulatedEvent = document.createEvent("MouseEvent");
-
-
-            if (touches.length === 2) {
-
-
-                if (type === 'mousemove') {
-                    let now = touches
-                    if (this.getDistance(now[0], now[1]) < this.fingerDistance) {
-                        simulatedEvent = document.createEvent("WheelEvent");
-                        simulatedEvent.initEvent()
-                        this.$message('1')
-                    } else {
-
-                    }
-                    this.fingerDistance = this.getDistance(now[0], now[1])
-                }
-
-            } else {
-                simulatedEvent.initMouseEvent(type, true, true, window, 1,
-                    first.screenX, first.screenY,
-                    first.clientX, first.clientY, false,
-                    false, false, false, 0/*left*/, null);
-            }
-
-            first.target.dispatchEvent(simulatedEvent);
-
         },
-        getDistance(p1, p2) {
-            let x = p2.pageX - p1.pageX,
-                y = p2.pageY - p1.pageY;
-            return Math.sqrt((x * x) + (y * y));
-        }
+        exit() {
+            this.timeout = false
+            Common.closeWindow()
+        },
     },
     components: {Aplayer},
 }
@@ -186,7 +156,7 @@ export default {
 .study-info {
     text-align: center;
     font-weight: bold;
-    color: #67C23A;
+    color: #41b883;
 }
 
 </style>

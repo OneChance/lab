@@ -21,7 +21,6 @@
             center
             :closable="false">
         </el-alert>
-
     </div>
 </template>
 

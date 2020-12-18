@@ -79,5 +79,11 @@ export default {
             }
         }
         return fmt;
+    },
+    closeWindow() {
+        window.opener = null;
+        window.open("", "_self");
+        window.close();
+        history.go(-2)
     }
 };
