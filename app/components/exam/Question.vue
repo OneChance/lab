@@ -4,7 +4,7 @@
             {{ index + 1 }}.{{ question.title }}
         </div>
         <div v-for="(option,index) of question.options" :key="option.id" class="answer">
-            <el-radio v-model="choose.answer" :label="option.answer" border
+            <el-radio v-model="choose.answer" :label="option.answer" border @change="setTime"
                       class="question">
                 {{ indexDescription[index] }}. {{ option.answer }}
             </el-radio>
@@ -15,15 +15,19 @@
 
 <script>
 
+import Common from '../../script/common'
+
 export default {
     name: "Question",
-    props: ['question', 'index', 'paperId'],
+    props: ['question', 'index'],
     data: function () {
         return {
             choose: {
-                id: this.question.id,
-                paperId: this.paperId,
-                answer: ''
+                qid: this.question.qid,
+                title: this.question.title,
+                options: this.question.options,
+                answer: '',
+                answerTime: ''
             },
             indexDescription: ["A", "B", "C", "D"]
         }
@@ -31,7 +35,11 @@ export default {
     mounted: function () {
 
     },
-    methods: {},
+    methods: {
+        setTime() {
+            this.choose.answerTime = Common.getFormattedDate(new Date())
+        }
+    },
     components: {},
 }
 </script>

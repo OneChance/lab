@@ -1,5 +1,8 @@
 <template>
-    <div class="mobile-div">
+    <el-row class="mobile-div" v-loading="startLoading"
+            element-loading-text="考卷加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(0, 0, 0, 0.8)">
         <div class="full-height">
             <el-tag type="warning" class="time-tip" v-if="status==='started'">
                 <div class="timer">
@@ -7,10 +10,9 @@
                 </div>
             </el-tag>
             <question
-                :ref="'question_'+question.id"
+                :ref="'question_'+question.qid"
                 v-bind:question="question"
                 v-bind:index="index"
-                v-bind:paperId="paperId"
                 v-for="(question,index) of questions"
                 :key="question.id"></question>
             <div class="content-center vertical-center" style="height: 100%;" v-if="status==='not-started'">
@@ -20,7 +22,7 @@
                 <el-button type="primary" @click="submit" :loading="submitLoading">提交考卷</el-button>
             </el-card>
         </div>
-    </div>
+    </el-row>
 </template>
 
 
@@ -41,7 +43,10 @@ export default {
             paperId: '',
             questions: [],
             startLoading: false,
-            submitLoading: false
+            submitLoading: false,
+            paperLoading: false,
+            startTime: '',
+            createTime: ''
         }
     },
     mounted: function () {
@@ -63,7 +68,7 @@ export default {
 
             }
             if (string === 'visible') {
-                this.$message('欢迎回来！')
+                this.start()
             }
         });
     },
@@ -71,6 +76,7 @@ export default {
         start() {
             this.startLoading = true
             Exam.startExam({examId: this.examId}).then(res => {
+                this.startLoading = false
                 this.exam(res)
             }).catch(() => {
                 this.startLoading = false
@@ -80,6 +86,8 @@ export default {
             this.status = 'started'
             this.paperId = res.paper.id
             this.questions = res.paper.questions
+            this.startTime = res.paper.startTime
+            this.createTime = res.paper.createTime
             this.$nextTick(() => {
                 $('.timer').countdown((res.exam.duration * 1000) + new Date(res.paper.startTime).valueOf(), (event) => {
                     let $this = $(this.$el);
@@ -105,12 +113,17 @@ export default {
             let answers = []
 
             this.questions.forEach(question => {
-                answers.push(this.$refs['question_' + question.id][0].choose)
+                answers.push(this.$refs['question_' + question.qid][0].choose)
             })
 
             console.log(answers)
 
-            /*Exam.commitPaper({id: this.paperId}).then(res => {
+            /*Exam.commitPaper({
+                startTime: this.startTime,
+                createTime: this.createTime,
+                examId: this.examId,
+                questions: answers
+            }).then(res => {
                 if (auto) {
                     this.$message({
                         showClose: true,

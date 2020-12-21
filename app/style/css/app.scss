@@ -1,3 +1,5 @@
+@import './calendar.scss';
+
 $barHeight: 60px;
 
 body {
@@ -55,6 +57,11 @@ body {
 
 .box-card {
     margin: 0 20px 0 20px;
+}
+
+.back-man-card {
+    min-width: 800px;
+    overflow: hidden;
 }
 
 .box-card-no-nav {

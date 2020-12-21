@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-card class="box-card box-card-no-nav">
+        <el-card class="box-card box-card-no-nav back-man-card">
             <my-calendar v-model="value" ref="c">
                 <template
                     slot="dateCell"
