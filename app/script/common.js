@@ -1,11 +1,5 @@
-function fill0(number) {
-    return number < 10 ? `0${number}` : number;
-}
-
 export default {
-    getFormattedDate(date) {
-        return `${date.getFullYear()}-${fill0(date.getMonth() + 1)}-${fill0(date.getDate())}`;
-    },
+
     clearObject(object) {
         for (const key in object) {
             if (typeof object[key] === 'string' || typeof object[key] === 'number') {
@@ -61,24 +55,6 @@ export default {
             type: type,
             duration: duration
         });
-    },
-    dateFormat(fmt, date) {
-        let ret;
-        const opt = {
-            "Y+": date.getFullYear().toString(),
-            "m+": (date.getMonth() + 1).toString(),
-            "d+": date.getDate().toString(),
-            "H+": date.getHours().toString(),
-            "M+": date.getMinutes().toString(),
-            "S+": date.getSeconds().toString()
-        };
-        for (let k in opt) {
-            ret = new RegExp("(" + k + ")").exec(fmt);
-            if (ret) {
-                fmt = fmt.replace(ret[1], (ret[1].length === 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-            }
-        }
-        return fmt;
     },
     closeWindow() {
         window.opener = null;

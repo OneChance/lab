@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "dayjs": "^1.9.7",
     "element-ui": "^2.14.0",
     "file-saver": "^2.0.2",
     "hls.js": "^0.14.16",

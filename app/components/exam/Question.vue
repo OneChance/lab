@@ -15,17 +15,15 @@
 
 <script>
 
-import Common from '../../script/common'
-
 export default {
     name: "Question",
     props: ['question', 'index'],
     data: function () {
         return {
             choose: {
-                qid: this.question.qid,
-                title: this.question.title,
-                options: this.question.options,
+                qid: '',
+                title: '',
+                options: '',
                 answer: '',
                 answerTime: ''
             },
@@ -33,11 +31,15 @@ export default {
         }
     },
     mounted: function () {
-
+        this.choose.qid = this.question.qid
+        this.choose.title = this.question.title
+        this.choose.options = this.question.options
+        this.choose.answer = ''
+        this.choose.answerTime = ''
     },
     methods: {
         setTime() {
-            this.choose.answerTime = Common.getFormattedDate(new Date())
+            this.choose.answerTime = this.dayjs().format('YYYY-MM-DD HH:mm:ss')
         }
     },
     components: {},

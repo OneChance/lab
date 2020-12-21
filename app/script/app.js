@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Print from '../plugin/print/print'
 import preview from 'vue-photo-preview'
 import 'vue-photo-preview/dist/skin.css'
+import dayjs from 'dayjs'
 
 
 //路由模块
@@ -38,6 +39,7 @@ import MobileLogin from "../components/MobileLogin";
 import MobileChangePassword from "../components/MobileChangePassword";
 import MobileMy from "../components/MobileMy";
 import QrCodeExport from "../components/sample/QrCodeExport";
+import ExamSetting from "../components/exam/ExamSetting";
 
 //网络工具
 axios.defaults.withCredentials = true;
@@ -54,6 +56,9 @@ Vue.use(cookie)
 
 // 使用路由插件
 Vue.use(VueRouter);
+
+//日期插件
+Vue.prototype.dayjs = dayjs
 
 //消除重复路由控制台错误提示
 const originalPush = VueRouter.prototype.push
@@ -134,6 +139,11 @@ export default {
                                     path: 'qrcodeexport',
                                     name: 'qrcodeexport',
                                     component: QrCodeExport
+                                },
+                                {
+                                    path: 'examsetting',
+                                    name: 'examsetting',
+                                    component: ExamSetting
                                 },
                             ]
                         },

@@ -1,8 +1,10 @@
 <template>
     <div>
+        <nav-component v-bind:data="navData"></nav-component>
+
         <el-row>
             <el-col :span="24">
-                <el-card class="box-card box-card-no-nav">
+                <el-card class="box-card">
                     <el-form :inline="true" class="demo-form-inline">
                         <el-form-item>
                             <el-button type="primary" @click="add">添加实验室</el-button>
@@ -58,7 +60,7 @@ export default {
     name: "Lab",
     data: function () {
         return {
-            navData: [Config.navs.questionbank],
+            navData: [Config.navs.duty],
             visible: false,
             zoneVisible: false,
             form: {
@@ -83,6 +85,11 @@ export default {
                         class: 'fa fa-pencil-square-o fa-lg click-fa warning-fa',
                         tip: {content: '查看', placement: 'top'},
                         event: this.edit,
+                    },
+                    {
+                        class: 'fa fa fa-calendar fa-lg click-fa primary-fa',
+                        tip: {content: '值班表', placement: 'top'},
+                        event: this.duty,
                     },
                     {
                         class: 'fa fa-trash-o fa-lg click-fa danger-fa',
@@ -120,6 +127,9 @@ export default {
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
             })
+        },
+        duty(row) {
+            this.$router.push({path: 'duty', query: {id: row.id, name: row.name}}).catch(err => err);
         },
         edit(row) {
             this.chooseTimeZone = []

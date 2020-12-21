@@ -14,7 +14,7 @@
                 v-bind:question="question"
                 v-bind:index="index"
                 v-for="(question,index) of questions"
-                :key="question.id"></question>
+                :key="question.qid"></question>
             <div class="content-center vertical-center" style="height: 100%;" v-if="status==='not-started'">
                 <el-button type="primary" @click="start" :loading="startLoading">开始考试</el-button>
             </div>
@@ -85,6 +85,7 @@ export default {
         exam(res) {
             this.status = 'started'
             this.paperId = res.paper.id
+            this.questions = []
             this.questions = res.paper.questions
             this.startTime = res.paper.startTime
             this.createTime = res.paper.createTime
@@ -116,9 +117,7 @@ export default {
                 answers.push(this.$refs['question_' + question.qid][0].choose)
             })
 
-            console.log(answers)
-
-            /*Exam.commitPaper({
+            Exam.commitPaper({
                 startTime: this.startTime,
                 createTime: this.createTime,
                 examId: this.examId,
@@ -142,7 +141,7 @@ export default {
                 this.$router.push('/wx/score').catch(err => err)
             }).catch(() => {
                 this.submitLoading = false
-            })*/
+            })
         }
     },
     components: {

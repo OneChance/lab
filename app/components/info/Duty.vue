@@ -1,5 +1,8 @@
 <template>
     <div>
+
+        <nav-component v-bind:data="navData"></nav-component>
+
         <el-card class="box-card box-card-no-nav back-man-card">
             <my-calendar v-model="value" ref="c">
                 <template
@@ -8,10 +11,10 @@
                     <div class="day" slot="reference" @click="setDayTeachers(data.day)">
                         <div class="day-sign">{{ Number(data.day.split('-')[2]) }}</div>
                         <div class="teachers">
-                            <el-tag v-for="teacher of getDayTeachers(data.day)" size="mini" type="success"
-                                    :key="teacher.id"
+                            <el-tag v-for="dt of getDayTeachers(data.day)" size="mini" :type="dayType(dt.type)"
+                                    :key="dt.type"
                                     class="teacher">
-                                {{ teacher.name }}
+                                {{ dt.value.name }}
                             </el-tag>
                         </div>
                     </div>
@@ -66,11 +69,17 @@
 <script>
 
 import MyCalendar from "../util/MyCalendar";
+import Config from "../../script/config";
+import NavComponent from "../util/NavComponent";
 
 export default {
     name: "Duty",
     data: function () {
         return {
+            navData: [Config.navs.duty, {
+                'name': this.$route.query.name,
+                'url': '/index/app/duty?id=' + this.$route.query.id + '&name=' + this.$route.query.name
+            }],
             visible: false,
             teachers: [
                 {id: 1, name: '张圣诞'},
@@ -100,6 +109,18 @@ export default {
 
     },
     methods: {
+        dayType(type) {
+            switch (type) {
+                case 'day':
+                    return 'success'
+                case 'afternoon':
+                    return 'warning'
+                case 'night':
+                    return 'primary'
+                default:
+                    return ''
+            }
+        },
         getDayTeachers(date) {
             let tList = []
             if (date === '2020-12-04') {
@@ -107,13 +128,13 @@ export default {
                 if (dayTeachers) {
                     let teachers = dayTeachers.teachers
                     if (teachers.day) {
-                        tList.push(teachers.day)
+                        tList.push({type: 'day', value: teachers.day})
                     }
                     if (teachers.afternoon) {
-                        tList.push(teachers.afternoon)
+                        tList.push({type: 'afternoon', value: teachers.afternoon})
                     }
                     if (teachers.night) {
-                        tList.push(teachers.night)
+                        tList.push({type: 'night', value: teachers.night})
                     }
                 }
             }
@@ -130,7 +151,7 @@ export default {
             this.visible = false
         }
     },
-    components: {MyCalendar}
+    components: {MyCalendar, NavComponent}
 }
 </script>
 
