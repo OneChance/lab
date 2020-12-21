@@ -97,6 +97,9 @@ export default {
         firstDayOfWeek: {
             type: Number,
             default: 1
+        },
+        topBtnEvent: {
+            type: Function
         }
     },
 
@@ -126,6 +129,7 @@ export default {
 
             if (day === this.formatedDate) return;
             this.pickDay(day);
+            this.topBtnEvent(day)
         },
 
         toDate(val) {

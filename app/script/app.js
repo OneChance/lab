@@ -40,6 +40,7 @@ import MobileChangePassword from "../components/MobileChangePassword";
 import MobileMy from "../components/MobileMy";
 import QrCodeExport from "../components/sample/QrCodeExport";
 import ExamSetting from "../components/exam/ExamSetting";
+import OpenTime from "../components/info/OpenTime";
 
 //网络工具
 axios.defaults.withCredentials = true;
@@ -144,6 +145,11 @@ export default {
                                     path: 'examsetting',
                                     name: 'examsetting',
                                     component: ExamSetting
+                                },
+                                {
+                                    path: 'opentime',
+                                    name: 'opentime',
+                                    component: OpenTime
                                 },
                             ]
                         },

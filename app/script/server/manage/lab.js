@@ -30,5 +30,52 @@ export default {
             {id: 17, name: '17:00--18:00'},
             {id: 18, name: '18:00--19:00'},
             {id: 19, name: '19:00--20:00'}]
+    },
+    getOpenTime(month) {
+        console.log('get ' + month + ' data')
+        return new Promise(resolve => {
+            let data = [
+                {date: '2020-12-04', res: '已修改'},
+                {date: '2020-12-09', res: '已修改'},
+            ]
+            let dateResMap = {}
+            data.forEach(r => {
+                dateResMap[r.date] = r.res
+            })
+            resolve(dateResMap)
+        });
+    },
+    getDayTeachers(month) {
+        console.log('get ' + month + ' data')
+        return new Promise(resolve => {
+            let data = [
+                {
+                    date: '2020-12-04',
+                    day: {id: 1, name: '张三'},
+                    afternoon: {id: 1, name: '李四'},
+                    night: {id: 1, name: '王五'}
+                },
+                {
+                    date: '2020-12-09',
+                    day: {id: 1, name: '王五'},
+                    night: {id: 1, name: '李四'}
+                },
+            ]
+            let map = {}
+            data.forEach(r => {
+                let teachers = []
+                if (r.day) {
+                    teachers.push({type: 'day', value: r.day})
+                }
+                if (r.afternoon) {
+                    teachers.push({type: 'afternoon', value: r.afternoon})
+                }
+                if (r.night) {
+                    teachers.push({type: 'night', value: r.night})
+                }
+                map[r.date] = teachers
+            })
+            resolve(map)
+        });
     }
 };

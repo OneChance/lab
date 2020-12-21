@@ -4,14 +4,14 @@
         <nav-component v-bind:data="navData"></nav-component>
 
         <el-card class="box-card box-card-no-nav back-man-card">
-            <my-calendar v-model="value" ref="c">
+            <my-calendar v-model="value" ref="c" v-bind:top-btn-event="topBtn">
                 <template
                     slot="dateCell"
                     slot-scope="{date, data}">
                     <div class="day" slot="reference" @click="setDayTeachers(data.day)">
                         <div class="day-sign">{{ Number(data.day.split('-')[2]) }}</div>
                         <div class="teachers">
-                            <el-tag v-for="dt of getDayTeachers(data.day)" size="mini" :type="dayType(dt.type)"
+                            <el-tag v-for="dt of dayTeachers[data.day]" size="mini" :type="dayType(dt.type)"
                                     :key="dt.type"
                                     class="teacher">
                                 {{ dt.value.name }}
@@ -24,7 +24,8 @@
 
         <el-dialog :title="form.date+' 值班老师'"
                    width="30%"
-                   :visible.sync="visible">
+                   :visible.sync="visible"
+                   :close-on-click-modal="false">
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="上午" prop="day">
                     <el-select v-model="form.day" filterable placeholder="请选择" class="teacher-select">
@@ -71,6 +72,7 @@
 import MyCalendar from "../util/MyCalendar";
 import Config from "../../script/config";
 import NavComponent from "../util/NavComponent";
+import Lab from "../../script/server/manage/lab";
 
 export default {
     name: "Duty",
@@ -81,34 +83,27 @@ export default {
                 'url': '/index/app/duty?id=' + this.$route.query.id + '&name=' + this.$route.query.name
             }],
             visible: false,
-            teachers: [
-                {id: 1, name: '张圣诞'},
-                {id: 2, name: '啥都付'},
-                {id: 3, name: '啥都付的'}
-            ],
             form: {
                 date: '',
                 day: '',
                 afternoon: '',
                 night: ''
             },
-            serverData: [
-                {
-                    date: '2020-12-04',
-                    teachers: {
-                        day: {id: 1, name: '张圣诞'},
-                        afternoon: {id: 2, name: ' 刀锋山'},
-                        night: {id: 3, name: '一体化'}
-                    }
-                }
-            ],
             dayTeachers: {},
         }
     },
     mounted: function () {
-
+        this.getMonthData(this.dayjs().month() + 1)
     },
     methods: {
+        topBtn(date) {
+            this.getMonthData(this.dayjs(date).month() + 1)
+        },
+        getMonthData(month) {
+            Lab.getDayTeachers(month).then(res => {
+                this.dayTeachers = res
+            })
+        },
         dayType(type) {
             switch (type) {
                 case 'day':

@@ -87,6 +87,11 @@ export default {
                         event: this.edit,
                     },
                     {
+                        class: 'fa fa-clock-o fa-lg click-fa success-fa',
+                        tip: {content: '开放时间', placement: 'top'},
+                        event: this.openTime,
+                    },
+                    {
                         class: 'fa fa fa-calendar fa-lg click-fa primary-fa',
                         tip: {content: '值班表', placement: 'top'},
                         event: this.duty,
@@ -127,6 +132,9 @@ export default {
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
             })
+        },
+        openTime(row) {
+            this.$router.push({path: 'opentime', query: {id: row.id, name: row.name}}).catch(err => err);
         },
         duty(row) {
             this.$router.push({path: 'duty', query: {id: row.id, name: row.name}}).catch(err => err);
