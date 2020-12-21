@@ -73,6 +73,7 @@ import MyCalendar from "../util/MyCalendar";
 import Config from "../../script/config";
 import NavComponent from "../util/NavComponent";
 import Lab from "../../script/server/manage/lab";
+import User from '../../script/server/user'
 
 export default {
     name: "Duty",
@@ -90,10 +91,14 @@ export default {
                 night: ''
             },
             dayTeachers: {},
+            teachers: []
         }
     },
     mounted: function () {
         this.getMonthData(this.dayjs().month() + 1)
+        User.getAllTeacher().then(res => {
+            this.teachers = res.list
+        })
     },
     methods: {
         topBtn(date) {
@@ -116,25 +121,6 @@ export default {
                     return ''
             }
         },
-        getDayTeachers(date) {
-            let tList = []
-            if (date === '2020-12-04') {
-                let dayTeachers = this.serverData.filter(data => data.date === date)[0]
-                if (dayTeachers) {
-                    let teachers = dayTeachers.teachers
-                    if (teachers.day) {
-                        tList.push({type: 'day', value: teachers.day})
-                    }
-                    if (teachers.afternoon) {
-                        tList.push({type: 'afternoon', value: teachers.afternoon})
-                    }
-                    if (teachers.night) {
-                        tList.push({type: 'night', value: teachers.night})
-                    }
-                }
-            }
-            return tList
-        },
         setDayTeachers(date) {
             this.visible = true
             this.form.date = date
@@ -143,6 +129,7 @@ export default {
             })
         },
         setCommit() {
+            console.log(this.form)
             this.visible = false
         }
     },

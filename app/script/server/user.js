@@ -1,4 +1,6 @@
 import Net from './net';
+import Common from "../common";
+import Config from "../config";
 
 export default {
     saveUser(data) {
@@ -16,4 +18,10 @@ export default {
     deleteUser(data) {
         return Net.delete('/user/' + data.id + '/');
     },
+    getAllTeacher() {
+        let data = Common.copyObject(Config.allPage)
+        data.type = 'TEACHER';
+        data.login = false
+        return this.getUsers(data)
+    }
 };
