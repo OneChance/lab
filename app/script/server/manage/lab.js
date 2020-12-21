@@ -38,11 +38,13 @@ export default {
                 {date: '2020-12-04', res: '已修改'},
                 {date: '2020-12-09', res: '已修改'},
             ]
-            let dateResMap = {}
-            data.forEach(r => {
-                dateResMap[r.date] = r.res
+            resolve(data)
+        }).then(res => {
+            let map = {}
+            res.forEach(r => {
+                map[r.date] = r.res
             })
-            resolve(dateResMap)
+            return map
         });
     },
     getDayTeachers(month) {
@@ -61,8 +63,10 @@ export default {
                     night: {id: 1, name: '李四'}
                 },
             ]
+            resolve(data)
+        }).then(res => {
             let map = {}
-            data.forEach(r => {
+            res.forEach(r => {
                 let teachers = []
                 if (r.day) {
                     teachers.push({type: 'day', value: r.day})
@@ -75,7 +79,7 @@ export default {
                 }
                 map[r.date] = teachers
             })
-            resolve(map)
+            return map
         });
     }
 };
