@@ -125,7 +125,7 @@ export default {
             this.visible = true
             this.form.date = date
             this.$nextTick(() => {
-
+                this.$refs['form'].resetFields();
             })
         },
         setCommit() {
