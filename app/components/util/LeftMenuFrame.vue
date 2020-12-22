@@ -86,6 +86,8 @@ export default {
                 this.activeIndex = '/index/app/samplebanks'
             } else if (path.indexOf('question') !== -1) {
                 this.activeIndex = '/index/app/questionbanks'
+            } else if (path.indexOf('duty') !== -1 || path.indexOf('opentime') !== -1) {
+                this.activeIndex = '/index/app/lab'
             } else {
                 this.activeIndex = path
             }

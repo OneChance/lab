@@ -49,9 +49,9 @@ export default {
     name: "Duty",
     data: function () {
         return {
-            navData: [Config.navs.opentime, {
+            navData: [Config.navs.lab, {
                 'name': this.$route.query.name,
-                'url': '/index/app/duty?id=' + this.$route.query.id + '&name=' + this.$route.query.name
+                'url': '/index/app/opentime?id=' + this.$route.query.id + '&name=' + this.$route.query.name
             }],
             visible: false,
             form: {

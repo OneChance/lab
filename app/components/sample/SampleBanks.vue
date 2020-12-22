@@ -78,13 +78,13 @@ export default {
                     },
                     {
                         class: 'fa fa-trash-o fa-lg click-fa danger-fa',
-                        tip: {content: '删除', placement: 'right'},
+                        tip: {content: '删除', placement: 'top'},
                         event: this.delete,
                         check: true
                     },
                     {
                         class: 'fa fa-file-text-o fa-lg click-fa primary-fa',
-                        tip: {content: '查看', placement: 'top'},
+                        tip: {content: '查看', placement: 'right'},
                         event: this.view,
                     },
                 ]
