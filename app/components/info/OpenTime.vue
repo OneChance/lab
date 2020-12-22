@@ -80,7 +80,8 @@ export default {
             this.chooseTimeZone = []
             this.visible = true
             this.$nextTick(() => {
-
+                //如果没有设置,默认是开放所有时段
+                this.chooseTimeZone = Lab.timeZone().map(zone => zone.id)
             })
         },
         setCommit() {
