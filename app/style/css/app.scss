@@ -14,6 +14,10 @@ body {
     user-select: none;
 }
 
+.form-select {
+    width: 100% !important;
+}
+
 .form-required:after {
     content: '*';
     color: red;

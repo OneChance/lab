@@ -97,6 +97,7 @@ export default {
                 name: '',
             },
             form: {
+                id: '',
                 name: '',
                 sign: ''
             },
@@ -157,14 +158,17 @@ export default {
             this.addRole = true
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
+                this.form.id = ''
             });
         },
         edit: function (row) {
             this.roleInfoDialogVisible = true
             Role.getRole({id: row.id}).then(result => {
                 this.roleInfoDialogVisible = true
-                this.form = result.role
-                this.addRole = false
+                this.$nextTick(() => {
+                    this.form = result.role
+                    this.addRole = false
+                })
             })
         },
         delete: function (row) {

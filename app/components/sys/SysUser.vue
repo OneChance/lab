@@ -34,6 +34,18 @@
                     <el-form-item label="联系方式" prop="telphone">
                         <el-input v-model="form.telphone"></el-input>
                     </el-form-item>
+                    <el-form-item label="角色" prop="roles">
+                        <el-select
+                            class="form-select"
+                            v-model="form.roles" multiple placeholder="请选择">
+                            <el-option
+                                v-for="role in roles"
+                                :key="role.id"
+                                :label="role.name"
+                                :value="role.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
                 </el-form>
             </template>
             <div slot="footer" class="dialog-footer">
@@ -50,9 +62,19 @@ import User from "../../script/server/user";
 import TableComponent from "../util/TableComponent";
 import Config from "../../script/config";
 import Common from '../../script/common';
+import Role from "../../script/server/role";
 
 export default {
     name: "SysUser",
+    watch: {
+        userInfoDialogVisible: function (vis) {
+            if (vis) {
+                Role.getRoles(Config.allPage).then(res => {
+                    this.roles = res.list
+                })
+            }
+        }
+    },
     data: function () {
         return {
             query: {
@@ -60,14 +82,17 @@ export default {
             },
             addUser: true,
             form: {
+                id: '',
                 username: '',
                 password: '',
                 name: '',
                 email: '',
                 telphone: '',
                 login: true,
-                type: 'TEACHER'
+                type: 'TEACHER',
+                roles: ''
             },
+            roles: [],
             rules: {
                 username: [
                     {required: true, message: '请输入用户名', trigger: 'blur'},
@@ -112,6 +137,9 @@ export default {
         commit: function () {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
+                    this.form.roles = this.form.roles.map(roleId => {
+                        return {role: {id: roleId}}
+                    })
                     if (this.addUser) {
                         User.saveUser(this.form).then(() => {
                             this.operSuccess(this)
@@ -134,13 +162,21 @@ export default {
             this.addUser = true
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
+                this.form.id = ''
             });
         },
         edit: function (row) {
             User.getUser({id: row.id}).then(result => {
                 this.userInfoDialogVisible = true
-                this.form = result.user
-                this.addUser = false
+                this.$nextTick(() => {
+                    for (let prop in result.user) {
+                        if (result.user[prop]) {
+                            this.form[prop] = result.user[prop]
+                        }
+                    }
+                    this.addUser = false
+                    this.form.roles = this.form.roles.map(role => role.role.id)
+                })
             })
         },
         delete: function (row) {
