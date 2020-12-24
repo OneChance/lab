@@ -44,5 +44,11 @@ export default {
     },
     scores(data) {
         return Net.get('/exam/paper/list/', data);
+    },
+    commitSettings(data) {
+        return Net.put('/exam/' + data.id + '/', data);
+    },
+    getSettings() {
+        return Net.get('/exam/');
     }
 };
