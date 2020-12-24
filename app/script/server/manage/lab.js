@@ -47,39 +47,43 @@ export default {
             return map
         });
     },
+    getOpenTimeByDay(date) {
+        return Net.get('/laboratory/', {date: date});
+    },
+    getDayTeachersByDay(date) {
+        return Net.get('/duty/', {date: date});
+    },
     getDayTeachers(month) {
-        console.log('get ' + month + ' data')
-        return new Promise(resolve => {
-            let data = [
-                {
-                    date: '2020-12-04',
-                    day: {id: 1, name: '张三'},
-                    afternoon: {id: 1, name: '李四'},
-                    night: {id: 1, name: '王五'}
-                },
-                {
-                    date: '2020-12-09',
-                    day: {id: 1, name: '王五'},
-                    night: {id: 1, name: '李四'}
-                },
-            ]
-            resolve(data)
-        }).then(res => {
+        return Net.get('/duty/list/', {date: month}).then(res => {
             let map = {}
-            res.forEach(r => {
+            res.list.forEach(r => {
                 let teachers = []
-                if (r.day) {
-                    teachers.push({type: 'day', value: r.day})
+                if (r.amUser) {
+                    teachers.push({type: 'day', value: r.amUser})
                 }
-                if (r.afternoon) {
-                    teachers.push({type: 'afternoon', value: r.afternoon})
+                if (r.pmUser) {
+                    teachers.push({type: 'afternoon', value: r.pmUser})
                 }
-                if (r.night) {
-                    teachers.push({type: 'night', value: r.night})
+                if (r.ngUser) {
+                    teachers.push({type: 'night', value: r.ngUser})
                 }
                 map[r.date] = teachers
             })
             return map
         });
+    },
+    setDuty(data) {
+        let serverData = {
+            id: data.id,
+            date: data.date,
+            amUser: {id: data.amUserId},
+            pmUser: {id: data.pmUserId},
+            ngUser: {id: data.ngUserId}
+        }
+        if (serverData.id) {
+            return Net.put('/duty/' + data.id + '/', serverData);
+        } else {
+            return Net.jsonPost('/duty/', serverData);
+        }
     }
 };

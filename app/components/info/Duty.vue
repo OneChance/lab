@@ -27,8 +27,8 @@
                    :visible.sync="visible"
                    :close-on-click-modal="false">
             <el-form ref="form" :model="form" label-width="80px">
-                <el-form-item label="上午" prop="day">
-                    <el-select v-model="form.day" filterable placeholder="请选择" class="teacher-select">
+                <el-form-item label="上午" prop="amUserId">
+                    <el-select v-model="form.amUserId" filterable clearable placeholder="请选择" class="teacher-select">
                         <el-option
                             v-for="teacher in teachers"
                             :key="teacher.id"
@@ -37,8 +37,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="下午" prop="afternoon">
-                    <el-select v-model="form.afternoon" filterable placeholder="请选择" class="teacher-select">
+                <el-form-item label="下午" prop="pmUserId">
+                    <el-select v-model="form.pmUserId" filterable clearable placeholder="请选择" class="teacher-select">
                         <el-option
                             v-for="teacher in teachers"
                             :key="teacher.id"
@@ -47,8 +47,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="晚上" prop="night">
-                    <el-select v-model="form.night" filterable placeholder="请选择" class="teacher-select">
+                <el-form-item label="晚上" prop="ngUserId">
+                    <el-select v-model="form.ngUserId" filterable clearable placeholder="请选择" class="teacher-select">
                         <el-option
                             v-for="teacher in teachers"
                             :key="teacher.id"
@@ -85,24 +85,28 @@ export default {
             }],
             visible: false,
             form: {
+                id: '',
                 date: '',
-                day: '',
-                afternoon: '',
-                night: ''
+                amUserId: '',
+                pmUserId: '',
+                ngUserId: ''
             },
             dayTeachers: {},
-            teachers: []
+            teachers: [],
+            currentMonth: ''
         }
     },
     mounted: function () {
-        this.getMonthData(this.dayjs().month() + 1)
+        this.currentMonth = this.dayjs().format('YYYY-MM')
+        this.refresh()
         User.getAllTeacher().then(res => {
             this.teachers = res.list
         })
     },
     methods: {
         topBtn(date) {
-            this.getMonthData(this.dayjs(date).month() + 1)
+            this.currentMonth = this.dayjs(date).format('YYYY-MM')
+            this.getMonthData(this.currentMonth)
         },
         getMonthData(month) {
             Lab.getDayTeachers(month).then(res => {
@@ -126,11 +130,27 @@ export default {
             this.form.date = date
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
+                this.form.id = ''
+                Lab.getDayTeachersByDay(date).then(res => {
+                    if (res.duty) {
+                        this.form.id = res.duty.id
+                        this.form.date = res.duty.date
+                        this.form.amUserId = res.duty.amUser ? res.duty.amUser.id : ''
+                        this.form.pmUserId = res.duty.pmUser ? res.duty.pmUser.id : ''
+                        this.form.ngUserId = res.duty.ngUser ? res.duty.ngUser.id : ''
+                    }
+                })
             })
         },
         setCommit() {
-            console.log(this.form)
-            this.visible = false
+            Lab.setDuty(this.form).then(() => {
+                this.$message.success('设定完成')
+                this.refresh()
+                this.visible = false
+            })
+        },
+        refresh() {
+            this.getMonthData(this.currentMonth)
         }
     },
     components: {MyCalendar, NavComponent}

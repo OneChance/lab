@@ -190,12 +190,10 @@ export default {
             });
             comp.list({page: 1})
         },
-    }
-    ,
+    },
     components: {
         TableComponent, NavComponent
-    }
-    ,
+    },
 }
 </script>
 
