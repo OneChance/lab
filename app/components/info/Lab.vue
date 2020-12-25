@@ -58,7 +58,6 @@
                     placeholder="选择日期">
                 </el-date-picker>
                 <section ref="qrArea" style="position: relative">
-                    <div class="code" ref="qrNo">{{ qr.code }}</div>
                     <vue-qr :correctLevel="3" :autoColor="false"
                             :text="qr.url" :size="qr.size" :margin="0" :logoMargin="3"></vue-qr>
                 </section>
@@ -82,6 +81,7 @@ import Lab from "../../script/server/manage/lab"
 import Common from "../../script/common";
 import Env from "../../script/server/env";
 import VueQr from 'vue-qr'
+import QrCode from "../../script/client/qrcode";
 
 export default {
     name: "Lab",
@@ -177,13 +177,15 @@ export default {
                 this.genQr()
             })
         },
+        downloadQr() {
+            QrCode.downloadQr(this.qr.date + '签到二维码', this)
+        },
+        printQr() {
+            QrCode.printQr(this)
+        },
         genQr() {
             Lab.getCheckinToken({date: this.qr.date, laboratoryId: this.qr.labId}).then(res => {
                 this.qr.url = Env.baseURL.replace('api', '') + '/#/wx/checkin?token=' + res.attendance.token
-                this.$nextTick(() => {
-                    this.$refs.qrNo.style.top = (this.qr.size / 2 - 43) + 'px'
-                    this.$refs.qrNo.style.left = (this.qr.size / 2 - 43) + 'px'
-                })
             })
         },
         add() {
