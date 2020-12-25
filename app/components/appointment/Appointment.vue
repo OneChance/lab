@@ -71,7 +71,7 @@ export default {
     watch: {},
     methods: {
         disabled: function (time) {
-            return !this.applyBookingDates.includes(Common.dateFormat("YYYY-mm-dd", new Date(time)))
+            return !this.applyBookingDates.includes(this.dayjs(time).format('YYYY-MM-DD'))
         },
         dateChoose(date) {
             this.form.bookDay = date

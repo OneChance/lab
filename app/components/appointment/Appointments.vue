@@ -15,10 +15,17 @@
                     <th style="width: 30%">时间段</th>
                     <td>{{ appointment.bookHour | formatZone }}</td>
                 </tr>
-                <tr>
+                <tr v-if="appointment.cancelable">
                     <td colspan="2">
                         <el-button type="danger" plain class="mobile-item-width"
                                    @click="cancel(appointment)">取消预约
+                        </el-button>
+                    </td>
+                </tr>
+                <tr v-if="appointment.markable">
+                    <td colspan="2">
+                        <el-button type="success" plain class="mobile-item-width"
+                                   @click="rate(appointment)">值班教师评价
                         </el-button>
                     </td>
                 </tr>
@@ -72,6 +79,17 @@ export default {
                     this.appointments.push(list[i])
                 }
             }
+            //检查当前时间是否超过预约开始时间提前一天，隐藏取消预约按钮
+            //检查当前时间是否超过预约结束时间，显示评价按钮
+            this.appointments.forEach(a => {
+                a.cancelable = !this.dayjs().isAfter(this.dayjs(a.bookDay + ' ' + (a.bookHour < 10 ? '0' + a.bookHour : a.bookHour) + ':00:00').subtract(24, 'hour'))
+            })
+            this.appointments.forEach(a => {
+                a.markable = this.dayjs().isAfter(this.dayjs(a.bookDay + ' ' + ((a.bookHour + 1) < 10 ? '0' + (a.bookHour + 1) : (a.bookHour + 1)) + ':00:00'))
+            })
+        },
+        rate(appointment) {
+            this.$router.push({path: 'teacherRate', query: {id: appointment.id}}).catch(err => err);
         },
         cancel(appointment) {
             this.$confirm('是否取消' + appointment.laboratory.name + appointment.bookDay + '日' + this.$options.filters.formatZone(appointment.bookHour) + '的预约?', '提示', {
@@ -111,7 +129,5 @@ export default {
 </script>
 
 <style scoped>
-.item-card {
-    margin-top: 15px;
-}
+
 </style>

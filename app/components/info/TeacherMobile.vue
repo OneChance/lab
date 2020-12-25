@@ -1,22 +1,31 @@
 <template>
     <div class="mobile-div">
         <div class="full-height">
-            <el-collapse v-model="activeNames" @change="handleChange">
-                <el-collapse-item :title="teacher.name" :name="teacher.id" v-for="teacher of teachers"
-                                  :key="teacher.id">
-                    <div class="mobile-item-row">
-                        <el-rate v-model="teacher.rate"
-                                 show-text
-                                 :texts="texts"></el-rate>
-                    </div>
-                    <div class="mobile-item-row">
-                        <el-input type="textarea" v-model="teacher.comment" placeholder="请填写评价"></el-input>
-                    </div>
-                    <div>
-                        <el-button type="success" plain @click="submitRate(teacher)">提交评价</el-button>
-                    </div>
-                </el-collapse-item>
-            </el-collapse>
+
+            <el-card class="box-card mobile-card">
+                {{ teacher.name }}
+            </el-card>
+
+            <el-card class="box-card mobile-card">
+                <div class="mobile-item rate">
+                    到岗情况:
+                    <el-rate v-model="teacher.dutyRate" class="rate-bar"></el-rate>
+                </div>
+                <div class="mobile-item rate">
+                    服务态度:
+                    <el-rate v-model="teacher.mannerRate" class="rate-bar"></el-rate>
+                </div>
+                <div class="mobile-item rate">
+                    讲解是否清晰:
+                    <el-rate v-model="teacher.teachRate" class="rate-bar"></el-rate>
+                </div>
+                <div class="mobile-item" style="margin-top: 20px">
+                    <el-input type="textarea" v-model="teacher.comment" :rows='8' placeholder="请填写评价"></el-input>
+                </div>
+                <div class="mobile-center-text">
+                    <el-button type="success" plain @click="submitRate()">提交评价</el-button>
+                </div>
+            </el-card>
         </div>
     </div>
 </template>
@@ -24,29 +33,26 @@
 
 <script>
 
-import User from "../../script/server/user";
-
 export default {
     name: "TeacherRate",
     data: function () {
         return {
-            teachers: [],
-            texts: ['极差', '失望', '一般', '满意', '很棒']
+            teacher: {
+                id: 1,
+                name: 'test1',
+                dutyRate: '',
+                mannerRate: '',
+                teachRate: '',
+                comment: ''
+            },
         }
     },
     mounted: function () {
-        User.getUsers({
-            page: 1,
-            pageSize: 99999999,
-            type: 'TEACHER',
-            login: false
-        }).then(res => {
-            this.teachers = res.list
-        })
+
     },
     methods: {
-        submitRate(teacher) {
-            console.log({id: teacher.id, rate: teacher.rate, comment: teacher.comment})
+        submitRate() {
+            console.log(this.teacher)
         }
     },
     components: {},
@@ -54,5 +60,13 @@ export default {
 </script>
 
 <style scoped>
+.rate {
+    margin: 10px 0 10px 0;
+    display: flex;
+    align-items: center;
+}
 
+.rate-bar {
+    margin-left: 10px;
+}
 </style>
