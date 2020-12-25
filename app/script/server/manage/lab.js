@@ -47,14 +47,14 @@ export default {
             return map
         });
     },
-    getOpenTimeByDay(date) {
-        return Net.get('/laboratory/', {date: date});
+    getOpenTimeByDay(date, laboratoryId) {
+        return Net.get('/laboratory/', {date: date, laboratoryId: laboratoryId});
     },
-    getDayTeachersByDay(date) {
-        return Net.get('/duty/', {date: date});
+    getDayTeachersByDay(date, laboratoryId) {
+        return Net.get('/duty/', {date: date, laboratoryId: laboratoryId});
     },
-    getDayTeachers(month) {
-        return Net.get('/duty/list/', {date: month}).then(res => {
+    getDayTeachers(month, laboratoryId) {
+        return Net.get('/duty/list/', {date: month, laboratoryId: laboratoryId}).then(res => {
             let map = {}
             res.list.forEach(r => {
                 let teachers = []
@@ -72,10 +72,11 @@ export default {
             return map
         });
     },
-    setDuty(data) {
+    setDuty(data, laboratoryId) {
         let serverData = {
             id: data.id,
             date: data.date,
+            laboratoryId: laboratoryId,
             amUser: {id: data.amUserId},
             pmUser: {id: data.pmUserId},
             ngUser: {id: data.ngUserId}
@@ -85,5 +86,11 @@ export default {
         } else {
             return Net.jsonPost('/duty/', serverData);
         }
+    },
+    getCheckinToken(data) {
+        return Net.get('/attendance/code/', data);
+    },
+    checkIn(token) {
+        return Net.get('/attendance/apply/', {token: token});
     }
 };

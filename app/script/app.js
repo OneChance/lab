@@ -41,6 +41,7 @@ import MobileMy from "../components/MobileMy";
 import QrCodeExport from "../components/sample/QrCodeExport";
 import ExamSetting from "../components/exam/ExamSetting";
 import OpenTime from "../components/info/OpenTime";
+import CheckIn from "../components/info/CheckIn";
 
 //网络工具
 axios.defaults.withCredentials = true;
@@ -182,6 +183,7 @@ export default {
                 {path: '/wx/changePasswordM', component: MobileChangePassword},
                 {path: '/wx/appointments', component: Appointments},
                 {path: '/wx/my', component: MobileMy},
+                {path: '/wx/checkin', component: CheckIn},
             ];
 
             const router = new VueRouter({

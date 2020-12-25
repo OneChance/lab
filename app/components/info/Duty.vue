@@ -106,10 +106,10 @@ export default {
     methods: {
         topBtn(date) {
             this.currentMonth = this.dayjs(date).format('YYYY-MM')
-            this.getMonthData(this.currentMonth)
+            this.getMonthData(this.currentMonth, this.$route.query.id)
         },
-        getMonthData(month) {
-            Lab.getDayTeachers(month).then(res => {
+        getMonthData(month, laboratoryId) {
+            Lab.getDayTeachers(month, laboratoryId).then(res => {
                 this.dayTeachers = res
             })
         },
@@ -131,7 +131,7 @@ export default {
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
                 this.form.id = ''
-                Lab.getDayTeachersByDay(date).then(res => {
+                Lab.getDayTeachersByDay(date, this.$route.query.id).then(res => {
                     if (res.duty) {
                         this.form.id = res.duty.id
                         this.form.date = res.duty.date
@@ -143,14 +143,14 @@ export default {
             })
         },
         setCommit() {
-            Lab.setDuty(this.form).then(() => {
+            Lab.setDuty(this.form, this.$route.query.id).then(() => {
                 this.$message.success('设定完成')
                 this.refresh()
                 this.visible = false
             })
         },
         refresh() {
-            this.getMonthData(this.currentMonth)
+            this.getMonthData(this.currentMonth, this.$route.query.id)
         }
     },
     components: {MyCalendar, NavComponent}

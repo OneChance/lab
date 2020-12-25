@@ -44,6 +44,31 @@
                 <el-button type="primary" @click="addCommit()">确 定</el-button>
             </div>
         </el-dialog>
+
+        <el-dialog title="签到二维码"
+                   :visible.sync="qrVisisble"
+                   width="440px"
+                   :close-on-click-modal="false">
+            <template>
+                <el-date-picker
+                    v-model="qr.date"
+                    type="date"
+                    style="margin-bottom: 10px"
+                    @change="qrDateChange"
+                    placeholder="选择日期">
+                </el-date-picker>
+                <section ref="qrArea" style="position: relative">
+                    <div class="code" ref="qrNo">{{ qr.code }}</div>
+                    <vue-qr :correctLevel="3" :autoColor="false"
+                            :text="qr.url" :size="qr.size" :margin="0" :logoMargin="3"></vue-qr>
+                </section>
+            </template>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="qrVisisble = false">取 消</el-button>
+                <el-button type="primary" @click="printQr()">打印</el-button>
+                <el-button type="success" @click="downloadQr()">下载</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -55,12 +80,21 @@ import Config from "../../script/config"
 import NavComponent from "../util/NavComponent";
 import Lab from "../../script/server/manage/lab"
 import Common from "../../script/common";
+import Env from "../../script/server/env";
+import VueQr from 'vue-qr'
 
 export default {
     name: "Lab",
     data: function () {
         return {
-            navData: [Config.navs.duty],
+            qrVisisble: false,
+            qr: {
+                url: '',
+                size: 400,
+                labId: '',
+                date: ''
+            },
+            navData: [Config.navs.lab],
             visible: false,
             zoneVisible: false,
             form: {
@@ -97,6 +131,11 @@ export default {
                         event: this.duty,
                     },
                     {
+                        class: 'fa fa-qrcode fa-lg click-fa success-fa',
+                        tip: {content: '签到二维码', placement: 'right'},
+                        event: this.showQr,
+                    },
+                    {
                         class: 'fa fa-trash-o fa-lg click-fa danger-fa',
                         tip: {content: '删除', placement: 'right'},
                         event: this.delete,
@@ -119,13 +158,34 @@ export default {
                 ],
             },
             chooseTimeZone: [],
-            availableTimeZone: Lab.timeZone()
+            availableTimeZone: Lab.timeZone(),
         }
     },
     mounted: function () {
         this.list()
     },
     methods: {
+        qrDateChange(date) {
+            this.qr.date = this.dayjs(date).format('YYYY-MM-DD')
+            this.genQr()
+        },
+        showQr(row) {
+            this.qrVisisble = true
+            this.$nextTick(() => {
+                this.qr.labId = row.id
+                this.qr.date = this.dayjs().format('YYYY-MM-DD')
+                this.genQr()
+            })
+        },
+        genQr() {
+            Lab.getCheckinToken({date: this.qr.date, laboratoryId: this.qr.labId}).then(res => {
+                this.qr.url = Env.baseURL.replace('api', '') + '/#/wx/checkin?token=' + res.attendance.token
+                this.$nextTick(() => {
+                    this.$refs.qrNo.style.top = (this.qr.size / 2 - 43) + 'px'
+                    this.$refs.qrNo.style.left = (this.qr.size / 2 - 43) + 'px'
+                })
+            })
+        },
         add() {
             this.visible = true
             this.chooseTimeZone = []
@@ -192,7 +252,7 @@ export default {
         },
     },
     components: {
-        TableComponent, NavComponent
+        TableComponent, NavComponent, VueQr
     },
 }
 </script>
