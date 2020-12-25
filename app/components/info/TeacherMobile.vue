@@ -48,7 +48,7 @@ export default {
         }
     },
     mounted: function () {
-
+        document.title = '教师评价'
     },
     methods: {
         submitRate() {

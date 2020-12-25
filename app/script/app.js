@@ -10,7 +10,6 @@ import preview from 'vue-photo-preview'
 import 'vue-photo-preview/dist/skin.css'
 import dayjs from 'dayjs'
 
-
 //路由模块
 import Sign from '../components/Sign.vue';
 import Index from '../components/Index.vue';
@@ -42,6 +41,7 @@ import QrCodeExport from "../components/sample/QrCodeExport";
 import ExamSetting from "../components/exam/ExamSetting";
 import OpenTime from "../components/info/OpenTime";
 import CheckIn from "../components/info/CheckIn";
+import StudyTime from "../components/info/StudyTime";
 
 //网络工具
 axios.defaults.withCredentials = true;
@@ -184,6 +184,7 @@ export default {
                 {path: '/wx/appointments', component: Appointments},
                 {path: '/wx/my', component: MobileMy},
                 {path: '/wx/checkin', component: CheckIn},
+                {path: '/wx/studytime', component: StudyTime},
             ];
 
             const router = new VueRouter({
