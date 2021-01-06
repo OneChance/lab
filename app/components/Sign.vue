@@ -69,8 +69,6 @@ export default {
 
 .login-card {
     width: 300px;
-    height: fit-content;
-    margin-top: 160px;
 }
 
 .sign-title {
@@ -89,15 +87,13 @@ export default {
 }
 
 .center {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     background-size: cover;
     background-color: #f7f3f3;
     display: flex;
+    height: 100vh;
     justify-content: center;
+    align-items: flex-start;
+    padding-top: 180px;
 }
 
 </style>
