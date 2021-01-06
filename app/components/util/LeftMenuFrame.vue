@@ -100,6 +100,7 @@ export default {
 <style scoped>
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
+    width: fit-content;
+    width: -moz-fit-content;
 }
 </style>
