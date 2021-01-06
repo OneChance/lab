@@ -149,10 +149,40 @@ body {
 }
 
 .header-bar {
+    height: $barHeight;
+    display: flex;
+    align-items: flex-start;
+    position: relative;
     background-color: #347dd6;
+
+    .el-menu.el-menu--horizontal {
+        border-bottom: 0 !important;
+    }
 
     .el-submenu__icon-arrow {
         color: white !important;
+    }
+
+    .header-title {
+        width: 200px;
+        color: white;
+        font-weight: 600;
+        font-size: 18px;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        margin-right: 20px;
+    }
+
+    .header-navi {
+        height: 100%;
+    }
+
+    .header-bar-right {
+        height: 100%;
+        position: absolute;
+        right: 0;
     }
 }
 
@@ -160,17 +190,6 @@ body {
     .el-submenu__icon-arrow {
         color: #347dd6 !important;
     }
-}
-
-.header-bar-right {
-    display: flex;
-    justify-content: flex-end;
-    height: $barHeight;
-    line-height: $barHeight;
-}
-
-.header-navi {
-    height: $barHeight;
 }
 
 .logo {
@@ -496,59 +515,10 @@ body {
     }
 }
 
-
-//适配小屏幕
 @media screen and (max-width: 480px) {
-    body {
-        .navi-menu {
-            display: none;
-        }
 
-        //导航菜单
-        .small-menu {
-            display: inline-block !important;
-            order: 3;
-            width: 260px;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            background-color: #fff;
-            overflow: hidden;
-            z-index: 1060;
-            transform: translateX(-270px);
-            transition: all 0.4s;
-        }
-
-        //菜单缩略按钮
-        .small-menu-bar {
-            display: inline-block !important;
-            margin-right: 10px;
-        }
-
-        //logo加文宽度
-        .header-bar {
-            .logo {
-                width: 150px;
-            }
-        }
-
-        //弹出2级菜单图标颜色
-        .el-menu--popup i {
-            color: #347dd6 !important;
-        }
-
-        .el-message {
-            min-width: 350px;
-        }
-    }
 }
 
 @media screen and (max-width: 320px) {
-    .el-table {
-        font-size: 12px;
-    }
-    .el-message {
-        min-width: 300px !important;
-    }
+
 }

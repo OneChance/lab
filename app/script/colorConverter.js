@@ -20,8 +20,8 @@ export default {
             return sColor;
         }
     },
-    brightTextColor(bgColor) {
+    bright(bgColor) {
         let lightness = bgColor[0] * 0.299 + bgColor[1] * 0.587 + bgColor[2] * 0.114;
-        return lightness < 128 ? '#fff' : '#000'
+        return lightness >= 150
     }
 }

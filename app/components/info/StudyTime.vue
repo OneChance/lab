@@ -46,7 +46,7 @@ export default {
     name: "TeacherRate",
     data: function () {
         return {
-            sum: 50,
+            sum: 0,
             sampleId: '',
             samples: [],
             samplesData: [],
@@ -55,22 +55,37 @@ export default {
     },
     mounted: function () {
         document.title = '学习时长'
-        let deepRatio = 1.5
+        let progressChange = 70
         /*Sample.getSamples(Config.allPage).then(res => {
             this.samples = res.list
         },)*/
         this.samplesData = [
-            {id: 1, name: 'test1', time: 20, color: '#F80808'},
-            {id: 2, name: 'test2', time: 30, color: '#A952F5'},
-            {id: 3, name: 'test3', time: 5, color: '#EBF704'},
+            {id: 1, name: 'test1', time: 20, color: '#4B43EF'},
+            {id: 2, name: 'test2', time: 30, color: '#F80808'},
+            {id: 3, name: 'test3', time: 5, color: '#43EF0F'},
+            {id: 4, name: 'test4', time: 15, color: '#347dd6'},
+            {id: 5, name: 'test5', time: 15, color: '#A952F5'},
+            {id: 6, name: 'test6', time: 60, color: '#07F4E4'},
+            {id: 7, name: 'test7', time: 32, color: '#EBF704'},
+            {id: 8, name: 'test8', time: 18, color: '#EB6303'},
+            {id: 9, name: 'test9', time: 1, color: '#07010B'},
         ]
         this.maxTime = Math.max(...this.samplesData.map(s => s.time))
+        this.sum = this.samplesData.map(s => s.time).reduce(function (prev, curr, idx, arr) {
+            return prev + curr
+        })
         //初始化颜色信息
         this.samplesData.forEach(s => {
             let rgb = ColorConverter.hex2rgb(s.color)
             s.progressWidth = (s.time / this.maxTime * 100) + '%'
-            s.progressColor = "rgb(" + (rgb[0] / deepRatio) + "," + (rgb[1] / deepRatio) + "," + (rgb[2] / deepRatio) + ")"
-            s.contentColor = ColorConverter.brightTextColor(rgb)
+            //根据底色决定进度条颜色和文字颜色
+            if (ColorConverter.bright(rgb)) {
+                s.progressColor = "rgb(" + (rgb[0] - progressChange) + "," + (rgb[1] - progressChange) + "," + (rgb[2] - progressChange) + ")"
+                s.contentColor = "#000"
+            } else {
+                s.progressColor = "rgb(" + (rgb[0] + progressChange) + "," + (rgb[1] + progressChange) + "," + (rgb[2] + progressChange) + ")"
+                s.contentColor = "#fff"
+            }
         })
         this.samples = this.samplesData
     },
@@ -101,14 +116,12 @@ export default {
 .one-sample-study {
     color: white;
     margin-bottom: 10px;
-    border-radius: 3px;
     position: relative;
     height: 48px;
 }
 
 .sample-progress {
     background-color: rgb(47, 132, 94);
-    border-radius: 3px;
     position: absolute;
     height: 48px;
 }

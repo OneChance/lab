@@ -1,16 +1,13 @@
 <template id="index">
     <div>
-        <el-row :gutter="24" class="header-bar">
-            <el-col :span="4">
-                <div class="logo fl">
-                    <i class="fa fa-bars fa-lg small-menu-bar" aria-hidden="true"></i>
+        <div class="header-bar">
+            <div class="header-title">
                     <span class="logo-title">
                         实验室管理系统
                     </span>
-                </div>
-            </el-col>
+            </div>
 
-            <el-col :span="16" class="header-navi">
+            <div class="header-navi">
                 <el-menu :default-active="activeMenuIndex" class="el-menu-demo navi-menu banner-back" mode="horizontal"
                          text-color="#fff"
                          background-color="#347dd6"
@@ -21,9 +18,9 @@
                         {{ menu.name }}
                     </el-menu-item>
                 </el-menu>
-            </el-col>
+            </div>
 
-            <el-col :span="4" class="header-bar-right">
+            <div class="header-bar-right">
                 <el-menu class="el-menu-demo" mode="horizontal"
                          background-color="#347dd6"
                          text-color="#fff"
@@ -35,9 +32,9 @@
                         <el-menu-item index="signOut">退出</el-menu-item>
                     </el-submenu>
                 </el-menu>
-            </el-col>
+            </div>
 
-        </el-row>
+        </div>
 
         <div class="main_center" id="main_center">
             <router-view></router-view>

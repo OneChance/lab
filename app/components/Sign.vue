@@ -16,7 +16,6 @@
                 </el-form>
             </el-card>
         </div>
-        <div class="foot">2020 版权所有 TEST</div>
     </div>
 </template>
 
@@ -99,16 +98,6 @@ export default {
     background-color: #f7f3f3;
     display: flex;
     justify-content: center;
-}
-
-.foot {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 12px;
-    position: absolute;
-    bottom: 30px;
-    left: calc(50% - 55px);
-    color: #347dd6;
 }
 
 </style>
