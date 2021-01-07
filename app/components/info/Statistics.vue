@@ -1,6 +1,6 @@
 <template>
     <div class="card-content">
-        <el-row :gutter="10">
+        <el-row :gutter="5">
             <el-col :span="12">
                 <el-card class="box-card">
                     <h-bar :chart-data="datacollection" :options="barOptions"></h-bar>
@@ -12,7 +12,7 @@
                 </el-card>
             </el-col>
         </el-row>
-        <el-row :gutter="10" style="margin-top: 10px">
+        <el-row :gutter="5" style="margin-top: 10px">
             <el-col :span="12">
                 <el-card class="box-card">
                     <c-line :chart-data="lineData"></c-line>
