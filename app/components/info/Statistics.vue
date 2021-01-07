@@ -20,7 +20,7 @@
             </el-col>
             <el-col :span="12">
                 <el-card class="box-card">
-
+                    <pie :chart-data="pieData"></pie>
                 </el-card>
             </el-col>
         </el-row>
@@ -32,6 +32,7 @@
 import HBar from "../charts/HBar";
 import Radar from "../charts/Radar"
 import CLine from "../charts/CLine"
+import Pie from "../charts/Pie"
 
 export default {
     name: "Statistics",
@@ -40,7 +41,8 @@ export default {
             datacollection: {},
             radarData: {},
             lineData: {},
-            barOptions: {}
+            barOptions: {},
+            pieData: {}
         }
     },
     mounted: function () {
@@ -58,7 +60,15 @@ export default {
                 datasets: [
                     {
                         label: '测试1',
-                        backgroundColor: '#347dd6',
+                        borderColor: '#347dd6',
+                        borderWidth: 2,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                        ],
                         data: [10, 20, 30, 40, 50],
                     }
                 ]
@@ -79,6 +89,14 @@ export default {
                 datasets: [{
                     label: '测试1',
                     borderColor: '#347dd6',
+                    borderWidth: 2,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.3)',
+                        'rgba(54, 162, 235, 0.3)',
+                        'rgba(255, 206, 86, 0.3)',
+                        'rgba(75, 192, 192, 0.3)',
+                        'rgba(153, 102, 255, 0.3)',
+                    ],
                     data: [60, 70, 55, 98, 39]
                 }]
             }
@@ -87,16 +105,40 @@ export default {
                 labels: ['抗压力', '精力', '适应力', '表达力', '逻辑力'],
                 datasets: [{
                     label: '测试1',
-                    backgroundColor: '#347dd6',
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                    ],
+                    borderWidth: 2,
                     data: [60, 70, 55, 98, 39],
                     fill: false,
                     borderColor: '#347dd6'
                 }]
             }
+
+            this.pieData = {
+                labels: ['抗压力', '精力', '适应力', '表达力', '逻辑力'],
+                datasets: [{
+                    label: '测试1',
+                    borderColor: '#347dd6',
+                    borderWidth: 2,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                    ],
+                    data: [60, 70, 55, 98, 39]
+                }]
+            }
         }
     },
     components: {
-        HBar, Radar, CLine
+        HBar, Radar, CLine, Pie
     }
 }
 </script>
