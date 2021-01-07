@@ -42,6 +42,7 @@ import ExamSetting from "../components/exam/ExamSetting";
 import OpenTime from "../components/info/OpenTime";
 import CheckIn from "../components/info/CheckIn";
 import StudyTime from "../components/info/StudyTime";
+import Statistics from "../components/info/Statistics";
 
 //网络工具
 axios.defaults.withCredentials = true;
@@ -151,6 +152,11 @@ export default {
                                     path: 'opentime',
                                     name: 'opentime',
                                     component: OpenTime
+                                },
+                                {
+                                    path: 'statistics',
+                                    name: 'statistics',
+                                    component: Statistics
                                 },
                             ]
                         },
