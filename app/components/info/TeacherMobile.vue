@@ -49,6 +49,7 @@ export default {
     },
     mounted: function () {
         document.title = '教师评价'
+        console.log(this.$route.query.id)
     },
     methods: {
         submitRate() {

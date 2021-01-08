@@ -31,25 +31,6 @@ export default {
             {id: 18, name: '18:00--19:00'},
             {id: 19, name: '19:00--20:00'}]
     },
-    getOpenTime(month) {
-        console.log('get ' + month + ' data')
-        return new Promise(resolve => {
-            let data = [
-                {date: '2020-12-04', res: '已修改'},
-                {date: '2020-12-09', res: '已修改'},
-            ]
-            resolve(data)
-        }).then(res => {
-            let map = {}
-            res.forEach(r => {
-                map[r.date] = r.res
-            })
-            return map
-        });
-    },
-    getOpenTimeByDay(date, laboratoryId) {
-        return Net.get('/laboratory/', {date: date, laboratoryId: laboratoryId});
-    },
     getDayTeachersByDay(date, laboratoryId) {
         return Net.get('/duty/', {date: date, laboratoryId: laboratoryId});
     },
@@ -86,6 +67,21 @@ export default {
         } else {
             return Net.jsonPost('/duty/', serverData);
         }
+    },
+    getOpenTime(month, laboratoryId) {
+        return Net.get('/laboratory/opening/list/', {date: month, laboratoryId: laboratoryId}).then(res => {
+            let map = {}
+            res.list.forEach(r => {
+                map[r.day] = '已修改'   //有日期表示已修改
+            })
+            return map
+        });
+    },
+    getOpenTimeByDay(date, laboratoryId) {
+        return Net.get('/laboratory/opening/', {day: date, laboratoryId: laboratoryId});
+    },
+    setOpenTime(data) {
+        return Net.jsonPost('/laboratory/opening/', data);
     },
     getCheckinToken(data) {
         return Net.get('/attendance/code/', data);

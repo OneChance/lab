@@ -31,13 +31,6 @@
                 <el-form-item label="预留人数" prop="reserve">
                     <el-input type="number" v-model="form.reserve"></el-input>
                 </el-form-item>
-                <el-divider>开放时段</el-divider>
-                <el-checkbox-group v-model="chooseTimeZone">
-                    <el-checkbox :label="zone.id" border v-for="zone of this.availableTimeZone"
-                                 :key="zone.id"
-                                 class="time-zone">{{ zone.name }}
-                    </el-checkbox>
-                </el-checkbox-group>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="visible = false">取 消</el-button>

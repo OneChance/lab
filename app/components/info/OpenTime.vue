@@ -18,7 +18,7 @@
             </my-calendar>
         </el-card>
 
-        <el-dialog :title="form.date+' 开放时段'"
+        <el-dialog :title="form.day+' 开放时段'"
                    :visible.sync="visible"
                    :close-on-click-modal="false">
             <el-form ref="form" :model="form" label-width="80px">
@@ -55,33 +55,45 @@ export default {
             }],
             visible: false,
             form: {
-                date: '',
-                allowHours: ''
+                day: '',
+                allowHours: '',
+                laboratoryId: this.$route.query.id
             },
             chooseTimeZone: [],
             availableTimeZone: Lab.timeZone(),
-            dateResMap: {}
+            dateResMap: {},
+            currentMonth: ''
         }
     },
     mounted: function () {
-        this.getMonthData(this.dayjs().month() + 1)
+        this.currentMonth = this.dayjs().format('YYYY-MM')
+        this.refresh()
     },
     methods: {
         topBtn(date) {
-            this.getMonthData(this.dayjs(date).month() + 1)
+            this.currentMonth = this.dayjs(date).format('YYYY-MM')
+            this.refresh()
         },
-        getMonthData(month) {
-            Lab.getOpenTime(month).then(res => {
+        getMonthData(month, laboratoryId) {
+            Lab.getOpenTime(month, laboratoryId).then(res => {
                 this.dateResMap = res
             })
         },
         setOpenTime(date) {
-            this.form.date = date
+            this.form.day = date
             this.chooseTimeZone = []
             this.visible = true
             this.$nextTick(() => {
-                //如果没有设置,默认是开放所有时段
-                this.chooseTimeZone = Lab.timeZone().map(zone => zone.id)
+                Lab.getOpenTimeByDay(date, this.$route.query.id).then(res => {
+                    if (res.empty) {
+                        //如果没有设置,默认是开放所有时段
+                        this.chooseTimeZone = Lab.timeZone().map(zone => zone.id)
+                    } else {
+                        res.laboratory_opening.allowHours.split(',').forEach(zoneId => {
+                            this.chooseTimeZone.push(Number(zoneId))
+                        })
+                    }
+                })
             })
         },
         setCommit() {
@@ -89,9 +101,15 @@ export default {
                 this.$notify.error({title: '错误', message: '请选择开放时段'});
             } else {
                 this.form.allowHours = this.chooseTimeZone.toString()
-                console.log(this.form)
-                this.visible = false
+                Lab.setOpenTime(this.form).then(() => {
+                    this.$message.success('设定完成')
+                    this.refresh()
+                    this.visible = false
+                })
             }
+        },
+        refresh() {
+            this.getMonthData(this.currentMonth, this.$route.query.id)
         }
     },
     components: {MyCalendar, NavComponent}

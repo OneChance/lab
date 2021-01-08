@@ -106,7 +106,7 @@ export default {
     methods: {
         topBtn(date) {
             this.currentMonth = this.dayjs(date).format('YYYY-MM')
-            this.getMonthData(this.currentMonth, this.$route.query.id)
+            this.refresh()
         },
         getMonthData(month, laboratoryId) {
             Lab.getDayTeachers(month, laboratoryId).then(res => {

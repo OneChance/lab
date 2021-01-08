@@ -75,6 +75,14 @@ export default {
         },
         dateChoose(date) {
             this.form.bookDay = date
+            Lab.getOpenTimeByDay(date, this.form.laboratory.id).then(res => {
+                if (res.empty) {
+                    this.availableTimeZone = Lab.timeZone()
+                } else {
+                    let zondIds = res.laboratory_opening.allowHours.split(",")
+                    this.availableTimeZone = Lab.timeZone().filter(lab => zondIds.includes(String(lab.id)))
+                }
+            })
         },
         commitAppointment() {
             if (!this.form.laboratory.id) {
@@ -100,8 +108,6 @@ export default {
         },
         chooseLab(labId) {
             Lab.get({id: labId}).then(res => {
-                let zondIds = res.laboratory.allowHours.split(",")
-                this.availableTimeZone = Lab.timeZone().filter(lab => zondIds.includes(String(lab.id)))
                 if (res.laboratory.applyBookingDates) {
                     this.applyBookingDates = res.laboratory.applyBookingDates
                     this.dateDisable = false
