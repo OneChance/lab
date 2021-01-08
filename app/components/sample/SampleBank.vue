@@ -325,7 +325,7 @@ export default {
             })
         },
         beforeRemove(file) {
-            return this.$confirm(`确定移除 ${file.name}？`)
+            return this.$confirm(`确定执行此操作？`, '删除文件', {type: 'warning'})
         },
         handlePreview(file) {
             window.open(Env.baseURL + file.url)

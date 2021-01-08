@@ -92,7 +92,7 @@ export default {
             this.$router.push({path: 'teacherRate', query: {id: appointment.id}}).catch(err => err);
         },
         cancel(appointment) {
-            this.$confirm('是否取消' + appointment.laboratory.name + appointment.bookDay + '日' + this.$options.filters.formatZone(appointment.bookHour) + '的预约?', '提示', {
+            this.$confirm('是否取消【' + appointment.laboratory.name + '】【' + appointment.bookDay + '】【' + this.$options.filters.formatZone(appointment.bookHour) + '】的预约?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
