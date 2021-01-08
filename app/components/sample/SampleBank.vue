@@ -244,6 +244,7 @@ export default {
         edit(row) {
             Sample.getSample({id: row.id}).then(result => {
                 this.visible = true
+                console.log(result)
                 this.$nextTick(() => {
                     let _this = this
                     for (let prop in result.specimen) {
