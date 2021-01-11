@@ -15,15 +15,15 @@ import Sign from '../components/Sign.vue';
 import Index from '../components/Index.vue';
 import Error from '../components/Error.vue';
 import AppCompnent from "../components/AppCompnent";
-import Appointment from "../components/appointment/Appointment";
-import Appointments from "../components/appointment/Appointments";
+import Appointment from "../components/mobile/Appointment";
+import Appointments from "../components/mobile/Appointments";
 import QuestionBanks from "../components/exam/QuestionBanks";
 import QuestionBank from "../components/exam/QuestionBank";
 import SampleBanks from "../components/sample/SampleBanks";
 import SampleBank from "../components/sample/SampleBank";
-import Sample from "../components/sample/SampleMobile";
+import Sample from "../components/mobile/SampleMobile";
 import SampleInfo from "../components/sample/SampleInfo";
-import Paper from "../components/exam/Paper";
+import Paper from "../components/mobile/Paper";
 import Lab from "../components/info/Lab";
 import Teacher from "../components/info/Teacher";
 import Duty from "../components/info/Duty"
@@ -32,17 +32,18 @@ import Guest from "../components/info/Guest"
 import SysCompnent from "../components/SysCompnent";
 import SysRole from "../components/sys/SysRole";
 import SysUser from "../components/sys/SysUser";
-import Score from "../components/exam/Score"
-import TeacherMobile from "../components/info/TeacherMobile";
+import Score from "../components/mobile/Score"
+import TeacherRate from "../components/mobile/TeacherRate";
 import MobileLogin from "../components/MobileLogin";
 import MobileChangePassword from "../components/MobileChangePassword";
 import MobileMy from "../components/MobileMy";
 import QrCodeExport from "../components/sample/QrCodeExport";
 import ExamSetting from "../components/exam/ExamSetting";
 import OpenTime from "../components/info/OpenTime";
-import CheckIn from "../components/info/CheckIn";
-import StudyTime from "../components/info/StudyTime";
+import CheckIn from "../components/mobile/CheckIn";
+import StudyTime from "../components/mobile/StudyTime";
 import Statistics from "../components/info/Statistics";
+import KpQuery from "../components/mobile/KpQuery";
 
 //网络工具
 axios.defaults.withCredentials = true;
@@ -184,13 +185,14 @@ export default {
                 {path: '/wx/sample', component: Sample},
                 {path: '/wx/exam', component: Paper},
                 {path: '/wx/score', component: Score},
-                {path: '/wx/teacherRate', component: TeacherMobile},
+                {path: '/wx/teacherRate', component: TeacherRate},
                 {path: '/wx/loginM', name: '/wx/loginM', component: MobileLogin},
                 {path: '/wx/changePasswordM', component: MobileChangePassword},
                 {path: '/wx/appointments', component: Appointments},
                 {path: '/wx/my', component: MobileMy},
                 {path: '/wx/checkin', component: CheckIn},
                 {path: '/wx/studytime', component: StudyTime},
+                {path: '/wx/kp', component: KpQuery},
             ];
 
             const router = new VueRouter({

@@ -1,0 +1,43 @@
+.query-wrapper {
+    display: flex;
+
+    .query {
+        width: 80%;
+        margin-right: 5px;
+    }
+}
+
+.sample-card {
+    height: 100px;
+
+    .el-card__body {
+        padding: 0 !important;
+        height: 100px;
+    }
+
+    .card-content {
+        display: flex;
+
+        .sample-img {
+            height: 100px;
+            width: 100px;
+
+            .sample-img-error {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100px;
+                width: 100px;
+                background: #f5f7fa;
+            }
+        }
+
+        .sample-name {
+            display: flex;
+            padding-left: 20px;
+            align-items: center;
+            font-size: 1.2em;
+        }
+    }
+
+}
