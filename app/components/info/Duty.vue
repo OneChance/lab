@@ -60,7 +60,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="visible = false">取 消</el-button>
-                <el-button type="primary" @click="setCommit()">确 定</el-button>
+                <el-button type="primary" @click="setCommit()" v-if="canEdit">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -94,6 +94,12 @@ export default {
             dayTeachers: {},
             teachers: [],
             currentMonth: ''
+        }
+    },
+    computed: {
+        canEdit: function () {
+            return this.dayjs(this.dayjs().format('YYYY-MM-DD')).isBefore(this.dayjs(this.form.date)) ||
+                this.dayjs(this.dayjs().format('YYYY-MM-DD')).isSame(this.dayjs(this.form.date))
         }
     },
     mounted: function () {
