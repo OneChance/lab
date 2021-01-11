@@ -89,7 +89,7 @@ export default {
             })
         },
         rate(appointment) {
-            this.$router.push({path: 'teacherRate', query: {id: appointment.id}}).catch(err => err);
+            this.$router.push({path: 'teacherRate', query: {appointment: appointment}}).catch(err => err);
         },
         cancel(appointment) {
             this.$confirm('是否取消【' + appointment.laboratory.name + '】【' + appointment.bookDay + '】【' + this.$options.filters.formatZone(appointment.bookHour) + '】的预约?', '提示', {

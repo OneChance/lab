@@ -11,9 +11,18 @@
                 <div slot="header" class="sample-title">
                     <span>{{ name }}</span>
                 </div>
-                <div class="mobile-item-row">
-                    <aplayer autoplay :music="audio"/>
+                <div class="mobile-item-row audio-player">
+                    <span>语音播放速度</span>
+                    <el-slider
+                        v-model="defaultSpeed"
+                        @change="audioSpeed"
+                        :max="1"
+                        :min="0.5"
+                        :step="0.1">
+                    </el-slider>
+                    <aplayer autoplay :music="audio" repeat="repeat-one"/>
                 </div>
+                <el-divider></el-divider>
                 <div class="mobile-item-row sample-description">{{ description }}</div>
                 <div class="mobile-item-row" v-for="img of imgs">
                     <img :src="img" preview="0" style="width: 100%" alt="">
@@ -70,7 +79,8 @@ export default {
             studyChecker: {},
             fingerDistance: 0,
             studyTime: 0,
-            timeout: false
+            timeout: false,
+            defaultSpeed: 1
         }
     },
     mounted: function () {
@@ -121,6 +131,9 @@ export default {
         clearInterval(this.studyChecker)
     },
     methods: {
+        audioSpeed(speed) {
+            $(".audio-player audio")[0].playbackRate = speed;
+        },
         kpClick(kp) {
             if (!kp.studied) {
                 console.log('请求后台记录')
@@ -159,4 +172,7 @@ export default {
     color: #41b883;
 }
 
+.aplayer {
+    margin: 0 !important;
+}
 </style>

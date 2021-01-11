@@ -49,7 +49,7 @@ export default {
     },
     mounted: function () {
         document.title = '教师评价'
-        console.log(this.$route.query.id)
+        console.log(this.$route.query.appointment.id, this.$route.query.appointment.bookHour)
     },
     methods: {
         submitRate() {
