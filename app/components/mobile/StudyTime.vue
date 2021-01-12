@@ -111,20 +111,19 @@ export default {
     color: white;
     margin-bottom: 10px;
     position: relative;
-    height: 48px;
+    height: 36px;
 }
 
 .sample-progress {
     background-color: rgb(47, 132, 94);
     position: absolute;
-    height: 48px;
+    height: 36px;
 }
 
 .sample-content {
     padding: 8px;
     position: absolute;
-    height: 32px;
-    font-weight: bold;
+    height: 19px;
     display: flex;
     align-items: center;
 }
