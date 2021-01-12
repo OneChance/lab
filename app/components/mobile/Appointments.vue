@@ -72,7 +72,10 @@ export default {
                     let another = Common.copyObject(list[i])
                     another.bookHour = another.bookHour2
                     another.bookHour2 = ''
+                    another.teacherId = another.teacherId2
+                    another.teacherId2 = ''
                     list[i].bookHour2 = ''
+                    list[i].teacherId2 = ''
                     this.appointments.push(list[i])
                     this.appointments.push(another)
                 } else {
@@ -89,7 +92,10 @@ export default {
             })
         },
         rate(appointment) {
-            this.$router.push({path: 'teacherRate', query: {appointment: appointment}}).catch(err => err);
+            this.$router.push({
+                path: 'teacherRate',
+                query: {bookId: appointment.id, bookHour: appointment.bookHour, teacherId: appointment.teacherId}
+            }).catch(err => err);
         },
         cancel(appointment) {
             this.$confirm('是否取消【' + appointment.laboratory.name + '】【' + appointment.bookDay + '】【' + this.$options.filters.formatZone(appointment.bookHour) + '】的预约?', '提示', {

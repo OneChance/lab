@@ -36,4 +36,7 @@ export default {
     getSamples(data) {
         return Net.get('/specimen/list/', data);
     },
+    getSampleTime(data) {
+        return Net.get('/specimen/study/timing/', data);
+    }
 };
