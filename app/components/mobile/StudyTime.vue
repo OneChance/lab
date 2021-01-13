@@ -3,7 +3,7 @@
         <div class="full-height">
             <el-card class="box-card mobile-card">
                 <div class="mobile-center-text">
-                    总学习时长<p class="sum">{{ sum }}</p>分钟
+                    总学习时长<p class="sum">{{ sum }}</p>分钟<p class="sum">{{ sumSecond }}</p>秒
                 </div>
             </el-card>
             <el-card class="box-card mobile-card">
@@ -26,7 +26,7 @@
                              :style="'background-color:'+sample.progressColor+';width:'+sample.progressWidth"></div>
                         <div class="sample-content" :id="'sample_content_'+sample.id"
                              :style="'color:'+sample.contentColor">
-                            {{ sample.name }}: {{ sample.time }}分钟
+                            {{ sample.name }}: {{ sample.time }}分钟{{ sample.timeSecond }}秒
                         </div>
                     </div>
                 </div>
@@ -46,6 +46,7 @@ export default {
     data: function () {
         return {
             sum: 0,
+            sumSecond: 0,
             sampleId: '',
             samples: [],
             samplesData: [],
@@ -60,13 +61,19 @@ export default {
                 return {
                     id: s[0], name: s[1],
                     time: s[2] ? Math.floor(s[2] / 60) : 0,
+                    timeSecond: s[2] ? Math.floor(s[2] % 60) : 0,
+                    timeOri: s[2],
                     color: s[3]
                 }
             })
-            this.maxTime = Math.max(...this.samplesData.map(s => s.time))
-            this.sum = this.samplesData.map(s => s.time).reduce(function (prev, curr, idx, arr) {
+            this.maxTime = this.samplesData.map(s => s.time).reduce((prev, next) => {
+                return Math.max(prev, next)
+            })
+            let sum = this.samplesData.map(s => s.timeOri).reduce(function (prev, curr, idx, arr) {
                 return prev + curr
             })
+            this.sum = Math.floor(sum / 60)
+            this.sumSecond = sum % 60
             //初始化颜色信息
             this.samplesData.forEach(s => {
                 let rgb = ColorConverter.hex2rgb(s.color)

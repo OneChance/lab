@@ -42,7 +42,9 @@ export default {
         Exam.scores(Config.allPage).then(res => {
             this.scores = res.list
             if (this.scores.length > 0) {
-                this.finalScore = Math.max(...this.scores.map(s => s.score))
+                this.finalScore = this.scores.map(s => s.score).reduce((prev, next) => {
+                    return Math.max(prev, next)
+                })
             }
         })
         document.title = '成绩查询'
