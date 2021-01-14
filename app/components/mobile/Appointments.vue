@@ -1,42 +1,15 @@
 <template>
     <div class="mobile-div">
-        <div class="full-height">
-            <table v-for="appointment of appointments" :key="appointment.id" class="form-table mobile-item"
-                   v-if="appointments.length>0">
-                <tr>
-                    <th style="width: 30%">实验室</th>
-                    <td>{{ appointment.laboratory.name }}</td>
-                </tr>
-                <tr>
-                    <th style="width: 30%">日期</th>
-                    <td>{{ appointment.bookDay }}</td>
-                </tr>
-                <tr>
-                    <th style="width: 30%">时间段</th>
-                    <td>{{ appointment.bookHour | formatZone }}</td>
-                </tr>
-                <tr v-if="appointment.cancelable">
-                    <td colspan="2">
-                        <el-button type="danger" plain class="mobile-item-width"
-                                   @click="cancel(appointment)">取消预约
-                        </el-button>
-                    </td>
-                </tr>
-                <tr v-if="appointment.markable">
-                    <td colspan="2">
-                        <el-button type="success" plain class="mobile-item-width"
-                                   @click="rate(appointment)">值班教师评价
-                        </el-button>
-                    </td>
-                </tr>
-            </table>
-            <el-alert v-if="appointments.length===0"
-                      title="无预约记录"
-                      type="info"
-                      center
-                      show-icon
-                      :closable="false">
-            </el-alert>
+        <div class="full-height mobile">
+            <el-tabs v-model="activeIndex" @tab-click="typeChoose" type="card">
+                <el-tab-pane label="预约中" name="ing">
+                    <appointment-list v-bind:appointments="ings" v-bind:cancel="cancel"></appointment-list>
+                </el-tab-pane>
+                <el-tab-pane label="已结束" name="complete">
+                    <appointment-list v-bind:appointments="completes" v-bind:rate="rate"></appointment-list>
+                </el-tab-pane>
+                <el-tab-pane label="已评价" name="rated">已评价</el-tab-pane>
+            </el-tabs>
         </div>
     </div>
 </template>
@@ -48,12 +21,17 @@ import Appointment from "../../script/server/manage/appointment";
 import Config from "../../script/config"
 import Common from "../../script/common"
 import Lab from "../../script/server/manage/lab"
+import AppointmentList from "./AppointmentList";
 
 export default {
     name: "Appointments",
     data: function () {
         return {
-            appointments: []
+            activeIndex: 'ing',
+            appointments: [],
+            ings: [],
+            completes: [],
+            rateds: [],
         }
     },
     filters: {
@@ -64,6 +42,9 @@ export default {
     mounted: function () {
         this.list()
         document.title = '我的预约'
+        if (this.$route.query.activeIndex) {
+            this.activeIndex = this.$route.query.activeIndex
+        }
     },
     methods: {
         splitAppointment(list) {
@@ -90,6 +71,10 @@ export default {
             this.appointments.forEach(a => {
                 a.markable = this.dayjs().isAfter(this.dayjs(a.bookDay + ' ' + ((a.bookHour + 1) < 10 ? '0' + (a.bookHour + 1) : (a.bookHour + 1)) + ':00:00'))
             })
+
+            this.ings = this.appointments.filter(a => !a.markable)
+            //可评价且未评价的
+            this.completes = this.appointments.filter(a => a.markable)
         },
         rate(appointment) {
             this.$router.push({
@@ -107,20 +92,20 @@ export default {
                 let aList = this.appointments.filter(a => a.id === appointment.id)
                 if (aList.length === 1) {
                     Appointment.delete({id: appointment.id}).then(res => {
-                        this.cancelOk()
+                        this.cancelOk(appointment)
                     })
                 } else {
                     update = aList.filter(a => a.bookHour !== appointment.bookHour)[0]
                     Appointment.save(update).then(res => {
-                        this.cancelOk()
+                        this.cancelOk(appointment)
                     })
                 }
             }).catch(() => {
             });
         },
-        cancelOk() {
+        cancelOk(appointment) {
+            this.ings = this.ings.filter(a => (a.id !== appointment.id || a.bookHour !== appointment.bookHour))
             Common.message(this, 'success', '预约已取消', true)
-            this.list()
         },
         list() {
             this.appointments = []
@@ -128,9 +113,17 @@ export default {
                 let appointments = res.list
                 this.splitAppointment(appointments)
             })
+        },
+        typeChoose() {
+            this.$router.push({
+                path: 'appointments',
+                query: {activeIndex: this.activeIndex}
+            }).catch(err => err);
         }
     },
-    components: {},
+    components: {
+        AppointmentList
+    },
 }
 </script>
 

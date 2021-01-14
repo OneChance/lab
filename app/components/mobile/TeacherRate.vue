@@ -79,7 +79,10 @@ export default {
                     type: 'success',
                     duration: 3000
                 });
-                this.$router.push('/wx/appointments')
+                this.$router.push({
+                    path: 'appointments',
+                    query: {activeIndex: 'complete'}
+                }).catch(err => err);
             })
         }
     },
