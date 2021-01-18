@@ -66,7 +66,7 @@ export default {
                     color: s[3]
                 }
             })
-            this.maxTime = this.samplesData.map(s => s.time).reduce((prev, next) => {
+            this.maxTime = this.samplesData.map(s => s.timeOri).reduce((prev, next) => {
                 return Math.max(prev, next)
             })
             let sum = this.samplesData.map(s => s.timeOri).reduce(function (prev, curr, idx, arr) {
@@ -77,7 +77,7 @@ export default {
             //初始化颜色信息
             this.samplesData.forEach(s => {
                 let rgb = ColorConverter.hex2rgb(s.color)
-                s.progressWidth = (s.time / this.maxTime * 100) + '%'
+                s.progressWidth = (s.timeOri / this.maxTime * 100) + '%'
                 //根据底色决定进度条颜色和文字颜色
                 if (ColorConverter.bright(rgb)) {
                     s.progressColor = "rgb(" + (rgb[0] - progressChange) + "," + (rgb[1] - progressChange) + "," + (rgb[2] - progressChange) + ")"
