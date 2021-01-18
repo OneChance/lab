@@ -133,5 +133,6 @@ export default {
     height: 19px;
     display: flex;
     align-items: center;
+    font-size: 0.8em;
 }
 </style>
