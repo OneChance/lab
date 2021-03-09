@@ -331,6 +331,7 @@ export default {
                 type: 'success'
             });
             this.importEnd()
+            this.list()
         },
         importError(err) {
             this.$message({
