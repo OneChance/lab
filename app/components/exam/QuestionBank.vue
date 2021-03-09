@@ -116,6 +116,11 @@ export default {
         edit(row) {
             Exam.getQuestion({id: row.id}).then(result => {
                 this.visible = true
+                result.question.options.forEach(option => {
+                    if (option.answer.endsWith('.0')) {
+                        option.answer = option.answer.split('.')[0]
+                    }
+                })
                 this.form = result.question
             })
         },
