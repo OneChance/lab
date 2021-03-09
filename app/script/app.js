@@ -9,6 +9,7 @@ import Print from '../plugin/print/print'
 import preview from 'vue-photo-preview'
 import 'vue-photo-preview/dist/skin.css'
 import dayjs from 'dayjs'
+import _ from 'lodash'
 
 //路由模块
 import Sign from '../components/Sign.vue';
@@ -26,6 +27,7 @@ import SampleInfo from "../components/sample/SampleInfo";
 import Paper from "../components/mobile/Paper";
 import Lab from "../components/info/Lab";
 import Teacher from "../components/info/Teacher";
+import Classes from "../components/info/Classes";
 import Duty from "../components/info/Duty"
 import Student from "../components/info/Student";
 import Guest from "../components/info/Guest"
@@ -63,6 +65,9 @@ Vue.use(VueRouter);
 
 //日期插件
 Vue.prototype.dayjs = dayjs
+
+//lodash
+Vue.prototype._ = _
 
 //消除重复路由控制台错误提示
 const originalPush = VueRouter.prototype.push
@@ -108,6 +113,11 @@ export default {
                                     path: 'teacher',
                                     name: 'teacher',
                                     component: Teacher
+                                },
+                                {
+                                    path: 'classes',
+                                    name: 'classes',
+                                    component: Classes
                                 },
                                 {
                                     path: 'duty',

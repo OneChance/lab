@@ -7,6 +7,9 @@ export default {
     get(api, data) {
         return request(api, 'get', data);
     },
+    jsonGet(api, data) {
+        return request(api, 'json_get', data);
+    },
     jsonPost(api, data) {
         return request(api, 'json_post', data);
     },
@@ -68,6 +71,14 @@ const request = function (api, type, data, progress) {
         axiosRequest = App.vueG.axios.get(fullURL, {
             headers: {Authorization: token},
             params: data,
+        });
+    } else if (type === 'json_get') {
+        axiosRequest = App.vueG.axios.get(fullURL, {
+            headers: {Authorization: token},
+            params: data,
+            paramsSerializer(params) {
+                return qs.stringify(params, {arrayFormat: 'brackets', allowDots: true});
+            },
         });
     } else if (type === 'put') {
         axiosRequest = App.vueG.axios.put(fullURL, data, {

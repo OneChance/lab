@@ -44,8 +44,8 @@ module.exports = {
                         ],
                     },
                     {
-                        test: /\.(gif|jpg|png|woff|svg|eot|ttf|mp3)\??.*$/,
-                        use: ['url-loader?limit=1&name=images/[hash:8].[name].[ext]'],
+                        test: /\.(gif|jpg|png|woff|svg|eot|ttf|mp3|xlsx)\??.*$/,
+                        use: ['url-loader?limit=1&name=assets/[hash:8].[name].[ext]'],
                     },
                     {
                         test: /\.css$/,

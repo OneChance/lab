@@ -76,14 +76,29 @@
                         </el-upload>
                     </el-form-item>
                     <el-divider>知识点</el-divider>
-                    <div v-for="(kp,index) in form.kps">
+                    <div v-for="(kp,index) in form.kps" class="kp-content">
                         <el-form-item label="标题" :prop="'kps.' + index + '.title'">
                             <el-input type="text" v-model="kp.title" style="width:626px"></el-input>
                         </el-form-item>
-                        <el-form-item label="内容" :prop="'kps.' + index + '.content'">
-                            <el-input type="textarea" v-model="kp.content" style="width:626px"></el-input>
-                            <el-button @click.prevent="removeKp(kp)">删除</el-button>
+                        <el-form-item label="所属系统" :prop="'kps.' + index + '.sbId'">
+                            <el-select v-model="kp.sbId" filterable clearable placeholder="请选择">
+                                <el-option
+                                    v-for="sb in sbs"
+                                    :key="sb.id"
+                                    :label="sb.name"
+                                    :value="sb.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
+                        <el-form-item label="内容" :prop="'kps.' + index + '.content'"
+                                      style="margin-bottom: 10px !important;">
+                            <el-input type="textarea" v-model="kp.content" style="width:626px"></el-input>
+                        </el-form-item>
+                        <el-button @click.prevent="removeKp(kp)"
+                                   style="position: absolute;top:0;right: 0;border-radius: 0 5px 0 0;"
+                                   type="danger"
+                                   icon="el-icon-delete">
+                        </el-button>
                     </div>
                     <el-button @click="addKp" type="success" plain>新增知识点</el-button>
                 </el-form>
@@ -128,6 +143,7 @@ import VueQr from 'vue-qr'
 import Lab from "../../script/server/manage/lab";
 import html2canvas from 'html2canvas'
 import QrCode from '../../script/client/qrcode'
+import SampleBanks from "./SampleBanks";
 
 export default {
     name: "SampleBank",
@@ -141,12 +157,13 @@ export default {
                 if (this.$refs['form']) {
                     this.$refs['form'].resetFields();
                 }
-                this.form.kps = [{title: '', content: ''}]
+                this.form.kps = [{title: '', content: '', sbId: ''}]
             }
         }
     },
     data: function () {
         return {
+            sbs: [],
             visible: false,
             qrVisisble: false,
             picCardVisible: false,
@@ -164,7 +181,7 @@ export default {
                 description: '',
                 imgFiles: [],
                 audioFile: [],
-                kps: [{title: '', content: ''}],
+                kps: [{title: '', content: '', sbId: ''}],
                 imgIds: '',
                 audioId: '',
             },
@@ -235,6 +252,9 @@ export default {
         Sample.getSB({id: this.$route.query.id}).then(res => {
             this.qr.color = res.specimen_bank.color
         })
+        Sample.getSBs(Config.allPage).then(res => {
+            this.sbs = res.list
+        })
     },
     methods: {
         add() {
@@ -244,7 +264,6 @@ export default {
         edit(row) {
             Sample.getSample({id: row.id}).then(result => {
                 this.visible = true
-                console.log(result)
                 this.$nextTick(() => {
                     let _this = this
                     for (let prop in result.specimen) {
@@ -362,7 +381,7 @@ export default {
         },
         addKp() {
             this.form.kps.push({
-                title: '', content: ''
+                title: '', content: '', sbId: {id: ''}
             })
         },
         removeKp(kp) {
@@ -399,5 +418,13 @@ export default {
     border-radius: 5px;
     font-size: 30px;
     font-weight: bold;
+}
+
+.kp-content {
+    position: relative;
+    padding: 20px 10px 10px;
+    border: 1px solid #dcdfe6;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 </style>

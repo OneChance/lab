@@ -57,6 +57,7 @@ import User from "../../script/server/user";
 import TableComponent from "../util/TableComponent";
 import Config from "../../script/config";
 import Common from '../../script/common';
+import Status from "../../script/client/status";
 
 export default {
     name: "SysUser",
@@ -92,6 +93,15 @@ export default {
                 cols: [
                     {prop: 'name', label: '姓名'},
                     {prop: 'telphone', label: '联系方式'},
+                    {
+                        prop: 'state',
+                        label: '状态',
+                        width: '70',
+                        formatter: Status.stateFormatter,
+                        tag: true,
+                        tagType: Status.stateTagFormatter,
+                        tagSize: 'small'
+                    },
                 ],
                 oper: [
                     {

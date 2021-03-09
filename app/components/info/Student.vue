@@ -3,12 +3,51 @@
         <el-card class="box-card">
             <el-form :inline="true" class="demo-form-inline">
                 <el-form-item>
-                    <el-input v-model="query.userName" placeholder="用户名"></el-input>
+                    <el-input v-model="query.username" placeholder="学号" style="width: 150px"></el-input>
+                    <el-input v-model="query.name" placeholder="姓名" style="width: 150px"></el-input>
+                    <el-select v-model="query.classes.id" filterable clearable placeholder="班级" style="width: 150px">
+                        <el-option
+                            v-for="classes in classesList"
+                            :key="classes.id"
+                            :label="classes.name"
+                            :value="classes.id">
+                        </el-option>
+                    </el-select>
+                    <el-select v-model="query.classes.teacher.id" filterable clearable placeholder="实验室教师"
+                               style="width: 150px">
+                        <el-option
+                            v-for="teacher in teachers"
+                            :key="teacher.id"
+                            :label="teacher.name"
+                            :value="teacher.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
+                    <el-button type="primary" @click="toQuery">查询</el-button>
                     <el-button type="success" @click="add">新增</el-button>
+                    <el-button type="danger" @click="disableAll" plain>全部禁用</el-button>
+                    <el-button type="success" @click="recoverAll" plain>全部恢复</el-button>
+                    <el-upload
+                        style="display: inline;margin-left: 10px"
+                        :action="importAction"
+                        name="formFile"
+                        :on-success="importComplete"
+                        :on-error="importError"
+                        :before-upload="importStart"
+                        :headers="uploadHeaders"
+                        :limit="3"
+                        :disabled="importDisable"
+                        :show-file-list="false">
+                        <el-button type="primary" plain :loading="importing" :disabled="importDisable">{{
+                                importMsg
+                            }}
+                        </el-button>
+                    </el-upload>
+
                 </el-form-item>
+                <el-link type="primary" style="float: right" :href="template">学生批量导入模板下载
+                </el-link>
             </el-form>
             <table-component v-bind:tableConfig="tableConfig"></table-component>
         </el-card>
@@ -18,7 +57,7 @@
                    :visible.sync="userInfoDialogVisible"
                    :close-on-click-modal="false">
             <template>
-                <el-form ref="form" :model="form" :rules="rules" label-width="80px" class="demo-ruleForm">
+                <el-form ref="form" :model="form" :rules="rules" label-width="120px" class="demo-ruleForm">
                     <el-form-item label="学号" prop="username">
                         <el-input v-model="form.username" placeholder="学号"></el-input>
                     </el-form-item>
@@ -60,6 +99,20 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="班级" prop="classes.id">
+                        <el-select v-model="form.classes.id" filterable clearable placeholder="请选择"
+                                   @change="classesChoose">
+                            <el-option
+                                v-for="classes in classesList"
+                                :key="classes.id"
+                                :label="classes.name"
+                                :value="classes.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="实验室教师" prop="classes.teacher.name">
+                        <el-input v-model="form.classes.teacher.name" placeholder="实验室教师" disabled></el-input>
+                    </el-form-item>
                 </el-form>
             </template>
             <div slot="footer" class="dialog-footer">
@@ -76,13 +129,27 @@ import User from "../../script/server/user";
 import TableComponent from "../util/TableComponent";
 import Config from "../../script/config";
 import Common from '../../script/common';
+import Env from "../../script/server/env";
+import Upload from "../../script/server/upload";
+import Status from "../../script/client/status"
+import Classes from "../../script/server/manage/classes";
 
 export default {
     name: "Student",
     data: function () {
         return {
+            template: require('../../assets/学生批量导入模板.xlsx'),
+            importAction: Env.baseURL + '/user/batchImport/student/',
+            uploadHeaders: {
+                Authorization: Upload.getToken()
+            },
+            importMsg: '导入',
+            importing: false,
+            importDisable: false,
             query: {
-                username: ''
+                username: '',
+                name: '',
+                classes: {id: '', teacher: {id: ''}},
             },
             addUser: true,
             form: {
@@ -95,7 +162,15 @@ export default {
                 overTerm: {year: '', num: ''},
                 type: 'STUDENT',
                 login: true,
+                classes: {
+                    id: '',
+                    teacher: {
+                        name: ''
+                    }
+                }
             },
+            classesList: [],
+            teachers: [],
             rules: {
                 username: [
                     {required: true, message: '请输入学号', trigger: 'blur'},
@@ -121,17 +196,20 @@ export default {
                 page: true,
                 pageMethod: this.toPage,
                 cols: [
+                    {prop: 'username', label: '学号'},
                     {prop: 'name', label: '姓名'},
                     {
                         prop: 'state',
                         label: '状态',
                         width: '70',
-                        formatter: this.stateFormatter,
+                        formatter: Status.stateFormatter,
                         tag: true,
-                        tagType: this.stateTagFormatter,
+                        tagType: Status.stateTagFormatter,
                         tagSize: 'small'
                     },
                     {prop: 'term.year', label: '学期', formatter: this.termFormatter, formatterType: 'raw'},
+                    {prop: 'classes.name', label: '班级'},
+                    {prop: 'classes.teacher.name', label: '实验室教师'},
                 ],
                 oper: [
                     {
@@ -154,8 +232,22 @@ export default {
     },
     mounted: function () {
         this.list()
+        Classes.gets(Config.allPage).then(res => {
+            this.classesList = res.list
+        })
+        User.getNormalTeacher().then(res => {
+            this.teachers = res.list
+        })
     },
     methods: {
+        toQuery() {
+            this.list()
+        },
+        classesChoose: function (classes) {
+            Classes.get({id: classes}).then(res => {
+                this.form.classes.teacher.name = res.classes.teacher.name
+            })
+        },
         commit: function () {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
@@ -194,6 +286,9 @@ export default {
                 this.$nextTick(() => {
                     result.user.overTerm.year = result.user.overTerm.year + ""
                     this.form = result.user
+                    if (!this.form.classes) {
+                        this.form.classes = {id: '', teacher: {name: ''}}
+                    }
                     this.addUser = false
                     this.passwordTemp = result.user.password
                 });
@@ -217,6 +312,9 @@ export default {
             for (let prop in config) {
                 data[prop] = config[prop]
             }
+            for (let prop in this.query) {
+                data[prop] = this.query[prop]
+            }
             this.tableConfig.currentPage = data.page
             data.type = 'STUDENT';
             User.getUsers(data).then(res => {
@@ -227,30 +325,66 @@ export default {
         termFormatter(row) {
             return row.overTerm.year + '年第' + row.overTerm.num + '学期'
         },
-        stateTagFormatter(value) {
-            switch (value) {
-                case 'NORMAL':
-                    return 'success'
-                case 'DISABLE':
-                    return 'warning'
-                case 'DELETE':
-                    return 'danger'
-                default:
-                    return ''
-            }
+        importComplete(response) {
+            this.$message({
+                message: '导入完成',
+                type: 'success'
+            });
+            this.importEnd()
         },
-        stateFormatter(value) {
-            switch (value) {
-                case 'NORMAL':
-                    return '正常'
-                case 'DISABLE':
-                    return '禁用'
-                case 'DELETE':
-                    return '删除'
-                default:
-                    return ''
-            }
+        importError(err) {
+            this.$message({
+                showClose: true,
+                duration: 20000,
+                message: '导入失败:' + JSON.parse(err.message).error_msg,
+                type: 'error'
+            });
+            this.importEnd()
         },
+        importStart() {
+            this.importing = true
+            this.importMsg = '导入中...'
+            this.importDisable = true
+        },
+        importEnd() {
+            this.importing = false
+            this.importMsg = '导入'
+            this.importDisable = false
+        },
+        disableAll() {
+            this.$confirm('将所有正常状态的学生设置为禁用状态, 是否继续?', '提示', {
+                confirmButtonText: '禁用',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                User.disableNormal().then(() => {
+                    this.list()
+                    this.$message({
+                        type: 'success',
+                        message: '已禁用!'
+                    });
+                })
+            }).catch(() => {
+
+            });
+        },
+        recoverAll() {
+            this.$confirm('将所有禁用状态的学生恢复为正常状态, 是否继续?', '提示', {
+                confirmButtonText: '恢复',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                User.normalDisable().then(() => {
+                    this.list()
+                    this.$message({
+                        type: 'success',
+                        message: '已恢复!'
+                    });
+                })
+            }).catch(() => {
+
+            });
+        }
     },
     components: {
         TableComponent
