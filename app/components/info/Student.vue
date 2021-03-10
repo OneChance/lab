@@ -358,7 +358,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                User.disableNormal().then(() => {
+                User.disableNormalStudent().then(() => {
                     this.list()
                     this.$message({
                         type: 'success',
@@ -375,7 +375,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                User.normalDisable().then(() => {
+                User.normalDisableStudent().then(() => {
                     this.list()
                     this.$message({
                         type: 'success',

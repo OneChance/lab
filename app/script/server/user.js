@@ -18,11 +18,11 @@ export default {
     deleteUser(data) {
         return Net.delete('/user/' + data.id + '/');
     },
-    disableNormal() {
-        return Net.put('/user/disableNormal/');
+    disableNormalStudent() {
+        return Net.put('/user/disableNormalStudent/');
     },
-    normalDisable() {
-        return Net.put('/user/normalDisable/');
+    normalDisableStudent() {
+        return Net.put('/user/normalDisableStudent/');
     },
     getAllTeacher() {
         let data = Common.copyObject(Config.allPage)

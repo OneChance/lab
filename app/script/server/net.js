@@ -117,9 +117,11 @@ const request = function (api, type, data, progress) {
                     duration: 5000
                 });
             } else {
+                let msg = e.response.data.error_msg ? e.response.data.error_msg : '服务异常'
                 App.vueG.$notify.error({
                     title: '错误',
-                    message: e.response.data.error_msg ? e.response.data.error_msg : '服务异常',
+                    duration: msg.length * 1000,
+                    message: msg,
                 });
             }
 

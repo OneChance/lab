@@ -28,7 +28,8 @@
                    :close-on-click-modal="false">
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="上午" prop="amUserId">
-                    <el-select v-model="form.amUserId" filterable clearable placeholder="请选择" class="teacher-select">
+                    <el-select v-model="form.amUserId" filterable clearable placeholder="请选择" class="teacher-select"
+                               :disabled="!canEdit">
                         <el-option
                             v-for="teacher in teachers"
                             :key="teacher.id"
@@ -38,7 +39,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="下午" prop="pmUserId">
-                    <el-select v-model="form.pmUserId" filterable clearable placeholder="请选择" class="teacher-select">
+                    <el-select v-model="form.pmUserId" filterable clearable placeholder="请选择" class="teacher-select"
+                               :disabled="!canEdit">
                         <el-option
                             v-for="teacher in teachers"
                             :key="teacher.id"
@@ -48,7 +50,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="晚上" prop="ngUserId">
-                    <el-select v-model="form.ngUserId" filterable clearable placeholder="请选择" class="teacher-select">
+                    <el-select v-model="form.ngUserId" filterable clearable placeholder="请选择" class="teacher-select"
+                               :disabled="!canEdit">
                         <el-option
                             v-for="teacher in teachers"
                             :key="teacher.id"
@@ -105,9 +108,6 @@ export default {
     mounted: function () {
         this.currentMonth = this.dayjs().format('YYYY-MM')
         this.refresh()
-        User.getAllTeacher().then(res => {
-            this.teachers = res.list
-        })
     },
     methods: {
         topBtn(date) {
@@ -132,21 +132,32 @@ export default {
             }
         },
         setDayTeachers(date) {
-            this.visible = true
             this.form.date = date
-            this.$nextTick(() => {
-                this.$refs['form'].resetFields();
-                this.form.id = ''
-                Lab.getDayTeachersByDay(date, this.$route.query.id).then(res => {
-                    if (res.duty) {
-                        this.form.id = res.duty.id
-                        this.form.date = res.duty.date
-                        this.form.amUserId = res.duty.amUser ? res.duty.amUser.id : ''
-                        this.form.pmUserId = res.duty.pmUser ? res.duty.pmUser.id : ''
-                        this.form.ngUserId = res.duty.ngUser ? res.duty.ngUser.id : ''
-                    }
+            this.getTeacherByIfCanEdit().then(res => {
+                this.teachers = res.list
+                this.visible = true
+                this.$nextTick(() => {
+                    this.$refs['form'].resetFields();
+                    this.form.id = ''
+                    Lab.getDayTeachersByDay(date, this.$route.query.id).then(res => {
+                        if (res.duty) {
+                            this.form.id = res.duty.id
+                            this.form.date = res.duty.date
+                            this.form.amUserId = res.duty.amUser ? res.duty.amUser.id : ''
+                            this.form.pmUserId = res.duty.pmUser ? res.duty.pmUser.id : ''
+                            this.form.ngUserId = res.duty.ngUser ? res.duty.ngUser.id : ''
+                        }
+                    })
                 })
             })
+        },
+        getTeacherByIfCanEdit() {
+            if (!this.canEdit) {
+                return User.getAllTeacher()
+            } else {
+                console.log('2')
+                return User.getNormalTeacher()
+            }
         },
         setCommit() {
             Lab.setDuty(this.form, this.$route.query.id).then(() => {
@@ -157,7 +168,7 @@ export default {
         },
         refresh() {
             this.getMonthData(this.currentMonth, this.$route.query.id)
-        }
+        },
     },
     components: {MyCalendar, NavComponent}
 }
