@@ -55,6 +55,7 @@ export default {
             }],
             visible: false,
             form: {
+                id: '',
                 day: '',
                 allowHours: '',
                 laboratoryId: this.$route.query.id
@@ -88,6 +89,7 @@ export default {
         setOpenTime(date) {
             this.form.day = date
             this.chooseTimeZone = []
+            this.form.id = ''
             this.visible = true
             this.$nextTick(() => {
                 Lab.getOpenTimeByDay(date, this.$route.query.id).then(res => {
@@ -95,6 +97,7 @@ export default {
                         //如果没有设置,默认是开放所有时段
                         this.chooseTimeZone = Lab.timeZone().map(zone => zone.id)
                     } else {
+                        this.form.id = res.laboratory_opening.id
                         res.laboratory_opening.allowHours.split(',').forEach(zoneId => {
                             this.chooseTimeZone.push(Number(zoneId))
                         })

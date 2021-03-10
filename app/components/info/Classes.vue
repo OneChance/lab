@@ -60,6 +60,7 @@ export default {
             teachers: [],
             visible: false,
             form: {
+                id: '',
                 code: '',
                 name: '',
                 teacher: {
@@ -109,10 +110,14 @@ export default {
         })
     },
     methods: {
+        toPage: function (val) {
+            this.list({page: val})
+        },
         add() {
             this.visible = true
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
+                this.form.id = ''
             })
         },
         edit(row) {
