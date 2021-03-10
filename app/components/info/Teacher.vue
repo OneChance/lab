@@ -3,7 +3,7 @@
         <el-card class="box-card">
             <el-form :inline="true" class="demo-form-inline">
                 <el-form-item>
-                    <el-input v-model="query.userName" placeholder="用户名"></el-input>
+                    <el-input v-model="query.name" placeholder="用户名"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -65,7 +65,7 @@ export default {
     data: function () {
         return {
             query: {
-                userName: ''
+                name: ''
             },
             addUser: true,
             form: {
@@ -118,6 +118,9 @@ export default {
         this.list()
     },
     methods: {
+        onSubmit() {
+            this.list()
+        },
         commit: function () {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
@@ -170,6 +173,9 @@ export default {
             let data = Common.copyObject(Config.page)
             for (let prop in config) {
                 data[prop] = config[prop]
+            }
+            for (let prop in this.query) {
+                data[prop] = this.query[prop]
             }
             this.tableConfig.currentPage = data.page
             data.type = 'TEACHER';
