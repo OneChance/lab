@@ -109,12 +109,6 @@ export default {
                         tip: {content: '编辑', placement: 'top'},
                         event: this.edit,
                     },
-                    {
-                        class: 'fa fa-trash-o fa-lg click-fa danger-fa',
-                        tip: {content: '删除', placement: 'right'},
-                        event: this.delete,
-                        check: true
-                    }
                 ]
             },
             userInfoDialogVisible: false
