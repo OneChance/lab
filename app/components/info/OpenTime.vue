@@ -87,6 +87,9 @@ export default {
             })
         },
         setOpenTime(date) {
+            if (this.dayjs(date).format('YYYY-MM') !== this.currentMonth) {
+                this.topBtn(date)
+            }
             this.form.day = date
             this.chooseTimeZone = []
             this.form.id = ''

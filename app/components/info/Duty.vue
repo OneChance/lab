@@ -111,6 +111,7 @@ export default {
     },
     methods: {
         topBtn(date) {
+            console.log('1')
             this.currentMonth = this.dayjs(date).format('YYYY-MM')
             this.refresh()
         },
@@ -132,6 +133,9 @@ export default {
             }
         },
         setDayTeachers(date) {
+            if (this.dayjs(date).format('YYYY-MM') !== this.currentMonth) {
+                this.topBtn(date)
+            }
             this.form.date = date
             this.getTeacherByIfCanEdit().then(res => {
                 this.teachers = res.list
@@ -155,7 +159,6 @@ export default {
             if (!this.canEdit) {
                 return User.getAllTeacher()
             } else {
-                console.log('2')
                 return User.getNormalTeacher()
             }
         },
