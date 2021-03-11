@@ -150,7 +150,6 @@ export default {
                     {required: true, message: '请选择预留人数', trigger: 'change'},
                 ],
             },
-            chooseTimeZone: [],
             availableTimeZone: Lab.timeZone(),
         }
     },
@@ -183,7 +182,6 @@ export default {
         },
         add() {
             this.visible = true
-            this.chooseTimeZone = []
             this.$nextTick(() => {
                 this.$refs['form'].resetFields();
             })
@@ -195,29 +193,20 @@ export default {
             this.$router.push({path: 'duty', query: {id: row.id, name: row.name}}).catch(err => err);
         },
         edit(row) {
-            this.chooseTimeZone = []
             Lab.get({id: row.id}).then(result => {
                 this.visible = true
                 this.$nextTick(() => {
                     this.form = result.laboratory
-                    this.form.allowHours.split(',').forEach(zoneId => {
-                        this.chooseTimeZone.push(Number(zoneId))
-                    })
                 });
             })
         },
         addCommit() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
-                    if (this.chooseTimeZone.length === 0) {
-                        this.$notify.error({title: '错误', message: '请选择开放时段'});
-                    } else {
-                        this.form.allowHours = this.chooseTimeZone.toString()
-                        Lab.save(this.form).then(() => {
-                            this.operSuccess(this)
-                            this.visible = false;
-                        })
-                    }
+                    Lab.save(this.form).then(() => {
+                        this.operSuccess(this)
+                        this.visible = false;
+                    })
                 }
             })
         },

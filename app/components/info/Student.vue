@@ -228,6 +228,7 @@ export default {
             userInfoDialogVisible: false,
             nums: [{value: 1, label: '第一学期'}, {value: 2, label: '第二学期'}],
             passwordTemp: '',
+            currentPage: 1,
         }
     },
     mounted: function () {
@@ -262,7 +263,7 @@ export default {
                         })
                     } else {
                         User.updateUser(this.form).then(() => {
-                            this.operSuccess(this)
+                            this.operSuccess(this, true)
                             this.userInfoDialogVisible = false;
                         })
                     }
@@ -270,7 +271,9 @@ export default {
             })
         },
         toPage: function (val) {
-            this.list({page: val})
+            this.list({page: val}).then(() => {
+                this.currentPage = val
+            })
         },
         add: function () {
             this.userInfoDialogVisible = true
@@ -299,13 +302,13 @@ export default {
                 this.operSuccess(this)
             })
         },
-        operSuccess(comp) {
+        operSuccess(comp, stay) {
             comp.dialogVisible = false
             comp.$message({
                 message: '操作成功',
                 type: 'success'
             });
-            comp.list({page: 1})
+            comp.list({page: stay ? this.currentPage : 1})
         },
         list(config) {
             let data = Common.copyObject(Config.page)
@@ -317,7 +320,7 @@ export default {
             }
             this.tableConfig.currentPage = data.page
             data.type = 'STUDENT';
-            User.getUsers(data).then(res => {
+            return User.getUsers(data).then(res => {
                 this.tableConfig.data = res.list
                 this.tableConfig.total = res.count
             })

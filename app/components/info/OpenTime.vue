@@ -109,16 +109,12 @@ export default {
             })
         },
         setCommit() {
-            if (this.chooseTimeZone.length === 0) {
-                this.$notify.error({title: '错误', message: '请选择开放时段'});
-            } else {
-                this.form.allowHours = this.chooseTimeZone.toString()
-                Lab.setOpenTime(this.form).then(() => {
-                    this.$message.success('设定完成')
-                    this.refresh()
-                    this.visible = false
-                })
-            }
+            this.form.allowHours = this.chooseTimeZone.toString()
+            Lab.setOpenTime(this.form).then(() => {
+                this.$message.success('设定完成')
+                this.refresh()
+                this.visible = false
+            })
         },
         refresh() {
             this.getMonthData(this.currentMonth, this.$route.query.id)
